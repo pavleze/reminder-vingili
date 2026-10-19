@@ -100,6 +100,8 @@
   const DOW_KEYS = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
   const BRAND = '#1E9E6A';
   const LIST_COLOR = '#4C7BD9';
+  const EVENT_COLOR = '#9B6BD6';
+  const isEvent = (it) => it.kind !== 'list' && it.type === 'event';
   const REPEAT_TYPES = [['none', 'repNone'], ['interval', 'repInterval'], ['weekdays', 'repWeekdays'], ['monthday', 'repMonthday']];
   const UNITS = [['day', 'unitDay'], ['week', 'unitWeek'], ['month', 'unitMonth']];
 
@@ -189,13 +191,13 @@
     return [
       mk({ name: sr ? 'Jutarnji trening' : 'Morning workout', description: sr ? '20 min istezanje + 5 km trčanja' : '20 min stretching + 5 km run', date: dkey(addDays(T, -20)), time: '07:30', repeat: { type: 'interval', every: 1, unit: 'day' }, done: { [k]: true } }),
       mk({ kind: 'list', name: sr ? 'Jutarnja rutina' : 'Morning routine', date: dkey(addDays(T, -14)), repeat: { type: 'weekdays', days: [...new Set([0, 1, 2, 3, 4, wd])].sort() }, items: morning, checks: { [k]: [morning[0].id] } }),
-      mk({ name: sr ? 'Sastanak tima' : 'Team stand-up', date: dkey(addDays(T, -21)), time: '10:00', repeat: { type: 'weekdays', days: [...new Set([0, 3, wd])].sort() } }),
+      mk({ type: 'event', name: sr ? 'Sastanak tima' : 'Team stand-up', date: dkey(addDays(T, -21)), time: '10:00', repeat: { type: 'weekdays', days: [...new Set([0, 3, wd])].sort() } }),
       mk({ kind: 'list', name: sr ? 'Kupovina' : 'Groceries', date: '', items: shop, checks: { any: [shop[0].id, shop[1].id] } }),
       mk({ name: sr ? 'Pozovi majstora za bojler' : 'Call the plumber', date: '' }),
       mk({ name: sr ? 'Zalij biljke' : 'Water the plants', time: '19:00', repeat: { type: 'interval', every: 3, unit: 'day' } }),
       mk({ name: sr ? 'Pročitaj 20 strana' : 'Read 20 pages', date: dkey(addDays(T, -10)), repeat: { type: 'interval', every: 1, unit: 'day' } }),
       mk({ name: sr ? 'Plati kiriju' : 'Pay the rent', important: true, date: dkey(addDays(T, -30)), time: '12:00', repeat: { type: 'monthday', monthDay: addDays(T, 2).getDate() } }),
-      mk({ name: sr ? 'Zubar' : 'Dentist', date: dkey(addDays(T, 3)), time: '14:30', description: sr ? 'Bulevar oslobođenja 12' : 'Main Street 12' }),
+      mk({ type: 'event', name: sr ? 'Zubar' : 'Dentist', date: dkey(addDays(T, 3)), time: '14:30', description: sr ? 'Bulevar oslobođenja 12' : 'Main Street 12' }),
       mk({ kind: 'list', name: sr ? 'Pakovanje za Rim' : 'Packing for Rome', important: true, date: dkey(addDays(T, 11)), time: '20:00', items: pack }),
     ];
   }
@@ -404,6 +406,14 @@
     const sub = subParts.length ? `<span class="sub">${esc(subParts.join(' · '))}</span>` : '';
     const star = it.important ? `<span class="star" aria-label="${esc(t('important'))}">${icon('star', 'fill xs')}</span>` : '';
     const time = it.time && !isFloating(it) ? `<span class="time tnum">${esc(fmtTime(it.time))}</span>` : '';
+    if (isEvent(it)) {
+      const past = it.time && sameDay(d, todayD()) && timeToMin(it.time) < new Date().getHours() * 60 + new Date().getMinutes();
+      return `<div class="entry event ${past || d < todayD() ? 'past' : ''}">
+        <span class="ev-ic" aria-hidden="true">${icon('event', 'sm')}</span>
+        <button class="body" data-a="edit" data-id="${it.uid}"><span class="title">${esc(it.name)}${star}</span>${sub}</button>
+        ${time}
+      </div>`;
+    }
     if (!isList) {
       return `<div class="entry ${done ? 'done' : ''}">
         <button class="tick ${done ? 'on' : ''}" data-a="toggle-done" data-id="${it.uid}" data-d="${k}" aria-pressed="${done}" aria-label="${esc(t('done'))}: ${esc(it.name)}">${done ? icon('check', 'xs') : ''}</button>
@@ -432,8 +442,9 @@
     const today = entriesOn(d);
     const floating = entries().filter((it) => isFloating(it) && floatingVisible(it))
       .sort((a, b) => isDoneOn(a, d) - isDoneOn(b, d) || (b.important ? 1 : 0) - (a.important ? 1 : 0) || a.name.localeCompare(b.name));
-    const doneN = today.filter((it) => isDoneOn(it, d)).length;
-    const pct = today.length ? Math.round((doneN / today.length) * 100) : 0;
+    const doable = today.filter((it) => !isEvent(it));
+    const doneN = doable.filter((it) => isDoneOn(it, d)).length;
+    const pct = doable.length ? Math.round((doneN / doable.length) * 100) : 0;
     const hasSamples = entries().some((it) => it.sample);
     const first = (me().name || '').split(' ')[0];
     const html = `
@@ -443,7 +454,7 @@
           <h2 id="today-h">${esc(t('today'))}</h2>
           <span class="eyebrow">${esc(cap(fmtDate(d, { weekday: 'long', day: 'numeric', month: 'long' })))}</span>
         </div>
-        ${today.length ? `<div class="ring ring-min" style="--p:${pct}" role="img" aria-label="${esc(t('ofDone', { a: doneN, b: today.length }))} ${esc(t('doneToday'))}"><div><b class="tnum">${doneN}/${today.length}</b><small>${esc(t('doneToday'))}</small></div></div>` : ''}
+        ${doable.length ? `<div class="ring ring-min" style="--p:${pct}" role="img" aria-label="${esc(t('ofDone', { a: doneN, b: doable.length }))} ${esc(t('doneToday'))}"><div><b class="tnum">${doneN}/${doable.length}</b><small>${esc(t('doneToday'))}</small></div></div>` : ''}
       </header>
       <section class="rows" aria-labelledby="today-h">
         ${today.length ? today.map((it) => entryCard(it, d)).join('') : `<p class="quiet">${esc(t('nothingToday'))}</p>`}
@@ -460,7 +471,7 @@
     <button class="icon-btn" data-a="tab" data-tab="profile" aria-label="${esc(t('profileTitle'))}">${avatarHtml(me(), 'sm')}</button>`;
 
   /* ---------- Calendar ---------- */
-  const entryColor = (it) => (it.kind === 'list' ? LIST_COLOR : BRAND);
+  const entryColor = (it) => (it.kind === 'list' ? LIST_COLOR : isEvent(it) ? EVENT_COLOR : BRAND);
   function screenReminders() {
     return {
       title: t('calendarTab'), html: renderCalendar(entries()),
@@ -495,7 +506,7 @@
       </div>
       <div class="cal-dow">${DOW_KEYS.map((k) => `<span>${esc(t(k))}</span>`).join('')}</div>
       <div class="cal-grid">${cells}</div>
-      <div class="legend"><span><span class="dot" style="background:${BRAND}"></span>${esc(t('kindTask'))}</span><span><span class="dot" style="background:${LIST_COLOR}"></span>${esc(t('kindList'))}</span></div>
+      <div class="legend"><span><span class="dot" style="background:${BRAND}"></span>${esc(cap(t('task')))}</span><span><span class="dot" style="background:${EVENT_COLOR}"></span>${esc(cap(t('event')))}</span><span><span class="dot" style="background:${LIST_COLOR}"></span>${esc(t('kindList'))}</span></div>
     </div>`;
   }
 
@@ -711,7 +722,10 @@
           <button type="button" role="radio" class="seg-btn" data-kind="task">${icon('task_alt', 'sm')}${esc(t('kindTask'))}</button>
           <button type="button" role="radio" class="seg-btn" data-kind="list">${icon('checklist', 'sm')}${esc(t('kindList'))}</button>
         </div>
-        <div class="field">${icon('title')}<label for="ef-name">${esc(t('titleLabel'))}</label><input id="ef-name" value="${esc(base.name)}" autocomplete="off" required></div>
+        <div class="name-row">
+          <div class="field">${icon('title')}<label for="ef-name">${esc(t('titleLabel'))}</label><input id="ef-name" value="${esc(base.name)}" autocomplete="off" required></div>
+          <div class="field select" id="ef-type-wrap"><label for="ef-type">${esc(t('type'))}</label><select id="ef-type">${opt('task', cap(t('task')), base.type || 'task')}${opt('event', cap(t('event')), base.type || 'task')}</select></div>
+        </div>
         <div class="items-edit" id="ef-items-wrap"><span class="lbl">${esc(t('itemsLabel'))}</span><div id="ef-items" class="stack" style="gap:8px"></div>
           <div class="add-item"><input id="ef-new-item" placeholder="${esc(t('newItemPh'))}" autocomplete="off" aria-label="${esc(t('addItem'))}"><button type="button" class="btn btn-tonal btn-sm" id="ef-add-item">${icon('add', 'sm')}${esc(t('addItem'))}</button></div></div>
         <div id="ef-when"></div>
@@ -768,6 +782,7 @@
     function drawKind() {
       const list = st.kind === 'list';
       $('#ef-items-wrap').hidden = !list;
+      $('#ef-type-wrap').hidden = list;
       $('#ef-head').style.background = list ? LIST_COLOR : '';
       $('#ef-head-ic').textContent = list ? 'checklist' : 'task_alt';
       $('#ed-t').textContent = t(existing ? (list ? 'editList' : 'editTask') : (list ? 'newList' : 'newTask'));
@@ -816,7 +831,7 @@
       if (r.type === 'weekdays') { if (!r.days.length) return err(t('pickDays')); repeat = { type: 'weekdays', days: r.days.slice() }; }
       if (r.type === 'monthday') { const n = Math.round(Number(r.monthDay)); if (!(n >= 1 && n <= 31)) return err(t('invalidDayOfMonth')); repeat = { type: 'monthday', monthDay: n }; }
       const data = {
-        ...(existing || {}), uid: existing ? existing.uid : uuid(), kind: st.kind, name, description: $('#ef-desc').value.trim(),
+        ...(existing || {}), uid: existing ? existing.uid : uuid(), kind: st.kind, type: st.kind === 'list' ? 'task' : $('#ef-type').value, name, description: $('#ef-desc').value.trim(),
         date, time: date || repeat.type !== 'none' ? st.time || '' : '', important: $('#ef-imp').checked, repeat, items: isList ? items : [],
         done: existing ? existing.done || {} : {}, checks: existing ? existing.checks || {} : {},
         createdAt: existing ? existing.createdAt : new Date().toISOString(), updatedAt: new Date().toISOString(),

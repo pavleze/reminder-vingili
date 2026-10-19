@@ -17,6 +17,7 @@ Demo nalog: `demo@reminder.app` / `demo123`
   - zajedničko: naziv, opcioni opis, **opcioni datum** (dugme „Dodaj datum“), opciono vreme (ako postoji, stiže obaveštenje), važno
   - bez datuma i bez ponavljanja → sekcija „Bez datuma“ na početnoj dok se ne završi (završeno ostaje precrtano do kraja dana)
   - bez datuma, sa ponavljanjem → ponavljanje se računa od dana kreiranja (`anchor`)
+  - single: tip **Zadatak** (čekira se kao urađen) ili **Događaj** (samo obaveštenje, ne čekira se, ne ulazi u krug napretka)
   - lista: stavke koje se čekiraju; svako ponavljanje kreće sa praznim čekovima
   - ponavljanje: ne ponavlja se / na svakih N dana, nedelja ili meseci / određenim danima u nedelji / određenog dana u mesecu
 - **Početna:** današnji taskovi i liste jedno ispod drugog (po vremenu, bez vremena na kraju); liste su skupljene, klik ih otvara
@@ -25,7 +26,7 @@ Demo nalog: `demo@reminder.app` / `demo123`
 
 ## Model podataka (po korisniku, `tasks[]`)
 ```
-{ uid, kind: 'task' | 'list', name, description, date: 'YYYY-MM-DD' | '', anchor?, time: 'HH:MM' | '',
+{ uid, kind: 'task' | 'list', type: 'task' | 'event', name, description, date: 'YYYY-MM-DD' | '', anchor?, time: 'HH:MM' | '',
   important, repeat: { type: 'none' | 'interval' | 'weekdays' | 'monthday', every, unit: 'day'|'week'|'month', days: [0-6, pon=0], monthDay },
   items: [{ id, text }],            // samo za listu
   done:   { 'YYYY-MM-DD': true, any?: 'YYYY-MM-DD' }, // task urađen tog dana; 'any' = bez datuma (vrednost: dan završetka)

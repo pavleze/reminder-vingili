@@ -256,6 +256,10 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
 .tick.on { background: var(--primary); border-color: var(--primary); }
 .list-tick { border-radius: 7px; font-size: 11.5px; font-weight: 600; color: var(--muted); }
 .list-tick.on { color: var(--on-primary); }
+.name-row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 150px); gap: 10px; }
+.name-row:has(#ef-type-wrap[hidden]) { grid-template-columns: minmax(0, 1fr); }
+.ev-ic { flex: none; width: 24px; height: 24px; display: grid; place-items: center; color: #9B6BD6; }
+.entry.event.past .title, .entry.event.past .time { color: var(--muted); }
 .chev { color: var(--muted); display: grid; place-items: center; flex: none; }
 .star { color: var(--star); display: inline-grid; }
 .entry-items { padding: 0 0 10px 38px; display: flex; flex-direction: column; align-items: flex-start; animation: open .2s ease; }
