@@ -797,8 +797,8 @@
         <p class="err-text" id="rf-err" hidden></p>
       </div>
       <div class="dialog-foot">
-        ${existing ? `<button type="button" class="btn btn-text" style="color:var(--error);margin-right:auto" data-a="delete" data-id="${existing.uid}">${icon('delete', 'sm')}${esc(t('delete'))}</button>` : ''}
-        <button type="button" class="btn btn-text" data-a="modal-close">${esc(t('cancel'))}</button>
+        ${existing ? `<button type="button" class="btn btn-text" style="color:var(--error)" data-a="delete" data-id="${existing.uid}">${icon('delete', 'sm')}${esc(t('delete'))}</button>` : ''}
+        <button type="button" class="btn btn-text" style="margin-right:auto" data-a="modal-close">${esc(t('cancel'))}</button>
         <button type="submit" class="btn btn-primary">${esc(t('save'))}</button>
       </div></form>`);
     const dyn = () => {
