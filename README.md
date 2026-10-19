@@ -19,7 +19,7 @@ Demo nalog: `demo@reminder.app` / `demo123`
   - bez datuma, sa ponavljanjem → ponavljanje se računa od dana kreiranja (`anchor`)
   - tip **Zadatak** (čekira se) ili **Događaj** (samo obaveštenje, ne čekira se, ne ulazi u krug napretka) — važi i za single i za listu; lista-događaj prikazuje stavke kao tačke
   - lista: stavke koje se čekiraju; svako ponavljanje kreće sa praznim čekovima
-  - ponavljanje: ne ponavlja se / na svakih N dana, nedelja ili meseci / određenim danima u nedelji / određenog dana u mesecu
+  - ponavljanje: ne ponavlja se / na svakih N dana, nedelja, meseci ili godina / određenim danima u nedelji / određenog dana u mesecu
 - **Početna:** današnji taskovi i liste jedno ispod drugog (po vremenu, bez vremena na kraju); liste su skupljene, klik ih otvara
 - **Kalendar:** prekidač Kalendar / Lista; kalendar preko celog ekrana sa uspravnim danima i nazivima, lista = sve narednih 30 dana po danima (+ „Prikaži još“) i „Bez datuma“; klik na dan otvara isti prikaz kao početna
 - **Profil:** podaci i statistika, sigurnost, povezani nalozi, povratne informacije, brisanje naloga, obaveštenja, jezik (7), izgled (tamni režim)
@@ -27,7 +27,7 @@ Demo nalog: `demo@reminder.app` / `demo123`
 ## Model podataka (po korisniku, `tasks[]`)
 ```
 { uid, kind: 'task' | 'list', type: 'task' | 'event', name, description, date: 'YYYY-MM-DD' | '', anchor?, time: 'HH:MM' | '',
-  important, repeat: { type: 'none' | 'interval' | 'weekdays' | 'monthday', every, unit: 'day'|'week'|'month', days: [0-6, pon=0], monthDay },
+  important, repeat: { type: 'none' | 'interval' | 'weekdays' | 'monthday', every, unit: 'day'|'week'|'month'|'year', days: [0-6, pon=0], monthDay },
   items: [{ id, text }],            // samo za listu
   done:   { 'YYYY-MM-DD': true, any?: 'YYYY-MM-DD' }, // task urađen tog dana; 'any' = bez datuma (vrednost: dan završetka)
   checks: { 'YYYY-MM-DD' | 'any': [itemId] }, doneAt? // čekirane stavke liste

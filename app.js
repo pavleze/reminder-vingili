@@ -19,8 +19,8 @@
       kindTask: 'Single', kindTaskDesc: 'A single thing to do', newList: 'New list', newTask: 'New task', editList: 'Edit list', editTask: 'Edit task',
       titleLabel: 'Name', descOptional: 'Note (optional)', itemsLabel: 'Items', addItem: 'Add item', newItemPh: 'New item…', needItem: 'Add at least one item',
       timeOptional: 'Time (optional)', noTime: 'No time', clearTime: 'Clear time',
-      repNone: 'Does not repeat', repInterval: 'Every few days, weeks or months', repWeekdays: 'On days of the week', repMonthday: 'On a day of the month',
-      everyLabel: 'Every', unitDay: 'days', unitWeek: 'weeks', unitMonth: 'months',
+      repNone: 'Does not repeat', repInterval: 'Every few days, weeks, months or years', repWeekdays: 'On days of the week', repMonthday: 'On a day of the month',
+      everyLabel: 'Every', unitDay: 'days', unitWeek: 'weeks', unitMonth: 'months', unitYear: 'years', everyYear: 'Every year', everyNyear: 'Every {n} years',
       everyDay: 'Every day', everyWeek: 'Every week', everyMonth: 'Every month', everyNday: 'Every {n} days', everyNweek: 'Every {n} weeks', everyNmonth: 'Every {n} months',
       monthDayEvery: 'Monthly on day {n}', pickDays: 'Pick at least one day', statTasks: 'Tasks', statLists: 'Lists', saved: 'Saved', listDone: 'List completed',
       homeSub: "Here is what's on for today.", addDate: 'Add date', tomorrow: 'Tomorrow', showMore: 'Show more', changeDate: 'Change date', removeDate: 'Remove date', noDateSection: 'No date', nothingToday: 'Nothing planned for today', deleteEntry: 'Delete', deleteEntryConfirm: 'Delete “{name}”?',
@@ -51,8 +51,8 @@
       kindTask: 'Pojedinačno', kindTaskDesc: 'Jedna stvar koju treba uraditi', newList: 'Nova lista', newTask: 'Novi task', editList: 'Izmeni listu', editTask: 'Izmeni task',
       titleLabel: 'Naziv', descOptional: 'Beleška (opciono)', itemsLabel: 'Stavke', addItem: 'Dodaj stavku', newItemPh: 'Nova stavka…', needItem: 'Dodajte bar jednu stavku',
       timeOptional: 'Vreme (opciono)', noTime: 'Bez vremena', clearTime: 'Ukloni vreme',
-      repNone: 'Ne ponavlja se', repInterval: 'Na nekoliko dana, nedelja ili meseci', repWeekdays: 'Određenim danima u nedelji', repMonthday: 'Određenog dana u mesecu',
-      everyLabel: 'Na svakih', unitDay: 'dana', unitWeek: 'nedelja', unitMonth: 'meseci',
+      repNone: 'Ne ponavlja se', repInterval: 'Na nekoliko dana, nedelja, meseci ili godina', repWeekdays: 'Određenim danima u nedelji', repMonthday: 'Određenog dana u mesecu',
+      everyLabel: 'Na svakih', unitDay: 'dana', unitWeek: 'nedelja', unitMonth: 'meseci', unitYear: 'godina', everyYear: 'Svake godine', everyNyear: 'Na svakih {n} godina',
       everyDay: 'Svaki dan', everyWeek: 'Svake nedelje', everyMonth: 'Svakog meseca', everyNday: 'Na svakih {n} dana', everyNweek: 'Na svakih {n} nedelja', everyNmonth: 'Na svakih {n} meseci',
       monthDayEvery: 'Svakog {n}. u mesecu', pickDays: 'Izaberite bar jedan dan', statTasks: 'Taskovi', statLists: 'Liste', saved: 'Sačuvano', listDone: 'Lista završena',
       homeSub: 'Evo šta vas čeka danas.', addDate: 'Dodaj datum', tomorrow: 'Sutra', showMore: 'Prikaži još', changeDate: 'Promeni datum', removeDate: 'Ukloni datum', noDateSection: 'Bez datuma', nothingToday: 'Za danas nema ništa', deleteEntry: 'Obriši', deleteEntryConfirm: 'Obrisati „{name}“?',
@@ -103,7 +103,7 @@
   const EVENT_COLOR = '#9B6BD6';
   const isEvent = (it) => it.type === 'event';
   const REPEAT_TYPES = [['none', 'repNone'], ['interval', 'repInterval'], ['weekdays', 'repWeekdays'], ['monthday', 'repMonthday']];
-  const UNITS = [['day', 'unitDay'], ['week', 'unitWeek'], ['month', 'unitMonth']];
+  const UNITS = [['day', 'unitDay'], ['week', 'unitWeek'], ['month', 'unitMonth'], ['year', 'unitYear']];
 
   /* ================= Utilities ================= */
   const $ = (s, el = document) => el.querySelector(s);
@@ -222,6 +222,10 @@
     switch (r.type) {
       case 'interval': {
         const n = Math.max(1, Number(r.every) || 1);
+        if (r.unit === 'year') {
+          const yd = d.getFullYear() - start.getFullYear();
+          return yd % n === 0 && d.getMonth() === start.getMonth() && d.getDate() === Math.min(start.getDate(), lastDay(d));
+        }
         if (r.unit === 'month') {
           const md = (d.getFullYear() - start.getFullYear()) * 12 + d.getMonth() - start.getMonth();
           return md % n === 0 && d.getDate() === Math.min(start.getDate(), lastDay(d));
@@ -255,7 +259,7 @@
     const r = it.repeat || { type: 'none' };
     if (r.type === 'interval') {
       const n = Math.max(1, Number(r.every) || 1); const u = r.unit || 'day';
-      return n === 1 ? t({ day: 'everyDay', week: 'everyWeek', month: 'everyMonth' }[u]) : t('everyN' + u, { n });
+      return n === 1 ? t({ day: 'everyDay', week: 'everyWeek', month: 'everyMonth', year: 'everyYear' }[u]) : t('everyN' + u, { n });
     }
     if (r.type === 'weekdays') return (r.days || []).slice().sort().map((i) => cap(weekdayName(i, 'short'))).join(', ');
     if (r.type === 'monthday') return t('monthDayEvery', { n: r.monthDay });
