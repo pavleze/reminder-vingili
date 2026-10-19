@@ -1464,6 +1464,20 @@
       if (el.id === 'n-morning') render();
     }
   });
+  // calendar: swipe left / right to change month
+  let swipe = null;
+  document.addEventListener('touchstart', (e) => {
+    const g = e.target.closest && e.target.closest('.cal-grid, .cal-head, .cal-dow');
+    swipe = g && e.touches.length === 1 ? { x: e.touches[0].clientX, y: e.touches[0].clientY, t: Date.now() } : null;
+  }, { passive: true });
+  document.addEventListener('touchend', (e) => {
+    if (!swipe) return; const s0 = swipe; swipe = null;
+    const dx = e.changedTouches[0].clientX - s0.x, dy = e.changedTouches[0].clientY - s0.y;
+    if (Math.abs(dx) < 50 || Math.abs(dx) < Math.abs(dy) * 1.5 || Date.now() - s0.t > 800) return;
+    const step = dx < 0 ? 1 : -1;
+    ui.calMonth = new Date(ui.calMonth.getFullYear(), ui.calMonth.getMonth() + step, 1); render();
+    const g = $('.cal-grid'); if (g) g.classList.add(step > 0 ? 'slide-l' : 'slide-r');
+  }, { passive: true });
   document.addEventListener('input', (e) => {
     if (e.target.id === 'np' || e.target.id === 'reg-pass') {
       const m = $('#pw-meter'); if (!m) return; const s = pwStrength(e.target.value);

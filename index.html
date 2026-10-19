@@ -372,6 +372,11 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
 .cal-band .view-seg .seg-btn { color: rgba(255,255,255,.88); }
 .cal-band .view-seg .seg-btn[aria-selected="true"] { background: #fff; color: var(--primary-strong); }
 .agenda .rows-label.is-today { color: #E8772E; }
+.cal-grid { touch-action: pan-y; }
+.cal-grid.slide-l { animation: cal-in-l .22s ease-out; }
+.cal-grid.slide-r { animation: cal-in-r .22s ease-out; }
+@keyframes cal-in-l { from { transform: translateX(28px); opacity: .3; } }
+@keyframes cal-in-r { from { transform: translateX(-28px); opacity: .3; } }
 .muted-date { font-weight: 500; letter-spacing: .02em; text-transform: none; font-size: 12px; opacity: .8; }
 .more-btn { align-self: center; margin: 18px 0 4px; }
 .content.wide { max-width: none; padding-bottom: 96px; gap: 12px; }
