@@ -414,19 +414,11 @@
         <div class="ring" style="--p:${pct}" role="img" aria-label="${esc(t('ofDone', { a: doneN, b: today.length }))} ${esc(t('doneToday'))}"><div><span><b class="tnum">${doneN}/${today.length}</b><br><small>${esc(t('doneToday'))}</small></span></div></div>
       </section>
       ${hasSamples ? `<div class="banner">${icon('info')}<p>${esc(t('sampleData'))}</p><button class="btn btn-text btn-sm" data-a="clear-samples">${esc(t('clearSamples'))}</button></div>` : ''}
-      <div class="home-grid">
+      <div class="stack">
         <section class="stack" aria-labelledby="today-h">
           <button class="btn btn-primary btn-block" data-a="add">${icon('add')}${esc(t('addReminder'))}</button>
           <div class="section-head"><h2 id="today-h">${esc(t('today'))}</h2><span class="meta">${esc(cap(fmtDate(d, { day: 'numeric', month: 'long', year: 'numeric' })))}</span></div>
           ${today.length ? today.map(todayCard).join('') : `<div class="empty">${icon('notifications', 'xl')}<span>${esc(t('noRemindersToday'))}</span><button class="btn btn-tonal btn-sm" data-a="add">${icon('add', 'sm')}${esc(t('addReminder'))}</button></div>`}
-        </section>
-        <section class="stack" aria-labelledby="cat-h">
-          <div class="section-head"><h2 id="cat-h">${esc(t('categoriesTitle'))}</h2></div>
-          <div class="cat-grid">
-            ${CATEGORIES.map((c) => `<button class="cat-tile" style="--c:${c.color}" data-a="open-cat" data-cat="${c.key}">
-              ${counts[c.key] ? `<span class="count tnum">${counts[c.key]}</span>` : ''}
-              <span class="circle">${icon(c.icon, 'fill lg')}</span><span class="lbl">${esc(t(c.l10n))}</span></button>`).join('')}
-          </div>
         </section>
       </div>`;
     const fabs = `
