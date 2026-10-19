@@ -165,7 +165,7 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
 .topbar {
   position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; display: flex; align-items: center; gap: 8px; min-height: 60px;
   padding-left: max(12px, env(safe-area-inset-left, 0px)); padding-right: max(12px, env(safe-area-inset-right, 0px));
-  background: linear-gradient(120deg, var(--primary), var(--primary-strong)); color: var(--on-primary);
+  background: linear-gradient(90deg, var(--primary), var(--primary-strong)); color: var(--on-primary);
 }
 .topbar h1 { font-size: 20px; font-weight: 600; flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding-left: 6px; }
 .topbar .theme-btn { background: color-mix(in srgb, var(--on-primary) 14%, transparent); }
@@ -247,7 +247,9 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
 .scroller { container-type: inline-size; }
 .day-hero { position: relative; isolation: isolate; display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 10px 0 26px; margin-top: -20px; color: #fff; }
 .day-hero::before { content: ""; position: absolute; z-index: -1; top: 0; bottom: 0; left: 50%; width: 100cqw; transform: translateX(-50%);
-  border-radius: 0 0 28px 28px; background: linear-gradient(180deg, var(--primary-strong) 0%, color-mix(in srgb, #000 28%, var(--primary)) 100%); }
+  border-radius: 0 0 28px 28px;
+  /* same left-to-right green as the top bar, so the two read as one surface; it only deepens gently toward the bottom */
+  background: linear-gradient(180deg, transparent 0%, rgba(0,0,0,.05) 45%, rgba(0,0,0,.16) 100%), linear-gradient(90deg, var(--primary), var(--primary-strong)); }
 .day-hero .greet, .day-hero h2 { color: #fff; }
 .day-hero .greet { opacity: .85; }
 .day-hero .ring-min { background: none; position: relative; }
