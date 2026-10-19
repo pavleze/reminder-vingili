@@ -23,7 +23,7 @@
       everyLabel: 'Every', unitDay: 'days', unitWeek: 'weeks', unitMonth: 'months', unitYear: 'years', everyYear: 'Every year', everyNyear: 'Every {n} years',
       everyDay: 'Every day', everyWeek: 'Every week', everyMonth: 'Every month', everyNday: 'Every {n} days', everyNweek: 'Every {n} weeks', everyNmonth: 'Every {n} months',
       monthDayEvery: 'Monthly on day {n}', pickDays: 'Pick at least one day', statTasks: 'Tasks', statLists: 'Lists', saved: 'Saved', listDone: 'List completed',
-      homeSub: "Here is what's on for today.", addDate: 'Add date', tomorrow: 'Tomorrow', showMore: 'Show more', changeDate: 'Change date', removeDate: 'Remove date', noDateSection: 'No date', doneSection: 'Done', overdueSection: 'Overdue', lateSince: 'from {date}', allDoneToday: 'All done for today', nothingToday: 'Nothing planned for today', deleteEntry: 'Delete', deleteEntryConfirm: 'Delete “{name}”?',
+      homeSub: "Here is what's on for today.", addDate: 'Add date', tomorrow: 'Tomorrow', showMore: 'Show more', changeDate: 'Change date', removeDate: 'Remove date', noDateSection: 'No date', doneSection: 'Done', lateDay: '{n} day late', lateDays: '{n} days late', allDoneToday: 'All done for today', nothingToday: 'Nothing planned for today', deleteEntry: 'Delete', deleteEntryConfirm: 'Delete “{name}”?',
       welcomeSubtitleAuth: 'Sign in to your account', fullName: 'Full Name', confirmPassword: 'Confirm Password',
       noAccount: "Don't have an account?", registerNow: 'Register', agreeTerms: 'I agree to the Terms of Service and Privacy Policy',
       fillAllFields: 'Please fill all fields', acceptTerms: 'Please accept terms and conditions', wrongCredentials: 'Wrong email or password',
@@ -55,7 +55,7 @@
       everyLabel: 'Na svakih', unitDay: 'dana', unitWeek: 'nedelja', unitMonth: 'meseci', unitYear: 'godina', everyYear: 'Svake godine', everyNyear: 'Na svakih {n} godina',
       everyDay: 'Svaki dan', everyWeek: 'Svake nedelje', everyMonth: 'Svakog meseca', everyNday: 'Na svakih {n} dana', everyNweek: 'Na svakih {n} nedelja', everyNmonth: 'Na svakih {n} meseci',
       monthDayEvery: 'Svakog {n}. u mesecu', pickDays: 'Izaberite bar jedan dan', statTasks: 'Taskovi', statLists: 'Liste', saved: 'Sačuvano', listDone: 'Lista završena',
-      homeSub: 'Evo šta vas čeka danas.', addDate: 'Dodaj datum', tomorrow: 'Sutra', showMore: 'Prikaži još', changeDate: 'Promeni datum', removeDate: 'Ukloni datum', noDateSection: 'Bez datuma', doneSection: 'Urađeno', overdueSection: 'Zakasnelo', lateSince: 'od {date}', allDoneToday: 'Sve za danas je urađeno', nothingToday: 'Za danas nema ništa', deleteEntry: 'Obriši', deleteEntryConfirm: 'Obrisati „{name}“?',
+      homeSub: 'Evo šta vas čeka danas.', addDate: 'Dodaj datum', tomorrow: 'Sutra', showMore: 'Prikaži još', changeDate: 'Promeni datum', removeDate: 'Ukloni datum', noDateSection: 'Bez datuma', doneSection: 'Urađeno', lateDay: 'kasni {n} dan', lateDays: 'kasni {n} dana', allDoneToday: 'Sve za danas je urađeno', nothingToday: 'Za danas nema ništa', deleteEntry: 'Obriši', deleteEntryConfirm: 'Obrisati „{name}“?',
       welcomeSubtitleAuth: 'Prijavite se na svoj nalog', fullName: 'Ime i prezime', confirmPassword: 'Potvrdite lozinku',
       noAccount: 'Nemate nalog?', registerNow: 'Registrujte se', agreeTerms: 'Prihvatam Uslove korišćenja i Politiku privatnosti',
       fillAllFields: 'Popunite sva polja', acceptTerms: 'Prihvatite uslove korišćenja', wrongCredentials: 'Pogrešan email ili lozinka',
@@ -413,10 +413,14 @@
   function entryCard(it, d = todayD(), opts = {}) {
     const k = dkey(d); const done = isDoneOn(it, d); const isList = it.kind === 'list';
     const subParts = [];
-    if (opts.overdue) subParts.push(t('lateSince', { date: fmtDate(d, { weekday: 'short', day: 'numeric', month: 'short' }) }));
+    let late = '';
+    if (opts.overdue) {
+      const n = Math.round((todayD() - d) / 864e5);
+      late = `<span class="late-tag">${esc(t(n % 10 === 1 && n % 100 !== 11 ? 'lateDay' : 'lateDays', { n }))}</span>`;
+    }
     if (it.repeat && it.repeat.type !== 'none') subParts.push(repeatText(it));
     if (it.description && !isList) subParts.push(it.description.split('\n')[0]);
-    const sub = subParts.length ? `<span class="sub">${esc(subParts.join(' · '))}</span>` : '';
+    const sub = subParts.length || late ? `<span class="sub">${late}${late && subParts.length ? ' · ' : ''}${esc(subParts.join(' · '))}</span>` : '';
     const star = it.important ? `<span class="star" aria-label="${esc(t('important'))}">${icon('star', 'fill xs')}</span>` : '';
     const time = it.time && !isFloating(it) && !opts.overdue ? `<span class="time tnum">${esc(fmtTime(it.time))}</span>` : '';
     if (isEvent(it) && !isList) {
@@ -439,7 +443,7 @@
     return `<div class="entry list ${done && !ev ? 'done' : ''} ${ev ? 'event' : ''} ${open ? 'open' : ''}">
       <button class="entry-row" data-a="expand" data-id="${it.uid}" data-d="${k}" aria-expanded="${open}">
         ${ev ? `<span class="ev-ic" aria-hidden="true">${icon('event', 'sm')}</span>` : `<span class="tick pie ${done ? 'on' : ''}" style="--n:${Math.max(n, 1)};--p:${n ? (c / n) * 100 : 0}" aria-hidden="true">${done ? icon('check', 'xs') : ''}</span>`}
-        <span class="body"><span class="title">${esc(it.name)}${star}</span><span class="sub tnum">${esc(ev ? String(n) : c + '/' + n)}${subParts.length ? ' · ' + esc(subParts.join(' · ')) : ''}</span></span>
+        <span class="body"><span class="title">${esc(it.name)}${star}</span><span class="sub tnum">${late ? late + ' · ' : ''}${esc(ev ? String(n) : c + '/' + n)}${subParts.length ? ' · ' + esc(subParts.join(' · ')) : ''}</span></span>
         ${time}
         <span class="chev">${icon(open ? 'expand_less' : 'expand_more', 'sm')}</span>
       </button>
@@ -455,9 +459,13 @@
     const today = entriesOn(d);
     const floating = entries().filter((it) => isFloating(it) && floatingVisible(it))
       .sort((a, b) => isDoneOn(a, d) - isDoneOn(b, d) || (b.important ? 1 : 0) - (a.important ? 1 : 0) || a.name.localeCompare(b.name));
+    const pastOneOff = (it) => it.date && (!it.repeat || it.repeat.type === 'none') && !isEvent(it) && fromKey(it.date) < d;
+    const overdue = entries().filter((it) => pastOneOff(it) && !isDoneOn(it, fromKey(it.date))).sort((a, b) => a.date.localeCompare(b.date) || byTime(a, b));
+    const lateDone = entries().filter((it) => pastOneOff(it) && isDoneOn(it, fromKey(it.date)) && it.lateDoneOn === dkey(d));
     const doable = today.filter((it) => !isEvent(it));
-    const doneN = doable.filter((it) => isDoneOn(it, d)).length;
-    const pct = doable.length ? Math.round((doneN / doable.length) * 100) : 0;
+    const doneN = doable.filter((it) => isDoneOn(it, d)).length + lateDone.length;
+    const totalN = doable.length + overdue.length + lateDone.length;
+    const pct = totalN ? Math.round((doneN / totalN) * 100) : 0;
     const hasSamples = entries().some((it) => it.sample);
     const first = (me().name || '').split(' ')[0];
     // finished items move to the "Done" section at the bottom
@@ -465,25 +473,18 @@
     const todayOpen = today.filter((it) => !isDone(it));
     const floatOpen = floating.filter((it) => !isDone(it));
     const doneList = today.filter(isDone).concat(floating.filter(isDone));
-    // overdue: one-off dated tasks/lists from past days that were never finished
-    const overdue = entries().filter((it) => it.date && (!it.repeat || it.repeat.type === 'none') && !isEvent(it) && fromKey(it.date) < d && !isDoneOn(it, fromKey(it.date)))
-      .sort((a, b) => a.date.localeCompare(b.date) || byTime(a, b));
-    const lateDone = entries().filter((it) => it.date && (!it.repeat || it.repeat.type === 'none') && !isEvent(it) && fromKey(it.date) < d && isDoneOn(it, fromKey(it.date)) && it.lateDoneOn === dkey(d));
     const html = `
       <header class="day-hero">
         <div class="day-head-txt">
           <span class="greet">${esc(t('welcomeBack'))}${first ? ', ' + esc(first) : ''}!</span>
           <h2 id="today-h">${esc(t('today'))}</h2>
         </div>
-        ${doable.length ? `<div class="ring ring-min" style="--p:${pct}" role="img" aria-label="${esc(t('ofDone', { a: doneN, b: doable.length }))} ${esc(t('doneToday'))}"><div><b class="tnum">${doneN}/${doable.length}</b><small>${esc(t('doneToday'))}</small></div></div>` : ''}
+        ${totalN ? `<div class="ring ring-min" style="--p:${pct}" role="img" aria-label="${esc(t('ofDone', { a: doneN, b: totalN }))} ${esc(t('doneToday'))}"><div><b class="tnum">${doneN}/${totalN}</b><small>${esc(t('doneToday'))}</small></div></div>` : ''}
       </header>
-      ${overdue.length ? `<section class="rows overdue-sec" aria-labelledby="late-h">
-        <h3 class="rows-label late" id="late-h">${esc(t('overdueSection'))} <span class="muted-date tnum">${overdue.length}</span></h3>
-        ${overdue.map((it) => entryCard(it, fromKey(it.date), { overdue: true })).join('')}
-      </section>` : ''}
       <section class="rows" aria-labelledby="today-h">
         <h3 class="rows-label">${esc(cap(fmtDate(d, { weekday: 'long', day: 'numeric', month: 'long' })))}</h3>
-        ${todayOpen.length ? todayOpen.map((it) => entryCard(it, d)).join('') : `<p class="quiet">${esc(today.length ? t('allDoneToday') : t('nothingToday'))}</p>`}
+        ${overdue.map((it) => entryCard(it, fromKey(it.date), { overdue: true })).join('')}
+        ${todayOpen.length ? todayOpen.map((it) => entryCard(it, d)).join('') : overdue.length ? '' : `<p class="quiet">${esc(today.length ? t('allDoneToday') : t('nothingToday'))}</p>`}
       </section>
       ${floatOpen.length ? `<section class="rows" aria-labelledby="nodate-h">
         <h3 class="rows-label" id="nodate-h">${esc(t('noDateSection'))}</h3>
