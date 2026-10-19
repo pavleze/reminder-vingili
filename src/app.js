@@ -587,7 +587,7 @@
       items.sort(doneLast(d));
       // date first (bold), then the day in plain text: "19. OKTOBAR  Danas" / "21. OKTOBAR  Sreda"
       const day = i === 0 ? t('today') : i === 1 ? t('tomorrow') : cap(fmtDate(d, { weekday: 'long' }));
-      html += `<section class="rows agenda-day"><h3 class="rows-label">${esc(fmtDate(d, { day: 'numeric', month: 'long' }))} <span class="muted-date">${esc(day)}</span></h3>${items.map((it) => entryCard(it, d)).join('')}</section>`;
+      html += `<section class="rows agenda-day"><h3 class="rows-label ${i === 0 ? 'is-today' : ''}">${esc(fmtDate(d, { day: 'numeric', month: 'long' }))} <span class="muted-date">${esc(day)}</span></h3>${items.map((it) => entryCard(it, d)).join('')}</section>`;
     }
     const floating = entries().filter((it) => isFloating(it) && floatingVisible(it));
     const undated = floating.filter((it) => !isDoneOn(it, T)).concat(floating.filter((it) => isDoneOn(it, T)));
