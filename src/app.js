@@ -752,38 +752,18 @@
     }
     function drawWhen() {
       const showTime = st.hasDate || st.rep.type !== 'none';
-      const dLabel = st.date ? cap(fmtDate(fromKey(st.date), { weekday: 'short', day: 'numeric', month: 'long', year: fromKey(st.date).getFullYear() === T.getFullYear() ? undefined : 'numeric' })) : '';
       const dateHtml = st.hasDate
-        ? `<div class="field date-field"><span style="margin-left:14px;color:var(--primary-ink)">${icon('event')}</span><label>${esc(t('date'))}</label>
-            <button type="button" class="date-show" id="ef-date-show" aria-expanded="${!!st.pickerOpen}" aria-label="${esc(t('changeDate'))}">${esc(dLabel)}</button>
+        ? `<div class="field"><button type="button" class="icon-btn pick-ic" data-open-picker="ef-date" aria-label="${esc(t('changeDate'))}">${icon('event')}</button><label for="ef-date">${esc(t('date'))}</label>
+            <input id="ef-date" type="date" value="${esc(st.date)}">
             <button type="button" class="icon-btn" id="ef-date-clear" aria-label="${esc(t('removeDate'))}">${icon('close', 'sm')}</button></div>`
         : `<button type="button" class="btn btn-outline add-date" id="ef-add-date">${icon('event')}${esc(t('addDate'))}</button>`;
-      const timeHtml = showTime ? `<div class="field">${icon('schedule')}<label for="ef-time">${esc(t('timeOptional'))}</label><input id="ef-time" type="time" value="${esc(st.time)}">
+      const timeHtml = showTime ? `<div class="field"><button type="button" class="icon-btn pick-ic" data-open-picker="ef-time" aria-label="${esc(t('timeOptional'))}">${icon('schedule')}</button><label for="ef-time">${esc(t('timeOptional'))}</label><input id="ef-time" type="time" value="${esc(st.time)}">
             <button type="button" class="icon-btn" id="ef-time-clear" aria-label="${esc(t('clearTime'))}" ${st.time ? '' : 'hidden'}>${icon('close', 'sm')}</button></div>` : '';
-      $('#ef-when').innerHTML = `<div class="field-row dt-row ${showTime ? '' : 'one'}">${dateHtml}${timeHtml}</div>${st.hasDate && st.pickerOpen ? miniCal() : ''}`;
+      $('#ef-when').innerHTML = `<div class="field-row dt-row ${showTime ? '' : 'one'}">${dateHtml}${timeHtml}</div>`;
     }
-    function miniCal() {
-      const m = st.pm || fromKey(st.date || dkey(T)); st.pm = new Date(m.getFullYear(), m.getMonth(), 1);
-      const y = st.pm.getFullYear(), mo = st.pm.getMonth(); const startW = weekdayIdx(st.pm); const days = new Date(y, mo + 1, 0).getDate();
-      let cells = '';
-      for (let i = 0; i < startW; i++) cells += '<span></span>';
-      for (let n = 1; n <= days; n++) {
-        const k = dkey(new Date(y, mo, n));
-        cells += `<button type="button" class="mc-day ${k === dkey(T) ? 'today' : ''}" data-pick="${k}" aria-pressed="${k === st.date}">${n}</button>`;
-      }
-      return `<div class="mini-cal" role="group" aria-label="${esc(t('date'))}">
-        <div class="mc-quick"><button type="button" class="chip-btn" data-pick="${dkey(T)}">${esc(t('today'))}</button><button type="button" class="chip-btn" data-pick="${dkey(addDays(T, 1))}">${esc(t('tomorrow'))}</button></div>
-        <div class="mc-head"><button type="button" class="icon-btn" data-pm="-1" aria-label="Previous month">${icon('chevron_left')}</button>
-          <b>${esc(cap(new Intl.DateTimeFormat(loc(), { month: 'long', year: 'numeric' }).format(st.pm)))}</b>
-          <button type="button" class="icon-btn" data-pm="1" aria-label="Next month">${icon('chevron_right')}</button></div>
-        <div class="mc-grid mc-dow">${DOW_KEYS.map((k) => `<span>${esc(t(k))}</span>`).join('')}</div>
-        <div class="mc-grid">${cells}</div>
-      </div>`;
-    }
-    function pickDate(k) {
-      st.date = k; st.pickerOpen = false; st.pm = null;
-      if (!existing) { const d = fromKey(k); st.rep.monthDay = d.getDate(); if (st.rep.days.length <= 1) st.rep.days = [weekdayIdx(d)]; if (st.rep.type === 'monthday' || st.rep.type === 'weekdays') drawRep(); }
-      drawWhen();
+    function openPicker(id) {
+      const el = document.getElementById(id); if (!el) return;
+      el.focus(); try { if (el.showPicker) el.showPicker(); } catch (er) { /* some browsers only allow the picker from a direct tap on the field */ }
     }
     function drawKind() {
       const list = st.kind === 'list';
@@ -803,17 +783,19 @@
       if (e.target.closest('#ef-add-item')) addItem();
       const sk = e.target.closest('.seg-btn'); if (sk) { st.kind = sk.dataset.kind; drawKind(); err(''); if (st.kind === 'list' && !st.items.length) $('#ef-new-item').focus(); return; }
       if (e.target.closest('#ef-time-clear')) { st.time = ''; $('#ef-time').value = ''; $('#ef-time-clear').hidden = true; }
-      if (e.target.closest('#ef-add-date')) { st.hasDate = true; if (!st.date) st.date = dkey(T); st.pickerOpen = true; drawWhen(); return; }
-      if (e.target.closest('#ef-date-show')) { st.pickerOpen = !st.pickerOpen; drawWhen(); return; }
-      if (e.target.closest('#ef-date-clear')) { st.hasDate = false; st.date = ''; st.pickerOpen = false; drawWhen(); return; }
-      const pk = e.target.closest('[data-pick]'); if (pk) { pickDate(pk.dataset.pick); return; }
-      const pm = e.target.closest('[data-pm]'); if (pm) { st.pm = new Date(st.pm.getFullYear(), st.pm.getMonth() + Number(pm.dataset.pm), 1); drawWhen(); return; }
+      if (e.target.closest('#ef-add-date')) { st.hasDate = true; if (!st.date) st.date = dkey(T); drawWhen(); openPicker('ef-date'); return; }
+      if (e.target.closest('#ef-date-clear')) { st.hasDate = false; st.date = ''; drawWhen(); return; }
+      const op = e.target.closest('[data-open-picker]'); if (op) { openPicker(op.dataset.openPicker); return; }
     });
     form.addEventListener('input', (e) => {
       if (e.target.dataset.i != null) st.items[Number(e.target.dataset.i)].text = e.target.value;
       if (e.target.id === 'ef-every') st.rep.every = Number(e.target.value);
       if (e.target.id === 'ef-mday') st.rep.monthDay = Number(e.target.value);
       if (e.target.id === 'ef-time') { st.time = e.target.value; $('#ef-time-clear').hidden = !e.target.value; }
+      if (e.target.id === 'ef-date' && e.target.value) {
+        st.date = e.target.value;
+        if (!existing) { const d = fromKey(st.date); st.rep.monthDay = d.getDate(); if (st.rep.days.length <= 1) st.rep.days = [weekdayIdx(d)]; if (st.rep.type === 'monthday' || st.rep.type === 'weekdays') drawRep(); }
+      }
     });
     form.addEventListener('change', (e) => {
       if (e.target.id === 'ef-rep') { st.rep.type = e.target.value; drawRep(); drawWhen(); }
