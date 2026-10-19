@@ -820,7 +820,6 @@
     function drawKind() {
       const list = st.kind === 'list';
       $('#ef-items-wrap').hidden = !list;
-      $('#ef-head').style.background = list ? LIST_COLOR : '';
       $('#ef-head-ic').textContent = list ? 'checklist' : 'task_alt';
       $('#ed-t').textContent = t(existing ? (list ? 'editList' : 'editTask') : (list ? 'newList' : 'newTask'));
       document.querySelectorAll('#entry-form .seg-btn').forEach((b) => b.setAttribute('aria-checked', b.dataset.kind === st.kind));
