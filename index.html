@@ -243,9 +243,18 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
 .banner p { margin: 0; flex: 1; min-width: 0; }
 
 /* Entries (tasks & lists) — minimal rows */
-.day-hero { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 8px 0 12px; border-bottom: 1px solid var(--divider); }
+.day-hero { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 18px 20px; margin-top: 4px; border-radius: 22px; color: #fff;
+  background: radial-gradient(120% 140% at 100% 0%, color-mix(in srgb, #fff 16%, var(--primary)) 0%, transparent 55%), linear-gradient(135deg, var(--primary) 0%, color-mix(in srgb, #000 38%, var(--primary)) 100%);
+  box-shadow: 0 10px 24px -14px color-mix(in srgb, var(--primary) 70%, transparent); }
+.day-hero .greet, .day-hero h2 { color: #fff; }
+.day-hero .greet { opacity: .85; }
+.day-hero .ring-min { background: none; position: relative; }
+.day-hero .ring-min::before { content: ""; position: absolute; inset: 0; border-radius: 50%; background: conic-gradient(#fff calc(var(--p) * 1%), rgba(255,255,255,.22) 0);
+  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 5px), #000 calc(100% - 4px)); mask: radial-gradient(farthest-side, transparent calc(100% - 5px), #000 calc(100% - 4px)); transition: background .3s; }
+.day-hero .ring-min > div { background: transparent !important; position: relative; color: #fff; }
+.day-hero .ring-min small { color: rgba(255,255,255,.8); }
 .day-head-txt { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
-.day-hero .greet { font-size: 16px; font-weight: 500; color: color-mix(in srgb, var(--fg) 75%, transparent); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.day-hero .greet { font-size: 16px; font-weight: 500; color: rgba(255,255,255,.88); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .day-hero .eyebrow { font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
 .day-hero h2 { font-size: 34px; font-weight: 700; letter-spacing: -.02em; line-height: 1.1; }
 .ring-min { width: 76px; height: 76px; background: conic-gradient(var(--primary) calc(var(--p) * 1%), var(--divider) 0); transition: background .3s; }
