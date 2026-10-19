@@ -416,14 +416,11 @@
       ${hasSamples ? `<div class="banner">${icon('info')}<p>${esc(t('sampleData'))}</p><button class="btn btn-text btn-sm" data-a="clear-samples">${esc(t('clearSamples'))}</button></div>` : ''}
       <div class="stack">
         <section class="stack" aria-labelledby="today-h">
-          <button class="btn btn-primary btn-block" data-a="add">${icon('add')}${esc(t('addReminder'))}</button>
           <div class="section-head"><h2 id="today-h">${esc(t('today'))}</h2><span class="meta">${esc(cap(fmtDate(d, { day: 'numeric', month: 'long', year: 'numeric' })))}</span></div>
           ${today.length ? today.map(todayCard).join('') : `<div class="empty">${icon('notifications', 'xl')}<span>${esc(t('noRemindersToday'))}</span><button class="btn btn-tonal btn-sm" data-a="add">${icon('add', 'sm')}${esc(t('addReminder'))}</button></div>`}
         </section>
       </div>`;
-    const fabs = `
-      <button class="fab secondary" data-a="test-notif" title="${esc(t('testNotificationTitle'))}">${icon('notification_add')}<span class="fab-label">${esc(t('testNotificationTitle'))}</span></button>
-      <button class="fab secondary" data-a="import-ics" title="${esc(t('importCalendarDesc'))}">${icon('calendar_add_on')}<span class="fab-label">${esc(t('importCalendar'))}</span></button>`;
+    const fabs = `<button class="fab" data-a="add" aria-label="${esc(t('addReminder'))}">${icon('add')}<span class="fab-label">${esc(t('addReminder'))}</span></button>`;
     return { title: t('homeTitle'), html, fabs, actions: avatarAction() };
   }
   const avatarAction = () => `<button class="icon-btn" data-a="tab" data-tab="profile" aria-label="${esc(t('profileTitle'))}">${avatarHtml(me(), 'sm')}</button>`;
