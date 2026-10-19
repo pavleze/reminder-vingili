@@ -435,11 +435,13 @@
     const doneN = today.filter((it) => isDoneOn(it, d)).length;
     const pct = today.length ? Math.round((doneN / today.length) * 100) : 0;
     const hasSamples = entries().some((it) => it.sample);
+    const first = (me().name || '').split(' ')[0];
     const html = `
       <header class="day-hero">
         <div class="day-head-txt">
-          <span class="eyebrow">${esc(cap(fmtDate(d, { weekday: 'long', day: 'numeric', month: 'long' })))}</span>
+          <span class="greet">${esc(t('welcomeBack'))}${first ? ', ' + esc(first) : ''}!</span>
           <h2 id="today-h">${esc(t('today'))}</h2>
+          <span class="eyebrow">${esc(cap(fmtDate(d, { weekday: 'long', day: 'numeric', month: 'long' })))}</span>
         </div>
         ${today.length ? `<div class="ring ring-min" style="--p:${pct}" role="img" aria-label="${esc(t('ofDone', { a: doneN, b: today.length }))} ${esc(t('doneToday'))}"><div><b class="tnum">${doneN}/${today.length}</b><small>${esc(t('doneToday'))}</small></div></div>` : ''}
       </header>
