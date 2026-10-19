@@ -23,7 +23,7 @@
       everyLabel: 'Every', unitDay: 'days', unitWeek: 'weeks', unitMonth: 'months',
       everyDay: 'Every day', everyWeek: 'Every week', everyMonth: 'Every month', everyNday: 'Every {n} days', everyNweek: 'Every {n} weeks', everyNmonth: 'Every {n} months',
       monthDayEvery: 'Monthly on day {n}', pickDays: 'Pick at least one day', statTasks: 'Tasks', statLists: 'Lists', saved: 'Saved', listDone: 'List completed',
-      homeSub: "Here is what's on for today.", addDate: 'Add date', removeDate: 'Remove date', noDateSection: 'No date', nothingToday: 'Nothing planned for today', deleteEntry: 'Delete', deleteEntryConfirm: 'Delete “{name}”?',
+      homeSub: "Here is what's on for today.", addDate: 'Add date', tomorrow: 'Tomorrow', changeDate: 'Change date', removeDate: 'Remove date', noDateSection: 'No date', nothingToday: 'Nothing planned for today', deleteEntry: 'Delete', deleteEntryConfirm: 'Delete “{name}”?',
       welcomeSubtitleAuth: 'Sign in to your account', fullName: 'Full Name', confirmPassword: 'Confirm Password',
       noAccount: "Don't have an account?", registerNow: 'Register', agreeTerms: 'I agree to the Terms of Service and Privacy Policy',
       fillAllFields: 'Please fill all fields', acceptTerms: 'Please accept terms and conditions', wrongCredentials: 'Wrong email or password',
@@ -55,7 +55,7 @@
       everyLabel: 'Na svakih', unitDay: 'dana', unitWeek: 'nedelja', unitMonth: 'meseci',
       everyDay: 'Svaki dan', everyWeek: 'Svake nedelje', everyMonth: 'Svakog meseca', everyNday: 'Na svakih {n} dana', everyNweek: 'Na svakih {n} nedelja', everyNmonth: 'Na svakih {n} meseci',
       monthDayEvery: 'Svakog {n}. u mesecu', pickDays: 'Izaberite bar jedan dan', statTasks: 'Taskovi', statLists: 'Liste', saved: 'Sačuvano', listDone: 'Lista završena',
-      homeSub: 'Evo šta vas čeka danas.', addDate: 'Dodaj datum', removeDate: 'Ukloni datum', noDateSection: 'Bez datuma', nothingToday: 'Za danas nema ništa', deleteEntry: 'Obriši', deleteEntryConfirm: 'Obrisati „{name}“?',
+      homeSub: 'Evo šta vas čeka danas.', addDate: 'Dodaj datum', tomorrow: 'Sutra', changeDate: 'Promeni datum', removeDate: 'Ukloni datum', noDateSection: 'Bez datuma', nothingToday: 'Za danas nema ništa', deleteEntry: 'Obriši', deleteEntryConfirm: 'Obrisati „{name}“?',
       welcomeSubtitleAuth: 'Prijavite se na svoj nalog', fullName: 'Ime i prezime', confirmPassword: 'Potvrdite lozinku',
       noAccount: 'Nemate nalog?', registerNow: 'Registrujte se', agreeTerms: 'Prihvatam Uslove korišćenja i Politiku privatnosti',
       fillAllFields: 'Popunite sva polja', acceptTerms: 'Prihvatite uslove korišćenja', wrongCredentials: 'Pogrešan email ili lozinka',
@@ -752,13 +752,38 @@
     }
     function drawWhen() {
       const showTime = st.hasDate || st.rep.type !== 'none';
+      const dLabel = st.date ? cap(fmtDate(fromKey(st.date), { weekday: 'short', day: 'numeric', month: 'long', year: fromKey(st.date).getFullYear() === T.getFullYear() ? undefined : 'numeric' })) : '';
       const dateHtml = st.hasDate
-        ? `<div class="field">${icon('event')}<label for="ef-date">${esc(t('date'))}</label><input id="ef-date" type="date" value="${esc(st.date)}">
+        ? `<div class="field date-field"><span style="margin-left:14px;color:var(--primary-ink)">${icon('event')}</span><label>${esc(t('date'))}</label>
+            <button type="button" class="date-show" id="ef-date-show" aria-expanded="${!!st.pickerOpen}" aria-label="${esc(t('changeDate'))}">${esc(dLabel)}</button>
             <button type="button" class="icon-btn" id="ef-date-clear" aria-label="${esc(t('removeDate'))}">${icon('close', 'sm')}</button></div>`
         : `<button type="button" class="btn btn-outline add-date" id="ef-add-date">${icon('event')}${esc(t('addDate'))}</button>`;
       const timeHtml = showTime ? `<div class="field">${icon('schedule')}<label for="ef-time">${esc(t('timeOptional'))}</label><input id="ef-time" type="time" value="${esc(st.time)}">
             <button type="button" class="icon-btn" id="ef-time-clear" aria-label="${esc(t('clearTime'))}" ${st.time ? '' : 'hidden'}>${icon('close', 'sm')}</button></div>` : '';
-      $('#ef-when').innerHTML = `<div class="field-row dt-row ${showTime ? '' : 'one'}">${dateHtml}${timeHtml}</div>`;
+      $('#ef-when').innerHTML = `<div class="field-row dt-row ${showTime ? '' : 'one'}">${dateHtml}${timeHtml}</div>${st.hasDate && st.pickerOpen ? miniCal() : ''}`;
+    }
+    function miniCal() {
+      const m = st.pm || fromKey(st.date || dkey(T)); st.pm = new Date(m.getFullYear(), m.getMonth(), 1);
+      const y = st.pm.getFullYear(), mo = st.pm.getMonth(); const startW = weekdayIdx(st.pm); const days = new Date(y, mo + 1, 0).getDate();
+      let cells = '';
+      for (let i = 0; i < startW; i++) cells += '<span></span>';
+      for (let n = 1; n <= days; n++) {
+        const k = dkey(new Date(y, mo, n));
+        cells += `<button type="button" class="mc-day ${k === dkey(T) ? 'today' : ''}" data-pick="${k}" aria-pressed="${k === st.date}">${n}</button>`;
+      }
+      return `<div class="mini-cal" role="group" aria-label="${esc(t('date'))}">
+        <div class="mc-quick"><button type="button" class="chip-btn" data-pick="${dkey(T)}">${esc(t('today'))}</button><button type="button" class="chip-btn" data-pick="${dkey(addDays(T, 1))}">${esc(t('tomorrow'))}</button></div>
+        <div class="mc-head"><button type="button" class="icon-btn" data-pm="-1" aria-label="Previous month">${icon('chevron_left')}</button>
+          <b>${esc(cap(new Intl.DateTimeFormat(loc(), { month: 'long', year: 'numeric' }).format(st.pm)))}</b>
+          <button type="button" class="icon-btn" data-pm="1" aria-label="Next month">${icon('chevron_right')}</button></div>
+        <div class="mc-grid mc-dow">${DOW_KEYS.map((k) => `<span>${esc(t(k))}</span>`).join('')}</div>
+        <div class="mc-grid">${cells}</div>
+      </div>`;
+    }
+    function pickDate(k) {
+      st.date = k; st.pickerOpen = false; st.pm = null;
+      if (!existing) { const d = fromKey(k); st.rep.monthDay = d.getDate(); if (st.rep.days.length <= 1) st.rep.days = [weekdayIdx(d)]; if (st.rep.type === 'monthday' || st.rep.type === 'weekdays') drawRep(); }
+      drawWhen();
     }
     function drawKind() {
       const list = st.kind === 'list';
@@ -778,24 +803,22 @@
       if (e.target.closest('#ef-add-item')) addItem();
       const sk = e.target.closest('.seg-btn'); if (sk) { st.kind = sk.dataset.kind; drawKind(); err(''); if (st.kind === 'list' && !st.items.length) $('#ef-new-item').focus(); return; }
       if (e.target.closest('#ef-time-clear')) { st.time = ''; $('#ef-time').value = ''; $('#ef-time-clear').hidden = true; }
-      if (e.target.closest('#ef-add-date')) {
-        st.hasDate = true; if (!st.date) st.date = dkey(T); drawWhen();
-        const di = $('#ef-date'); if (di) { di.focus(); try { di.showPicker && di.showPicker(); } catch (er) { /* picker needs user gesture support */ } }
-      }
-      if (e.target.closest('#ef-date-clear')) { st.hasDate = false; st.date = ''; drawWhen(); }
+      if (e.target.closest('#ef-add-date')) { st.hasDate = true; if (!st.date) st.date = dkey(T); st.pickerOpen = true; drawWhen(); return; }
+      if (e.target.closest('#ef-date-show')) { st.pickerOpen = !st.pickerOpen; drawWhen(); return; }
+      if (e.target.closest('#ef-date-clear')) { st.hasDate = false; st.date = ''; st.pickerOpen = false; drawWhen(); return; }
+      const pk = e.target.closest('[data-pick]'); if (pk) { pickDate(pk.dataset.pick); return; }
+      const pm = e.target.closest('[data-pm]'); if (pm) { st.pm = new Date(st.pm.getFullYear(), st.pm.getMonth() + Number(pm.dataset.pm), 1); drawWhen(); return; }
     });
     form.addEventListener('input', (e) => {
       if (e.target.dataset.i != null) st.items[Number(e.target.dataset.i)].text = e.target.value;
       if (e.target.id === 'ef-every') st.rep.every = Number(e.target.value);
       if (e.target.id === 'ef-mday') st.rep.monthDay = Number(e.target.value);
       if (e.target.id === 'ef-time') { st.time = e.target.value; $('#ef-time-clear').hidden = !e.target.value; }
-      if (e.target.id === 'ef-date') st.date = e.target.value;
     });
     form.addEventListener('change', (e) => {
       if (e.target.id === 'ef-rep') { st.rep.type = e.target.value; drawRep(); drawWhen(); }
       if (e.target.id === 'ef-unit') st.rep.unit = e.target.value;
       if (e.target.id === 'ef-imp') $('#ef-star').style.color = e.target.checked ? 'var(--star)' : 'var(--muted)';
-      if (e.target.id === 'ef-date' && !existing && e.target.value) { st.date = e.target.value; const d = fromKey(e.target.value); st.rep.monthDay = d.getDate(); if (st.rep.days.length <= 1) st.rep.days = [weekdayIdx(d)]; if (st.rep.type === 'monthday' || st.rep.type === 'weekdays') drawRep(); }
     });
     const ni = $('#ef-new-item'); if (ni) ni.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); addItem(); } });
     form.addEventListener('submit', (e) => {
