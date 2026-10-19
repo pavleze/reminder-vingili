@@ -144,7 +144,7 @@
   /* ================= Store (swap for Firebase later) ================= */
   const KEY = 'todays-v3';
   const defaultSettings = () => ({
-    lang: (() => { const n = (navigator.language || 'en').slice(0, 2).toLowerCase(); if (['sr', 'hr', 'bs', 'me'].includes(n)) return 'sr'; return LANGS.some((l) => l.code === n) ? n : 'en'; })(),
+    lang: 'sr',
     dark: null, primary: BRAND, reduceMotion: false,
     notif: { reminders: true, snooze: true, sound: true },
   });
@@ -153,6 +153,14 @@
     try { DB = JSON.parse(localStorage.getItem(KEY) || 'null'); } catch (e) { DB = null; }
     if (!DB || typeof DB !== 'object' || !DB.users) DB = { users: {}, session: null, guest: defaultSettings(), fired: {}, feedback: [], seeded: false };
     DB.fired = DB.fired || {}; DB.feedback = DB.feedback || [];
+    // Serbian is the default; switch everyone who never picked a language themselves
+    const fix = (st) => { if (st && !st.langChosen && st.lang !== 'sr') { st.lang = 'sr'; return true; } return false; };
+    fix(DB.guest);
+    Object.values(DB.users).forEach((u) => { if (fix(u.settings)) refreshSamples(u); });
+  }
+  function refreshSamples(u) {
+    if (!u.tasks || !u.tasks.some((x) => x.sample)) return;
+    u.tasks = u.tasks.filter((x) => !x.sample).concat(sampleEntries(u.settings.lang));
   }
   function save() { try { localStorage.setItem(KEY, JSON.stringify(DB)); } catch (e) { /* storage unavailable: keep in memory */ } }
   const me = () => (DB.session && DB.users[DB.session]) || null;
@@ -1046,7 +1054,8 @@
       case 'notif-save': save(); toast(t('notificationSettingsSaved')); break;
       case 'pick-lang': ui.pendingLang = el.dataset.v; render(); break;
       case 'save-lang': {
-        const code = ui.pendingLang || settings().lang; settings().lang = code; ui.pendingLang = null; save(); render();
+        const code = ui.pendingLang || settings().lang; const changed = settings().lang !== code;
+        settings().lang = code; settings().langChosen = true; ui.pendingLang = null; if (changed && me()) refreshSamples(me()); save(); render();
         toast(t('languageSetTo', { language: LANGS.find((l) => l.code === code).label })); break;
       }
       case 'restore-defaults': { const s = settings(); s.primary = BRAND; s.dark = null; s.reduceMotion = false; save(); render(); toast(t('defaultsRestored')); break; }
