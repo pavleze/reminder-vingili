@@ -539,7 +539,7 @@
       </header>
       ${filterBar}
       <section class="rows home-rows" aria-labelledby="today-h">
-        <h3 class="rows-label"><span class="d-long">${esc(cap(fmtDate(d, { weekday: 'long', day: 'numeric', month: 'long' })))}</span><span class="d-short">${esc(cap(fmtDate(d, { weekday: 'short', day: 'numeric', month: 'short' })))}</span></h3>
+        <h3 class="rows-label">${esc(fmtDate(d, { day: 'numeric', month: 'long' }))} <span class="muted-date">${esc(cap(fmtDate(d, { weekday: 'long' })))}</span></h3>
         ${overdueF.map((it) => entryCard(it, fromKey(it.date), { overdue: true })).join('')}
         ${todayOpen.length ? todayOpen.map((it) => entryCard(it, d)).join('') : overdueF.length ? '' : `<p class="quiet">${esc(today.length ? t('allDoneToday') : t('nothingToday'))}</p>`}
       </section>
@@ -585,8 +585,9 @@
       });
       if (!items.length) continue;
       items.sort(doneLast(d));
-      const label = i === 0 ? t('today') : i === 1 ? t('tomorrow') : cap(fmtDate(d, { weekday: 'long', day: 'numeric', month: 'long' }));
-      html += `<section class="rows agenda-day"><h3 class="rows-label">${esc(label)}${i <= 1 ? ` <span class="muted-date">${esc(fmtDate(d, { day: 'numeric', month: 'long' }))}</span>` : ''}</h3>${items.map((it) => entryCard(it, d)).join('')}</section>`;
+      // date first (bold), then the day in plain text: "19. OKTOBAR  Danas" / "21. OKTOBAR  Sreda"
+      const day = i === 0 ? t('today') : i === 1 ? t('tomorrow') : cap(fmtDate(d, { weekday: 'long' }));
+      html += `<section class="rows agenda-day"><h3 class="rows-label">${esc(fmtDate(d, { day: 'numeric', month: 'long' }))} <span class="muted-date">${esc(day)}</span></h3>${items.map((it) => entryCard(it, d)).join('')}</section>`;
     }
     const floating = entries().filter((it) => isFloating(it) && floatingVisible(it));
     const undated = floating.filter((it) => !isDoneOn(it, T)).concat(floating.filter((it) => isDoneOn(it, T)));
