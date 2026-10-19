@@ -910,7 +910,7 @@
       const dp = e.target.closest('.day-pill');
       if (dp) { const i = Number(dp.dataset.day); const s = new Set(st.rep.days); s.has(i) ? s.delete(i) : s.add(i); st.rep.days = [...s].sort(); dp.setAttribute('aria-pressed', s.has(i)); return; }
       if (e.target.closest('#ef-add-item')) addItem();
-      const sk = e.target.closest('.seg-btn'); if (sk) { st.kind = sk.dataset.kind; drawKind(); err(''); if (st.kind === 'list' && !st.items.length) $('#ef-new-item').focus(); return; }
+      const sk = e.target.closest('.seg-btn'); if (sk) { st.kind = sk.dataset.kind; drawKind(); err(''); return; }
       if (e.target.closest('#ef-time-clear')) { st.time = ''; $('#ef-time').value = ''; $('#ef-time-clear').hidden = true; }
       if (e.target.closest('#ef-add-date')) { st.hasDate = true; if (!st.date) st.date = dkey(T); drawWhen(); openPicker('ef-date'); return; }
       if (e.target.closest('#ef-date-clear')) { st.hasDate = false; st.date = ''; drawWhen(); return; }
