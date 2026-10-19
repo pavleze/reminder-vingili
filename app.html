@@ -257,8 +257,13 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
 .tick { flex: none; width: 24px; height: 24px; border-radius: 50%; border: 1.5px solid color-mix(in srgb, var(--fg) 35%, transparent); background: transparent; display: grid; place-items: center; padding: 0; color: var(--on-primary); transition: background .15s, border-color .15s; }
 .tick:hover { border-color: var(--primary-ink); }
 .tick.on { background: var(--primary); border-color: var(--primary); }
-.list-tick { border-radius: 7px; font-size: 11.5px; font-weight: 600; color: var(--muted); }
-.list-tick.on { color: var(--on-primary); }
+/* list progress "pizza": one slice per item, checked slices filled */
+.tick.pie { --gap: var(--bg); position: relative; overflow: hidden;
+  background:
+    repeating-conic-gradient(from 0deg, transparent 0 calc(360deg / var(--n) - 6deg), var(--gap) calc(360deg / var(--n) - 6deg) calc(360deg / var(--n))),
+    conic-gradient(var(--primary) calc(var(--p) * 1%), transparent 0); }
+.tick.pie.on { background: var(--primary); }
+.entry-row:hover .tick.pie { border-color: var(--primary-ink); }
 .name-row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 150px); gap: 10px; }
 .name-row:has(#ef-type-wrap[hidden]) { grid-template-columns: minmax(0, 1fr); }
 .ev-ic { flex: none; width: 24px; height: 24px; display: grid; place-items: center; color: #9B6BD6; }

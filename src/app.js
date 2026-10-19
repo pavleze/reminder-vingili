@@ -436,7 +436,7 @@
     const checked = new Set(checkedOn(it, d)); const n = it.items.length; const c = checked.size; const ev = isEvent(it);
     return `<div class="entry list ${done && !ev ? 'done' : ''} ${ev ? 'event' : ''} ${open ? 'open' : ''}">
       <button class="entry-row" data-a="expand" data-id="${it.uid}" data-d="${k}" aria-expanded="${open}">
-        ${ev ? `<span class="ev-ic" aria-hidden="true">${icon('event', 'sm')}</span>` : `<span class="tick list-tick ${done ? 'on' : ''}" aria-hidden="true">${done ? icon('check', 'xs') : `<span class="tnum">${c}</span>`}</span>`}
+        ${ev ? `<span class="ev-ic" aria-hidden="true">${icon('event', 'sm')}</span>` : `<span class="tick pie ${done ? 'on' : ''}" style="--n:${Math.max(n, 1)};--p:${n ? (c / n) * 100 : 0}" aria-hidden="true">${done ? icon('check', 'xs') : ''}</span>`}
         <span class="body"><span class="title">${esc(it.name)}${star}</span><span class="sub tnum">${esc(ev ? String(n) : c + '/' + n)}${subParts.length ? ' · ' + esc(subParts.join(' · ')) : ''}</span></span>
         ${time}
         <span class="chev">${icon(open ? 'expand_less' : 'expand_more', 'sm')}</span>
