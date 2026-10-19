@@ -1,18 +1,20 @@
-// Firestore rules for the Todays web app.
-// ADD these two `match` blocks inside your existing `match /databases/{database}/documents { ... }`
-// (keep the rules the old Android app already has for `users`).
+// Firestore rules for project reminder-c29a5 — covers BOTH the old Android app and the new web app.
+// Paste the whole file into Firebase console → Firestore Database → Rules → Publish.
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    // profile: name, email (so a partner can find you), settings, linked partner
-    match /todays_users/{uid} {
+    // Profiles (old app + web): name, email, photo, language, dark mode, settings, partnerUid.
+    // Old app also keeps its `reminders` array here (left untouched by the web app).
+    // Any signed-in user may read a profile so a partner can be found by email.
+    match /users/{uid} {
       allow read: if request.auth != null;
-      allow write: if request.auth != null && request.auth.uid == uid;
+      allow create, update, delete: if request.auth != null && request.auth.uid == uid;
     }
 
-    // tasks and lists; `members` = who can see it (owner + partner when shared)
-    match /todays_items/{id} {
+    // Web app tasks and lists, one document each.
+    // `members` = who can see it (owner, plus the partner when shared).
+    match /reminders/{id} {
       allow read: if request.auth != null && request.auth.uid in resource.data.members;
       allow create: if request.auth != null
         && request.resource.data.owner == request.auth.uid
@@ -21,6 +23,11 @@ service cloud.firestore {
         && request.auth.uid in resource.data.members
         && request.resource.data.owner == resource.data.owner;
       allow delete: if request.auth != null && request.auth.uid == resource.data.owner;
+    }
+
+    // Feedback from the old app's account-deletion screen.
+    match /feedback/{id} {
+      allow create: if request.auth != null;
     }
   }
 }

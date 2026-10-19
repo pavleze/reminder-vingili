@@ -24,7 +24,7 @@
       everyDay: 'Every day', everyWeek: 'Every week', everyMonth: 'Every month', everyNday: 'Every {n} days', everyNweek: 'Every {n} weeks', everyNmonth: 'Every {n} months',
       monthDayEvery: 'Monthly on day {n}', pickDays: 'Pick at least one day', statTasks: 'Tasks', statLists: 'Lists', saved: 'Saved', listDone: 'List completed',
       homeSub: "Here is what's on for today.", addDate: 'Add date', tomorrow: 'Tomorrow', showMore: 'Show more', changeDate: 'Change date', removeDate: 'Remove date', noDateSection: 'No date', doneSection: 'Done', unauthorizedDomain: 'This website is not yet allowed in Firebase (Authentication → Settings → Authorized domains).', networkError: 'No internet connection', permissionDenied: 'Firebase rules do not allow this yet (see README).',
-      importedLocal: 'Moved {n} items from this device to your account', partnerTitle: 'Partner', partnerDesc: 'Share items with one person', partnerEmail: "Partner's email",
+      importedLocal: 'Moved {n} items from this device to your account', migratedOld: 'Brought over {n} reminders from the old app', partnerTitle: 'Partner', partnerDesc: 'Share items with one person', partnerEmail: "Partner's email",
       partnerHelp: 'Your partner needs to sign in with Google once. Then enter their email here.', linkBtn: 'Link', unlinkBtn: 'Remove', partnerSelf: "That's your own email",
       partnerNotFound: "No account with that email yet. Ask them to sign in with Google first.", partnerLinked: 'Linked with {name}', shareWith: 'Share with {name}',
       sharedBy: 'Shared by {name}', sharedWith: 'Shared with {name}', partnerLinkFirst: 'Link a partner in Profile to share items', signInGoogleHint: 'Sign in to sync across devices and share with your partner',
@@ -61,7 +61,7 @@
       everyDay: 'Svaki dan', everyWeek: 'Svake nedelje', everyMonth: 'Svakog meseca', everyNday: 'Na svakih {n} dana', everyNweek: 'Na svakih {n} nedelja', everyNmonth: 'Na svakih {n} meseci',
       monthDayEvery: 'Svakog {n}. u mesecu', pickDays: 'Izaberite bar jedan dan', statTasks: 'Taskovi', statLists: 'Liste', saved: 'Sačuvano', listDone: 'Lista završena',
       homeSub: 'Evo šta vas čeka danas.', addDate: 'Dodaj datum', tomorrow: 'Sutra', showMore: 'Prikaži još', changeDate: 'Promeni datum', removeDate: 'Ukloni datum', noDateSection: 'Bez datuma', doneSection: 'Urađeno', unauthorizedDomain: 'Ovaj sajt još nije dozvoljen u Firebase-u (Authentication → Settings → Authorized domains).', networkError: 'Nema internet konekcije', permissionDenied: 'Firebase pravila ovo još ne dozvoljavaju (pogledajte README).',
-      importedLocal: 'Prebačeno {n} stavki sa ovog uređaja na vaš nalog', partnerTitle: 'Partner', partnerDesc: 'Delite stavke sa jednom osobom', partnerEmail: 'Email partnera',
+      importedLocal: 'Prebačeno {n} stavki sa ovog uređaja na vaš nalog', migratedOld: 'Preneto {n} podsetnika iz stare aplikacije', partnerTitle: 'Partner', partnerDesc: 'Delite stavke sa jednom osobom', partnerEmail: 'Email partnera',
       partnerHelp: 'Partner treba jednom da se prijavi preko Google-a. Zatim ovde unesite njegov email.', linkBtn: 'Poveži', unlinkBtn: 'Ukloni', partnerSelf: 'To je vaš email',
       partnerNotFound: 'Nema naloga sa tim emailom. Neka se partner prvo prijavi preko Google-a.', partnerLinked: 'Povezani ste sa: {name}', shareWith: 'Podeli sa: {name}',
       sharedBy: 'Podelio/la: {name}', sharedWith: 'Podeljeno sa: {name}', partnerLinkFirst: 'Povežite partnera u Profilu da biste delili stavke', signInGoogleHint: 'Prijavite se da biste imali iste podatke na svim uređajima i delili sa partnerom',
@@ -1099,7 +1099,8 @@
     appId: '1:81351094737:web:8831b721352a691b20f0f0',
   };
   const FB_VER = '10.12.2';
-  const ITEMS = 'todays_items', PEOPLE = 'todays_users';
+  // same Firestore as the old Android app: profiles live in `users`, items in `reminders` (one doc per task/list)
+  const ITEMS = 'reminders', PEOPLE = 'users';
   const Cloud = { on: false, ready: false, fb: null, db: null, user: null, unsub: null, last: {}, partner: null, firstSnap: true, prevLocal: null };
   const cloudHost = () => {
     const h = location.hostname;
@@ -1166,8 +1167,18 @@
     try {
       const snap = await ref.get(); const data = snap.exists ? snap.data() : {};
       if (data.settings) u.settings = { ...u.settings, ...data.settings, notif: { ...u.settings.notif, ...(data.settings.notif || {}) } };
+      else { // first time in the new app: take language / dark mode chosen in the old app
+        if (data.language && LANGS.some((l) => l.code === data.language)) u.settings.lang = data.language;
+        if (typeof data.isDarkMode === 'boolean') u.settings.dark = data.isDarkMode;
+      }
       u.partnerUid = data.partnerUid || null;
-      await ref.set({ uid: fu.uid, name: u.name, email: (u.email || '').toLowerCase(), photo: u.photo || null, settings: clean(u.settings), lastLogin: u.lastLogin }, { merge: true });
+      if (data.creationDate && data.creationDate.toDate) u.createdAt = data.creationDate.toDate().toISOString();
+      const ts = window.firebase.firestore.FieldValue.serverTimestamp();
+      await ref.set({
+        uid: fu.uid, name: u.name, email: u.email || '', emailLower: (u.email || '').toLowerCase(), photoUrl: u.photo || data.photoUrl || null,
+        language: u.settings.lang, isDarkMode: isDark(), settings: clean(u.settings), lastLogIn: ts, ...(snap.exists ? {} : { creationDate: ts }),
+      }, { merge: true });
+      Cloud.legacy = !data.migratedAt && Array.isArray(data.reminders) && data.reminders.length ? data.reminders : null;
       await loadPartner();
     } catch (e) { cloudError(e); }
     if (Cloud.unsub) Cloud.unsub();
@@ -1177,10 +1188,50 @@
       qs.forEach((doc) => { const it = { ...doc.data(), uid: doc.id }; tasks.push(it); last[it.uid] = taskJson(it); });
       const mine = DB.users[fu.uid]; if (!mine) return;
       mine.tasks = tasks; Cloud.last = last;
-      if (Cloud.firstSnap) { Cloud.firstSnap = false; importLocal(mine); }
+      if (Cloud.firstSnap) { Cloud.firstSnap = false; migrateLegacy(mine); importLocal(mine); }
       save(false); refresh();
     }, (e) => cloudError(e));
     render();
+  }
+  // old Android app kept reminders as an array inside users/{uid}; turn each one into a document in `reminders`
+  function legacyToItem(r, owner) {
+    const toDate = (v) => (v && v.toDate ? v.toDate() : typeof v === 'string' ? new Date(v) : v && v.seconds ? new Date(v.seconds * 1000) : null);
+    const okDate = (d) => d && !isNaN(d.getTime());
+    const hhmm = (str) => {
+      const m = String(str || '').trim().match(/^(\d{1,2}):(\d{2})\s*([AaPp][Mm])?$/); if (!m) return '';
+      let h = Number(m[1]); const min = Number(m[2]); const ap = (m[3] || '').toUpperCase();
+      if (ap === 'PM' && h !== 12) h += 12; if (ap === 'AM' && h === 12) h = 0; return `${pad(h)}:${pad(min)}`;
+    };
+    const once = toDate(r.oneTimeDate); const start = toDate(r.startDate) || toDate(r.createdAt) || toDate(r.creationDate);
+    const dayIdx = { monday: 0, tuesday: 1, wednesday: 2, thursday: 3, friday: 4, saturday: 5, sunday: 6 };
+    let repeat = { type: 'none' }; let date = '';
+    switch (r.repetitionTime) {
+      case 'daily': repeat = { type: 'interval', every: 1, unit: 'day' }; break;
+      case 'weekly': repeat = { type: 'weekdays', days: [dayIdx[String(r.dayOfWeek || '').toLowerCase()] ?? weekdayIdx(okDate(start) ? start : new Date())] }; break;
+      case 'monthly': repeat = { type: 'monthday', monthDay: Number(r.dayOfMonth) || (okDate(start) ? start.getDate() : 1) }; break;
+      case 'yearly': repeat = { type: 'interval', every: 1, unit: 'year' }; if (okDate(once)) date = dkey(once); break;
+      case 'custom': repeat = { type: 'weekdays', days: (r.customDays || []).map((n) => (Number(n) + 6) % 7).filter((n) => n >= 0 && n < 7) }; if (!repeat.days.length) repeat = { type: 'none' }; break;
+      default: if (okDate(once)) date = dkey(once);
+    }
+    if (repeat.type !== 'none' && !date) date = okDate(start) ? dkey(start) : dkey(todayD());
+    const time = hhmm(r.notificationTime);
+    const done = {};
+    if (repeat.type === 'none' && (r.status === 'completed' || r.completed === true)) done[date || 'any'] = date ? true : dkey(todayD());
+    return clean({
+      uid: uuid(), kind: 'task', type: r.type === 'event' ? 'event' : 'task', name: String(r.name || '').trim() || t('unnamedReminder'),
+      description: [r.description, r.location, r.meetingLink].filter(Boolean).join('\n'), date, time: r.hasNotification === false ? '' : time,
+      important: !!r.isImportant, repeat, items: [], done, checks: {}, owner, members: [owner],
+      createdAt: (okDate(start) ? start : new Date()).toISOString(), legacyUid: r.uid || null, source: r.source || 'android',
+    });
+  }
+  async function migrateLegacy(u) {
+    const old = Cloud.legacy; if (!old) return;
+    Cloud.legacy = null;
+    const have = new Set((u.tasks || []).map((x) => x.legacyUid).filter(Boolean));
+    const fresh = old.filter((r) => r && typeof r === 'object' && !(r.uid && have.has(r.uid))).map((r) => legacyToItem(r, u.uid));
+    if (fresh.length) { u.tasks = (u.tasks || []).concat(fresh); save(); }
+    try { await Cloud.db.collection(PEOPLE).doc(u.uid).set({ migratedAt: window.firebase.firestore.FieldValue.serverTimestamp() }, { merge: true }); } catch (e) { cloudError(e); }
+    if (fresh.length) toast(t('migratedOld', { n: fresh.length }), { icon: 'cloud_done', ms: 5000 });
   }
   async function importLocal(u) {
     // first Google sign-in: bring over what was made on this device before (examples excluded)
@@ -1193,16 +1244,18 @@
   async function loadPartner() {
     const u = me(); Cloud.partner = null;
     if (!u || !u.partnerUid) return;
-    try { const s = await Cloud.db.collection(PEOPLE).doc(u.partnerUid).get(); if (s.exists) Cloud.partner = s.data(); } catch (e) { cloudError(e); }
+    try { const s = await Cloud.db.collection(PEOPLE).doc(u.partnerUid).get(); if (s.exists) Cloud.partner = personOf(s); } catch (e) { cloudError(e); }
   }
+  const personOf = (doc) => { const d = doc.data() || {}; return { uid: d.uid || doc.id, name: d.name || '', email: d.email || '', photo: d.photoUrl || d.photo || null }; };
   async function linkPartner(email) {
     const u = me(); const em = String(email || '').trim().toLowerCase();
     if (!validEmail(em)) return toast(t('invalidEmail'), { error: true });
     if (em === (u.email || '').toLowerCase()) return toast(t('partnerSelf'), { error: true });
     try {
-      const qs = await Cloud.db.collection(PEOPLE).where('email', '==', em).limit(1).get();
+      let qs = await Cloud.db.collection(PEOPLE).where('emailLower', '==', em).limit(1).get();
+      if (qs.empty) qs = await Cloud.db.collection(PEOPLE).where('email', '==', String(email).trim()).limit(1).get();
       if (qs.empty) return toast(t('partnerNotFound'), { error: true, ms: 6000 });
-      const p = qs.docs[0].data();
+      const p = personOf(qs.docs[0]);
       u.partnerUid = p.uid; Cloud.partner = p;
       await Cloud.db.collection(PEOPLE).doc(u.uid).set({ partnerUid: p.uid }, { merge: true });
       save(false); render(); toast(t('partnerLinked', { name: p.name || p.email }), { icon: 'group' });
@@ -1234,7 +1287,7 @@
       else col.doc(id).update({ members: window.firebase.firestore.FieldValue.arrayRemove(u.uid) }).catch(cloudError);
     }
     const sj = JSON.stringify(u.settings);
-    if (Cloud.lastSettings !== sj) { Cloud.lastSettings = sj; Cloud.db.collection(PEOPLE).doc(u.uid).set({ settings: clean(u.settings) }, { merge: true }).catch(() => {}); }
+    if (Cloud.lastSettings !== sj) { Cloud.lastSettings = sj; Cloud.db.collection(PEOPLE).doc(u.uid).set({ settings: clean(u.settings), language: u.settings.lang, isDarkMode: isDark() }, { merge: true }).catch(() => {}); }
   }
   function cloudSignedOut() {
     if (Cloud.unsub) { Cloud.unsub(); Cloud.unsub = null; }

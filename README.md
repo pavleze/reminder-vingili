@@ -40,9 +40,13 @@ Demo nalog: `demo@reminder.app` / `demo123`
 - **U Claude pregledu i kad se `index.html` otvori kao fajl:** lokalni demo u pregledaču (localStorage), bez prijave.
 - **Partner:** Profil → Partner → email partnera (partner mora bar jednom da se prijavi). Posle toga forma ima prekidač „Podeli sa …“; podeljene stavke vide i menjaju oboje (ikonica 👥 pored naziva).
 
-Kolekcije (ne diraju podatke stare Android aplikacije u `users`):
-- `todays_users/{uid}` – ime, email, slika, podešavanja, `partnerUid`
-- `todays_items/{id}` – stavka + `owner` i `members` (ko je vidi)
+Baza je **ista kao kod stare Android aplikacije** (Firebase projekat `reminder-c29a5`):
+- `users/{uid}` – postojeći profil iz stare aplikacije (ime, email, slika, jezik, tamna tema); web dodaje `settings`, `emailLower`, `partnerUid`, `migratedAt`
+- `reminders/{id}` – jedna stavka po dokumentu (zadatak / događaj / lista) + `owner` i `members` (ko je vidi)
+
+**Prenos iz stare aplikacije:** pri prvoj prijavi, podsetnici iz niza `users/{uid}.reminders` automatski se pretvaraju u nove stavke
+(dnevno → svaki dan, nedeljno → dan u nedelji, mesečno → dan u mesecu, godišnje → svake godine, jednokratno → datum; vreme, tip, „važno“ i završeni jednokratni se zadržavaju; lokacija ide u belešku).
+Stari niz ostaje netaknut, a `migratedAt` sprečava dupli prenos.
 
 ### Jednokratno podešavanje (Firebase projekat `reminder-c29a5`)
 
@@ -51,7 +55,7 @@ Kolekcije (ne diraju podatke stare Android aplikacije u `users`):
 3. **Google prijava preko tvog domena** (bitno za iPhone): u [Google Cloud Console](https://console.cloud.google.com/apis/credentials?project=reminder-c29a5) → Credentials → *Web client (auto created by Google Service)* → **Authorized redirect URIs** dodaj  
    `https://<tvoj-domen>.vercel.app/__/auth/handler`  
    (`vercel.json` već prosleđuje `/__/auth/*` na Firebase.)
-4. **Firestore Database → Rules:** dodaj dva `match` bloka iz fajla `firestore.rules` (ne briši postojeća pravila stare aplikacije) i klikni **Publish**.
+4. **Firestore Database → Rules:** zameni pravila celim sadržajem fajla `firestore.rules` (pokriva i staru i novu aplikaciju) i klikni **Publish**.
 5. Oboje se prijavite preko Google-a, jedno od vas u Profil → Partner unese email drugog.
 
 ## Struktura
