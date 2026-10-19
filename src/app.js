@@ -826,7 +826,8 @@
     function drawWhen() {
       const showTime = st.hasDate || st.rep.type !== 'none';
       const dateHtml = st.hasDate
-        ? `<div class="field picker-field"><span class="pick-ic" aria-hidden="true">${icon('event')}</span><label for="ef-date">${esc(t('date'))}</label>
+        ? `<div class="field picker-field date-pretty"><span class="pick-ic" aria-hidden="true">${icon('event')}</span><label for="ef-date">${esc(t('date'))}</label>
+            <span class="date-text" id="ef-date-text" aria-hidden="true">${esc(prettyDate(st.date))}</span>
             <input id="ef-date" type="date" value="${esc(st.date)}">
             <button type="button" class="icon-btn" id="ef-date-clear" aria-label="${esc(t('removeDate'))}">${icon('close', 'sm')}</button></div>`
         : `<button type="button" class="btn btn-outline add-date" id="ef-add-date">${icon('event')}${esc(t('addDate'))}</button>`;
@@ -834,6 +835,7 @@
             <button type="button" class="icon-btn" id="ef-time-clear" aria-label="${esc(t('clearTime'))}" ${st.time ? '' : 'hidden'}>${icon('close', 'sm')}</button></div>` : '';
       $('#ef-when').innerHTML = `<div class="field-row dt-row ${showTime ? '' : 'one'}">${dateHtml}${timeHtml}</div>`;
     }
+    function prettyDate(k) { return k ? fmtDate(fromKey(k), { day: 'numeric', month: 'short', year: 'numeric' }) : ''; }
     function openPicker(id) {
       const el = document.getElementById(id); if (!el) return;
       el.focus(); try { if (el.showPicker) el.showPicker(); } catch (er) { /* some browsers only allow the picker from a direct tap on the field */ }
@@ -864,7 +866,7 @@
       if (e.target.id === 'ef-mday') st.rep.monthDay = Number(e.target.value);
       if (e.target.id === 'ef-time') { st.time = e.target.value; $('#ef-time-clear').hidden = !e.target.value; }
       if (e.target.id === 'ef-date' && e.target.value) {
-        st.date = e.target.value;
+        st.date = e.target.value; $('#ef-date-text').textContent = prettyDate(st.date);
         if (!existing) { const d = fromKey(st.date); st.rep.monthDay = d.getDate(); if (st.rep.days.length <= 1) st.rep.days = [weekdayIdx(d)]; if (st.rep.type === 'monthday' || st.rep.type === 'weekdays') drawRep(); }
       }
     });

@@ -315,6 +315,9 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
 .picker-field input { position: relative; padding-left: 50px; cursor: pointer; }
 /* the browser's own picker button stretches over the whole field, so any tap (icon included) opens the built-in calendar/clock */
 .picker-field input::-webkit-calendar-picker-indicator { position: absolute; inset: 0; width: auto; height: auto; margin: 0; padding: 0; opacity: 0; cursor: pointer; }
+.date-pretty .date-text { position: absolute; left: 50px; top: 50%; transform: translateY(-50%); font-size: 15px; color: var(--fg); pointer-events: none; }
+.date-pretty input { color: transparent; }
+.date-pretty input::-webkit-datetime-edit { opacity: 0; }
 .add-date { justify-content: flex-start; min-height: 52px; border-style: dashed; border-width: 1.5px; }
 
 /* Calendar — full screen, tall day cells */
