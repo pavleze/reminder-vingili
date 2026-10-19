@@ -23,7 +23,7 @@
       everyLabel: 'Every', unitDay: 'days', unitWeek: 'weeks', unitMonth: 'months', unitYear: 'years', everyYear: 'Every year', everyNyear: 'Every {n} years',
       everyDay: 'Every day', everyWeek: 'Every week', everyMonth: 'Every month', everyNday: 'Every {n} days', everyNweek: 'Every {n} weeks', everyNmonth: 'Every {n} months',
       monthDayEvery: 'Monthly on day {n}', pickDays: 'Pick at least one day', statTasks: 'Tasks', statLists: 'Lists', saved: 'Saved', listDone: 'List completed',
-      homeSub: "Here is what's on for today.", addDate: 'Add date', tomorrow: 'Tomorrow', showMore: 'Show more', changeDate: 'Change date', removeDate: 'Remove date', noDateSection: 'No date', doneSection: 'Done', lateDay: '{n} day late', lateDays: '{n} days late', allDoneToday: 'All done for today', nothingToday: 'Nothing planned for today', deleteEntry: 'Delete', deleteEntryConfirm: 'Delete “{name}”?',
+      homeSub: "Here is what's on for today.", addDate: 'Add date', tomorrow: 'Tomorrow', showMore: 'Show more', changeDate: 'Change date', removeDate: 'Remove date', noDateSection: 'No date', doneSection: 'Done', filterAll: 'All', filterTasks: 'Tasks', filterEvents: 'Events', lateDay: '{n} day late', lateDays: '{n} days late', allDoneToday: 'All done for today', nothingToday: 'Nothing planned for today', deleteEntry: 'Delete', deleteEntryConfirm: 'Delete “{name}”?',
       welcomeSubtitleAuth: 'Sign in to your account', fullName: 'Full Name', confirmPassword: 'Confirm Password',
       noAccount: "Don't have an account?", registerNow: 'Register', agreeTerms: 'I agree to the Terms of Service and Privacy Policy',
       fillAllFields: 'Please fill all fields', acceptTerms: 'Please accept terms and conditions', wrongCredentials: 'Wrong email or password',
@@ -55,7 +55,7 @@
       everyLabel: 'Na svakih', unitDay: 'dana', unitWeek: 'nedelja', unitMonth: 'meseci', unitYear: 'godina', everyYear: 'Svake godine', everyNyear: 'Na svakih {n} godina',
       everyDay: 'Svaki dan', everyWeek: 'Svake nedelje', everyMonth: 'Svakog meseca', everyNday: 'Na svakih {n} dana', everyNweek: 'Na svakih {n} nedelja', everyNmonth: 'Na svakih {n} meseci',
       monthDayEvery: 'Svakog {n}. u mesecu', pickDays: 'Izaberite bar jedan dan', statTasks: 'Taskovi', statLists: 'Liste', saved: 'Sačuvano', listDone: 'Lista završena',
-      homeSub: 'Evo šta vas čeka danas.', addDate: 'Dodaj datum', tomorrow: 'Sutra', showMore: 'Prikaži još', changeDate: 'Promeni datum', removeDate: 'Ukloni datum', noDateSection: 'Bez datuma', doneSection: 'Urađeno', lateDay: 'kasni {n} dan', lateDays: 'kasni {n} dana', allDoneToday: 'Sve za danas je urađeno', nothingToday: 'Za danas nema ništa', deleteEntry: 'Obriši', deleteEntryConfirm: 'Obrisati „{name}“?',
+      homeSub: 'Evo šta vas čeka danas.', addDate: 'Dodaj datum', tomorrow: 'Sutra', showMore: 'Prikaži još', changeDate: 'Promeni datum', removeDate: 'Ukloni datum', noDateSection: 'Bez datuma', doneSection: 'Urađeno', filterAll: 'Sve', filterTasks: 'Zadaci', filterEvents: 'Događaji', lateDay: 'kasni {n} dan', lateDays: 'kasni {n} dana', allDoneToday: 'Sve za danas je urađeno', nothingToday: 'Za danas nema ništa', deleteEntry: 'Obriši', deleteEntryConfirm: 'Obrisati „{name}“?',
       welcomeSubtitleAuth: 'Prijavite se na svoj nalog', fullName: 'Ime i prezime', confirmPassword: 'Potvrdite lozinku',
       noAccount: 'Nemate nalog?', registerNow: 'Registrujte se', agreeTerms: 'Prihvatam Uslove korišćenja i Politiku privatnosti',
       fillAllFields: 'Popunite sva polja', acceptTerms: 'Prihvatite uslove korišćenja', wrongCredentials: 'Pogrešan email ili lozinka',
@@ -470,9 +470,13 @@
     const first = (me().name || '').split(' ')[0];
     // finished items move to the "Done" section at the bottom
     const isDone = (it) => !isEvent(it) && isDoneOn(it, d);
-    const todayOpen = today.filter((it) => !isDone(it));
-    const floatOpen = floating.filter((it) => !isDone(it));
-    const doneList = today.filter(isDone).concat(floating.filter(isDone));
+    const f = ui.homeFilter || 'all';
+    const pass = (it) => f === 'all' || (f === 'event' ? isEvent(it) : !isEvent(it));
+    const todayOpen = today.filter((it) => !isDone(it) && pass(it));
+    const floatOpen = floating.filter((it) => !isDone(it) && pass(it));
+    const doneList = today.filter(isDone).concat(floating.filter(isDone)).filter(pass);
+    const overdueF = overdue.filter(pass); const lateDoneF = lateDone.filter(pass);
+    const filterBar = `<div class="filter-pills" role="radiogroup" aria-label="Filter">${[['all', 'filterAll'], ['task', 'filterTasks'], ['event', 'filterEvents']].map(([v, k]) => `<button type="button" role="radio" class="fpill" data-a="home-filter" data-v="${v}" aria-checked="${f === v}">${esc(t(k))}</button>`).join('')}</div>`;
     const html = `
       <header class="day-hero">
         <div class="day-head-txt">
@@ -482,17 +486,17 @@
         ${totalN ? `<div class="ring ring-min" style="--p:${pct}" role="img" aria-label="${esc(t('ofDone', { a: doneN, b: totalN }))} ${esc(t('doneToday'))}"><div><b class="tnum">${doneN}/${totalN}</b><small>${esc(t('doneToday'))}</small></div></div>` : ''}
       </header>
       <section class="rows" aria-labelledby="today-h">
-        <h3 class="rows-label">${esc(cap(fmtDate(d, { weekday: 'long', day: 'numeric', month: 'long' })))}</h3>
-        ${overdue.map((it) => entryCard(it, fromKey(it.date), { overdue: true })).join('')}
-        ${todayOpen.length ? todayOpen.map((it) => entryCard(it, d)).join('') : overdue.length ? '' : `<p class="quiet">${esc(today.length ? t('allDoneToday') : t('nothingToday'))}</p>`}
+        <div class="label-row"><h3 class="rows-label"><span class="d-long">${esc(cap(fmtDate(d, { weekday: 'long', day: 'numeric', month: 'long' })))}</span><span class="d-short">${esc(cap(fmtDate(d, { weekday: 'short', day: 'numeric', month: 'short' })))}</span></h3>${filterBar}</div>
+        ${overdueF.map((it) => entryCard(it, fromKey(it.date), { overdue: true })).join('')}
+        ${todayOpen.length ? todayOpen.map((it) => entryCard(it, d)).join('') : overdueF.length ? '' : `<p class="quiet">${esc(today.length ? t('allDoneToday') : t('nothingToday'))}</p>`}
       </section>
       ${floatOpen.length ? `<section class="rows" aria-labelledby="nodate-h">
         <h3 class="rows-label" id="nodate-h">${esc(t('noDateSection'))}</h3>
         ${floatOpen.map((it) => entryCard(it, d)).join('')}
       </section>` : ''}
-      ${doneList.length + lateDone.length ? `<section class="rows done-sec" aria-labelledby="done-h">
-        <h3 class="rows-label" id="done-h">${esc(t('doneSection'))} <span class="muted-date tnum">${doneList.length + lateDone.length}</span></h3>
-        ${lateDone.map((it) => entryCard(it, fromKey(it.date))).join('')}${doneList.map((it) => entryCard(it, d)).join('')}
+      ${doneList.length + lateDoneF.length ? `<section class="rows done-sec" aria-labelledby="done-h">
+        <h3 class="rows-label" id="done-h">${esc(t('doneSection'))} <span class="muted-date tnum">${doneList.length + lateDoneF.length}</span></h3>
+        ${lateDoneF.map((it) => entryCard(it, fromKey(it.date))).join('')}${doneList.map((it) => entryCard(it, d)).join('')}
       </section>` : ''}
       ${hasSamples ? `<p class="quiet small">${esc(t('sampleData'))} <button class="link-btn" data-a="clear-samples">${esc(t('clearSamples'))}</button></p>` : ''}`;
     const fabs = `<button class="fab" data-a="add" aria-label="${esc(t('addReminder'))}">${icon('add')}<span class="fab-label">${esc(t('addReminder'))}</span></button>`;
@@ -1050,6 +1054,7 @@
       case 'cal-next': ui.calMonth = new Date(ui.calMonth.getFullYear(), ui.calMonth.getMonth() + 1, 1); render(); break;
       case 'cal-today': ui.calMonth = todayD(); render(); break;
       case 'rem-tab': ui.remTab = el.dataset.v; render(); scrollTop(); break;
+      case 'home-filter': ui.homeFilter = el.dataset.v; render(); break;
       case 'agenda-more': ui.agendaDays = (ui.agendaDays || 30) + 30; render(); break;
       case 'day': dayDialog(el.dataset.d); break;
       case 'modal-close': closeModal(); break;

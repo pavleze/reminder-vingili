@@ -244,6 +244,13 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
 .rows { display: flex; flex-direction: column; }
 .rows-label { font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); padding: 18px 0 6px; }
 .entry .time.late-tag { color: var(--error); font-weight: 600; font-size: 12.5px; }
+.label-row { display: flex; align-items: flex-end; justify-content: space-between; gap: 8px; padding-top: 12px; }
+.label-row .rows-label { padding: 0 0 8px; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.d-short { display: none; }
+@media (max-width: 400px) { .d-long { display: none; } .d-short { display: inline; } }
+.filter-pills { flex: none; display: inline-flex; gap: 1px; padding: 2px; border-radius: 99px; background: var(--surface); border: 1px solid var(--divider); margin-bottom: 4px; }
+.fpill { border: 0; background: none; padding: 4px 9px; border-radius: 99px; font-size: 12px; font-weight: 500; color: var(--muted); }
+.fpill[aria-checked="true"] { background: var(--primary); color: var(--on-primary); }
 .quiet { color: var(--muted); margin: 0; padding: 16px 0; }
 .quiet.small { font-size: 12.5px; padding: 8px 0; }
 .link-btn { background: none; border: 0; padding: 0; color: var(--primary-ink); font-weight: 500; font-size: inherit; text-decoration: underline; text-underline-offset: 3px; }
