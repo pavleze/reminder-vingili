@@ -500,7 +500,6 @@
     const nextTxt = next ? (sameDay(next, T) ? t('today') : cap(fmtDate(next, { weekday: 'short', day: 'numeric', month: 'short' }))) : '—';
     const details = [
       det('category', t('type'), cap(t(r.type === 'event' ? 'event' : 'task'))),
-      det('priority_high', t('priority'), cap(t(r.priority))),
       det('repeat', t('repetition'), repetitionText(r)),
       det('event', t('next'), nextTxt),
       det('schedule', t('time'), fmtTime(r.notificationTime)),
@@ -510,7 +509,7 @@
     ].join('');
     return `<article class="rcard ${done ? 'done' : ''}">
       <button class="rcard-head" data-a="expand" data-id="${r.uid}" aria-expanded="${open}">
-        <span class="prio-bar" style="background:${PRIORITY_COLORS[r.priority] || '#9e9e9e'}"></span>
+        <span class="prio-bar" style="background:${r.isImportant ? 'var(--star)' : 'var(--primary)'}"></span>
         <span class="main-col">
           <span class="line1">${r.isImportant ? `<span class="star">${icon('star', 'fill')}</span>` : ''}<span class="name">${esc(r.name)}</span><span class="time-chip tnum">${esc(fmtTime(r.notificationTime))}</span></span>
           <span class="line2"><span class="tag"><span class="dot" style="background:${c.color}"></span>${esc(catLabel(r.category))}</span><span class="tag">${icon('repeat')}${esc(repetitionText(r))}</span>${next ? `<span class="tag">${icon('calendar_today')}${esc(nextTxt)}</span>` : ''}</span>
@@ -778,12 +777,9 @@
         <div class="field" style="align-items:flex-start">${icon('description').replace('class="ms', 'style="margin-top:14px" class="ms')}<label for="rf-desc">${esc(t('description'))}</label><textarea id="rf-desc" rows="3">${esc(r.description)}</textarea></div>
         <div class="field-row">
           <div class="field select"><label for="rf-type">${esc(t('type'))}</label><select id="rf-type">${opt('task', cap(t('task')), r.type)}${opt('event', cap(t('event')), r.type)}</select></div>
-          <div class="field select"><span class="dot" id="rf-prio-dot" style="margin-left:14px;background:${PRIORITY_COLORS[r.priority]}"></span><label for="rf-prio">${esc(t('priority'))}</label><select id="rf-prio">${['high', 'medium', 'low'].map((p) => opt(p, cap(t(p)), r.priority)).join('')}</select></div>
-        </div>
-        <div class="field-row">
           <div class="field select"><span class="dot" id="rf-cat-dot" style="margin-left:14px;background:${catOf(r.category).color}"></span><label for="rf-cat">${esc(t('category'))}</label><select id="rf-cat">${CATEGORIES.map((c) => opt(c.key, t(c.l10n), r.category)).join('')}</select></div>
-          <div class="field select"><label for="rf-rep">${esc(t('repetition'))}</label><select id="rf-rep">${REPETITIONS.map((x) => opt(x.key, t(x.l10n), r.repetitionTime)).join('')}</select></div>
         </div>
+        <div class="field select"><label for="rf-rep">${esc(t('repetition'))}</label><select id="rf-rep">${REPETITIONS.map((x) => opt(x.key, t(x.l10n), r.repetitionTime)).join('')}</select></div>
         <div id="rf-dyn"></div>
         <div class="field">${icon('location_on')}<label for="rf-loc">${esc(t('location'))}</label><input id="rf-loc" value="${esc(r.location || '')}" autocomplete="off"></div>
         <div class="field-row" style="align-items:center">
@@ -809,7 +805,6 @@
     dyn();
     $('#rf-rep').addEventListener('change', () => { captureDyn(); dyn(); });
     function captureDyn() { if ($('#rf-dow')) r.dayOfWeek = $('#rf-dow').value; if ($('#rf-dom')) r.dayOfMonth = $('#rf-dom').value; if ($('#rf-date')) r.oneTimeDate = $('#rf-date').value; }
-    $('#rf-prio').addEventListener('change', (e) => { $('#rf-prio-dot').style.background = PRIORITY_COLORS[e.target.value]; });
     $('#rf-cat').addEventListener('change', (e) => { $('#rf-cat-dot').style.background = catOf(e.target.value).color; });
     $('#rf-imp').addEventListener('change', (e) => { $('#rf-star').style.color = e.target.checked ? 'var(--star)' : 'var(--primary-ink)'; });
     $('#rem-form').addEventListener('submit', (e) => {
@@ -822,7 +817,7 @@
       if ((rep === 'onetime' || rep === 'yearly') && !r.oneTimeDate) return err(t('pickDateFirst'));
       const data = {
         ...(existing || {}), uid: existing ? existing.uid : uuid(), name, description: $('#rf-desc').value.trim(), type: $('#rf-type').value,
-        priority: $('#rf-prio').value, category: $('#rf-cat').value, repetitionTime: rep,
+        priority: existing ? existing.priority || 'medium' : 'medium', category: $('#rf-cat').value, repetitionTime: rep,
         dayOfWeek: rep === 'weekly' ? r.dayOfWeek : null, dayOfMonth: rep === 'monthly' ? Number(r.dayOfMonth) : null,
         oneTimeDate: rep === 'onetime' || rep === 'yearly' ? r.oneTimeDate : null,
         location: $('#rf-loc').value.trim(), notificationTime: $('#rf-time').value || '09:00', hasNotification: $('#rf-notif').checked,

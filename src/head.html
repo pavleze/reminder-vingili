@@ -119,7 +119,8 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
 .field.select::after { content: ""; position: absolute; right: 14px; top: 50%; width: 8px; height: 8px; margin-top: -6px; border-right: 2px solid var(--muted); border-bottom: 2px solid var(--muted); transform: rotate(45deg); pointer-events: none; }
 .field select option { background: var(--card); color: var(--fg); }
 .field .icon-btn { margin-right: 4px; }
-.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.field-row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px; }
+.field-row > * { min-width: 0; }
 .err-text { color: var(--error); font-size: 12.5px; margin-top: -8px; }
 
 /* ---------- Buttons ---------- */
@@ -403,7 +404,7 @@ hr.div { border: 0; border-top: 1.2px solid var(--divider); margin: 0; width: 10
 .day-row small { display: flex; align-items: center; gap: 4px; color: var(--muted); }
 .stars { display: flex; justify-content: center; gap: 4px; }
 .stars button { border: 0; background: none; color: var(--primary-ink); padding: 4px; }
-.inline-switch { display: flex; align-items: center; gap: 12px; padding: 6px 0; }
+.inline-switch { display: flex; align-items: center; gap: 10px; padding: 6px 0; min-width: 0; }
 .inline-switch .grow { flex: 1; min-width: 0; }
 .inline-switch small { display: block; color: var(--muted); font-size: 12.5px; }
 
