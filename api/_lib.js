@@ -171,4 +171,35 @@ function localNow(tz, now = new Date()) {
   return { today: fromKey(`${p.year}-${p.month}-${p.day}`), min: Number(p.hour) * 60 + Number(p.minute) };
 }
 
-module.exports = { listAll, getDoc, createOnce, deleteDoc, sendPush, encryptPayload, vapidAuth, occursOn, isDoneOn, checkedOn, isEvent, isFloating, localNow, addDays, dkey, fromKey, timeToMin };
+/* ---------------- Firebase ID token check (who is calling) ---------------- */
+let certCache = null;
+async function verifyIdToken(token) {
+  const [h, p, s] = String(token || '').split('.');
+  if (!s) throw new Error('no token');
+  const head = JSON.parse(fromB64u(h)); const pl = JSON.parse(fromB64u(p));
+  if (!certCache || certCache.exp < Date.now()) {
+    const r = await fetch('https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com');
+    certCache = { certs: await r.json(), exp: Date.now() + 3600e3 };
+  }
+  const cert = certCache.certs[head.kid];
+  if (head.alg !== 'RS256' || !cert) throw new Error('bad token header');
+  if (!crypto.verify('RSA-SHA256', Buffer.from(`${h}.${p}`), cert, fromB64u(s))) throw new Error('bad signature');
+  const pid = projectId(); const now = Date.now() / 1000;
+  if (pl.aud !== pid || pl.iss !== `https://securetoken.google.com/${pid}` || pl.exp < now || !pl.sub) throw new Error('token not valid');
+  return pl.sub;
+}
+// send one message to every device of each uid; drops dead subscriptions
+async function pushToUids(uids, makeMsg) {
+  const subs = await listAll('pushSubs'); let sent = 0;
+  for (const uid of uids) {
+    const user = await getDoc('users', uid).catch(() => null);
+    const msg = makeMsg(user || {}); if (!msg) continue;
+    for (const s of subs.filter((x) => x.uid === uid && x.sub && x.sub.endpoint)) {
+      const code = await sendPush(s.sub, msg).catch(() => 0);
+      if (code === 404 || code === 410) await deleteDoc('pushSubs', s.id); else if (code >= 200 && code < 300) sent++;
+    }
+  }
+  return sent;
+}
+
+module.exports = { verifyIdToken, pushToUids, listAll, getDoc, createOnce, deleteDoc, sendPush, encryptPayload, vapidAuth, occursOn, isDoneOn, checkedOn, isEvent, isFloating, localNow, addDays, dkey, fromKey, timeToMin };

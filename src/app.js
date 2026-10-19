@@ -31,7 +31,7 @@
       repUnits: 'day|days|days;week|weeks|weeks;month|months|months;year|years|years', filterDated: 'With date', remindLabel: 'Reminder', remindAt: 'At the time', remindBefore: '{n} before', remindOff: 'No reminder', min5: '5 min', min15: '15 min', min30: '30 min', hour1: '1 hour', day1: '1 day',
       pushDevice: 'Notifications on this device', pushDeviceDesc: 'Arrive even when the app is closed', pushOn: 'On', pushTurnOn: 'Turn on', pushTurnOff: 'Turn off', pushIosHint: 'On iPhone: first add Reminder to the Home Screen (Share → Add to Home Screen), open it from there and turn notifications on.',
       pushEnabled: 'Notifications are on for this device', pushDisabled: 'Notifications are off for this device', pushFailed: 'Could not turn on notifications', pushTestSent: 'Test notification sent', pushNeedsOn: 'Turn on notifications on this device first',
-      remindersPushDesc: 'At the item time, or earlier — you choose in each item', morningSummary: 'Morning summary', morningSummaryDesc: 'Today\'s items without a time, overdue and General', morningTime: 'Time', sendTest: 'Send a test notification', filterAll: 'All', filterTasks: 'Tasks', filterEvents: 'Events', lateDay: '{n} day late', lateDays: '{n} days late', allDoneToday: 'All done for today', nothingToday: 'Nothing planned for today', deleteEntry: 'Delete', deleteEntryConfirm: 'Delete “{name}”?',
+      remindersPushDesc: 'At the item time, or earlier — you choose in each item', sharedChanges: 'Shared items', sharedChangesDesc: 'When your partner adds or edits an item shared with you', morningSummary: 'Morning summary', morningSummaryDesc: 'Today\'s items without a time, overdue and General', morningTime: 'Time', sendTest: 'Send a test notification', filterAll: 'All', filterTasks: 'Tasks', filterEvents: 'Events', lateDay: '{n} day late', lateDays: '{n} days late', allDoneToday: 'All done for today', nothingToday: 'Nothing planned for today', deleteEntry: 'Delete', deleteEntryConfirm: 'Delete “{name}”?',
       welcomeSubtitleAuth: 'Sign in to your account', fullName: 'Full Name', confirmPassword: 'Confirm Password',
       noAccount: "Don't have an account?", registerNow: 'Register', agreeTerms: 'I agree to the Terms of Service and Privacy Policy',
       fillAllFields: 'Please fill all fields', acceptTerms: 'Please accept terms and conditions', wrongCredentials: 'Wrong email or password',
@@ -71,7 +71,7 @@
       repUnits: 'dan|dana|dana;nedelja|nedelje|nedelja;mesec|meseca|meseci;godina|godine|godina', filterDated: 'Sa datumom', remindLabel: 'Podsetnik', remindAt: 'U vreme stavke', remindBefore: '{n} ranije', remindOff: 'Bez podsetnika', min5: '5 min', min15: '15 min', min30: '30 min', hour1: '1 sat', day1: '1 dan',
       pushDevice: 'Obaveštenja na ovom uređaju', pushDeviceDesc: 'Stižu i kad je aplikacija zatvorena', pushOn: 'Uključeno', pushTurnOn: 'Uključi', pushTurnOff: 'Isključi', pushIosHint: 'Na iPhone-u: prvo dodaj Reminder na početni ekran (Share → Add to Home Screen), otvori ga odatle i uključi obaveštenja.',
       pushEnabled: 'Obaveštenja su uključena na ovom uređaju', pushDisabled: 'Obaveštenja su isključena na ovom uređaju', pushFailed: 'Nije uspelo uključivanje obaveštenja', pushTestSent: 'Probno obaveštenje je poslato', pushNeedsOn: 'Prvo uključi obaveštenja na ovom uređaju',
-      remindersPushDesc: 'U vreme stavke ili ranije — biraš u svakoj stavci', morningSummary: 'Jutarnji pregled', morningSummaryDesc: 'Današnje stavke bez vremena, one koje kasne i Opšte', morningTime: 'Vreme', sendTest: 'Pošalji probno obaveštenje', filterAll: 'Sve', filterTasks: 'Zadaci', filterEvents: 'Događaji', lateDay: 'kasni {n} dan', lateDays: 'kasni {n} dana', allDoneToday: 'Sve za danas je urađeno', nothingToday: 'Za danas nema ništa', deleteEntry: 'Obriši', deleteEntryConfirm: 'Obrisati „{name}“?',
+      remindersPushDesc: 'U vreme stavke ili ranije — biraš u svakoj stavci', sharedChanges: 'Podeljene stavke', sharedChangesDesc: 'Kad partner doda ili izmeni stavku koju deli sa tobom', morningSummary: 'Jutarnji pregled', morningSummaryDesc: 'Današnje stavke bez vremena, one koje kasne i Opšte', morningTime: 'Vreme', sendTest: 'Pošalji probno obaveštenje', filterAll: 'Sve', filterTasks: 'Zadaci', filterEvents: 'Događaji', lateDay: 'kasni {n} dan', lateDays: 'kasni {n} dana', allDoneToday: 'Sve za danas je urađeno', nothingToday: 'Za danas nema ništa', deleteEntry: 'Obriši', deleteEntryConfirm: 'Obrisati „{name}“?',
       welcomeSubtitleAuth: 'Prijavite se na svoj nalog', fullName: 'Ime i prezime', confirmPassword: 'Potvrdite lozinku',
       noAccount: 'Nemate nalog?', registerNow: 'Registrujte se', agreeTerms: 'Prihvatam Uslove korišćenja i Politiku privatnosti',
       fillAllFields: 'Popunite sva polja', acceptTerms: 'Prihvatite uslove korišćenja', wrongCredentials: 'Pogrešan email ili lozinka',
@@ -778,6 +778,7 @@
       <div class="switch-tile" style="cursor:default">${icon('notifications_active')}<span class="grow"><b>${esc(t('pushDevice'))}</b><small>${esc(t('pushDeviceDesc'))}</small></span>${right}</div>
       ${!supported && isIos() ? `<p class="muted" style="margin:0;font-size:13.5px">${esc(t('pushIosHint'))}</p>` : ''}
       ${switchTile('n-rem', t('reminders'), t('remindersPushDesc'), n.reminders !== false, 'notif-set')}
+      ${switchTile('n-shared', t('sharedChanges'), t('sharedChangesDesc'), n.shared !== false, 'notif-set')}
       ${switchTile('n-morning', t('morningSummary'), t('morningSummaryDesc'), n.morning !== false, 'notif-set')}
       ${n.morning !== false ? `<div class="field picker-field"><span class="pick-ic" aria-hidden="true">${icon('schedule')}</span><label for="n-morning-time">${esc(t('morningTime'))}</label><input id="n-morning-time" type="time" value="${esc(n.morningTime || '08:00')}"></div>` : ''}
     </div>
@@ -1010,6 +1011,12 @@
       const list = me().tasks; const i = list.findIndex((x) => x.uid === data.uid);
       if (i >= 0) list[i] = data; else list.push(data);
       save(); closeModal(); render(); toast(t('saved'));
+      // shared item added or changed → the partner gets a notification
+      if (isCloud() && (data.members || []).length > 1) {
+        const pick = (x) => JSON.stringify(['name', 'type', 'kind', 'date', 'time', 'repeat', 'items', 'description', 'important'].map((f) => x && x[f]));
+        const wasShared = existing && (existing.members || []).length > 1;
+        if (!wasShared) notifyShare(data.uid, 'added'); else if (pick(existing) !== pick(data)) notifyShare(data.uid, 'edited');
+      }
     });
   }
 
@@ -1224,6 +1231,14 @@
   async function pushRefresh() {
     if (!pushId() || !pushSupported() || Notification.permission !== 'granted') return;
     try { const reg = await navigator.serviceWorker.ready; const sub = await reg.pushManager.getSubscription(); if (sub) await pushSave(sub); else localStorage.removeItem(PUSH_KEY); } catch (e) { /* ignore */ }
+  }
+  function notifyShare(id, action) {
+    setTimeout(async () => {
+      try {
+        const token = await window.firebase.auth().currentUser.getIdToken();
+        await fetch('/api/notify-share', { method: 'POST', headers: { 'content-type': 'application/json', authorization: `Bearer ${token}` }, body: JSON.stringify({ id, action }) });
+      } catch (e) { /* best effort */ }
+    }, 1200);
   }
   async function pushTest() {
     const id = pushId(); if (!id) return toast(t('pushNeedsOn'), { error: true });
@@ -1440,7 +1455,7 @@
     const s = settings();
     if (a === 'dark-toggle') { s.dark = el.checked; save(); render(); }
     else if (a === 'notif-set') {
-      const map = { 'n-rem': 'reminders', 'n-snooze': 'snooze', 'n-sound': 'sound', 'n-morning': 'morning' }; s.notif[map[el.id]] = el.checked; save();
+      const map = { 'n-rem': 'reminders', 'n-snooze': 'snooze', 'n-sound': 'sound', 'n-morning': 'morning', 'n-shared': 'shared' }; s.notif[map[el.id]] = el.checked; save();
       if (el.id === 'n-morning') render();
     }
   });
