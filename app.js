@@ -28,7 +28,10 @@
       partnerHelp: 'Your partner needs to sign in with Google once. Then enter their email here.', linkBtn: 'Link', unlinkBtn: 'Remove', partnerSelf: "That's your own email",
       partnerNotFound: "No account with that email yet. Ask them to sign in with Google first.", partnerLinked: 'Linked with {name}', shareWith: 'Share with {name}',
       sharedBy: 'Shared by {name}', sharedWith: 'Shared with {name}', partnerLinkFirst: 'Link a partner in Profile to share items', signInGoogleHint: 'Sign in to sync across devices and share with your partner',
-      repUnits: 'day|days|days;week|weeks|weeks;month|months|months;year|years|years', filterDated: 'With date', filterAll: 'All', filterTasks: 'Tasks', filterEvents: 'Events', lateDay: '{n} day late', lateDays: '{n} days late', allDoneToday: 'All done for today', nothingToday: 'Nothing planned for today', deleteEntry: 'Delete', deleteEntryConfirm: 'Delete “{name}”?',
+      repUnits: 'day|days|days;week|weeks|weeks;month|months|months;year|years|years', filterDated: 'With date', remindLabel: 'Reminder', remindAt: 'At the time', remindBefore: '{n} before', remindOff: 'No reminder', min5: '5 min', min15: '15 min', min30: '30 min', hour1: '1 hour', day1: '1 day',
+      pushDevice: 'Notifications on this device', pushDeviceDesc: 'Arrive even when the app is closed', pushOn: 'On', pushTurnOn: 'Turn on', pushTurnOff: 'Turn off', pushIosHint: 'On iPhone: first add Reminder to the Home Screen (Share → Add to Home Screen), open it from there and turn notifications on.',
+      pushEnabled: 'Notifications are on for this device', pushDisabled: 'Notifications are off for this device', pushFailed: 'Could not turn on notifications', pushTestSent: 'Test notification sent', pushNeedsOn: 'Turn on notifications on this device first',
+      remindersPushDesc: 'At the item time, or earlier — you choose in each item', morningSummary: 'Morning summary', morningSummaryDesc: 'Today\'s items without a time, overdue and General', morningTime: 'Time', sendTest: 'Send a test notification', filterAll: 'All', filterTasks: 'Tasks', filterEvents: 'Events', lateDay: '{n} day late', lateDays: '{n} days late', allDoneToday: 'All done for today', nothingToday: 'Nothing planned for today', deleteEntry: 'Delete', deleteEntryConfirm: 'Delete “{name}”?',
       welcomeSubtitleAuth: 'Sign in to your account', fullName: 'Full Name', confirmPassword: 'Confirm Password',
       noAccount: "Don't have an account?", registerNow: 'Register', agreeTerms: 'I agree to the Terms of Service and Privacy Policy',
       fillAllFields: 'Please fill all fields', acceptTerms: 'Please accept terms and conditions', wrongCredentials: 'Wrong email or password',
@@ -65,7 +68,10 @@
       partnerHelp: 'Partner treba jednom da se prijavi preko Google-a. Zatim ovde unesite njegov email.', linkBtn: 'Poveži', unlinkBtn: 'Ukloni', partnerSelf: 'To je vaš email',
       partnerNotFound: 'Nema naloga sa tim emailom. Neka se partner prvo prijavi preko Google-a.', partnerLinked: 'Povezani ste sa: {name}', shareWith: 'Podeli sa: {name}',
       sharedBy: 'Podelio/la: {name}', sharedWith: 'Podeljeno sa: {name}', partnerLinkFirst: 'Povežite partnera u Profilu da biste delili stavke', signInGoogleHint: 'Prijavite se da biste imali iste podatke na svim uređajima i delili sa partnerom',
-      repUnits: 'dan|dana|dana;nedelja|nedelje|nedelja;mesec|meseca|meseci;godina|godine|godina', filterDated: 'Sa datumom', filterAll: 'Sve', filterTasks: 'Zadaci', filterEvents: 'Događaji', lateDay: 'kasni {n} dan', lateDays: 'kasni {n} dana', allDoneToday: 'Sve za danas je urađeno', nothingToday: 'Za danas nema ništa', deleteEntry: 'Obriši', deleteEntryConfirm: 'Obrisati „{name}“?',
+      repUnits: 'dan|dana|dana;nedelja|nedelje|nedelja;mesec|meseca|meseci;godina|godine|godina', filterDated: 'Sa datumom', remindLabel: 'Podsetnik', remindAt: 'U vreme stavke', remindBefore: '{n} ranije', remindOff: 'Bez podsetnika', min5: '5 min', min15: '15 min', min30: '30 min', hour1: '1 sat', day1: '1 dan',
+      pushDevice: 'Obaveštenja na ovom uređaju', pushDeviceDesc: 'Stižu i kad je aplikacija zatvorena', pushOn: 'Uključeno', pushTurnOn: 'Uključi', pushTurnOff: 'Isključi', pushIosHint: 'Na iPhone-u: prvo dodaj Reminder na početni ekran (Share → Add to Home Screen), otvori ga odatle i uključi obaveštenja.',
+      pushEnabled: 'Obaveštenja su uključena na ovom uređaju', pushDisabled: 'Obaveštenja su isključena na ovom uređaju', pushFailed: 'Nije uspelo uključivanje obaveštenja', pushTestSent: 'Probno obaveštenje je poslato', pushNeedsOn: 'Prvo uključi obaveštenja na ovom uređaju',
+      remindersPushDesc: 'U vreme stavke ili ranije — biraš u svakoj stavci', morningSummary: 'Jutarnji pregled', morningSummaryDesc: 'Današnje stavke bez vremena, one koje kasne i Opšte', morningTime: 'Vreme', sendTest: 'Pošalji probno obaveštenje', filterAll: 'Sve', filterTasks: 'Zadaci', filterEvents: 'Događaji', lateDay: 'kasni {n} dan', lateDays: 'kasni {n} dana', allDoneToday: 'Sve za danas je urađeno', nothingToday: 'Za danas nema ništa', deleteEntry: 'Obriši', deleteEntryConfirm: 'Obrisati „{name}“?',
       welcomeSubtitleAuth: 'Prijavite se na svoj nalog', fullName: 'Ime i prezime', confirmPassword: 'Potvrdite lozinku',
       noAccount: 'Nemate nalog?', registerNow: 'Registrujte se', agreeTerms: 'Prihvatam Uslove korišćenja i Politiku privatnosti',
       fillAllFields: 'Popunite sva polja', acceptTerms: 'Prihvatite uslove korišćenja', wrongCredentials: 'Pogrešan email ili lozinka',
@@ -156,7 +162,7 @@
   const defaultSettings = () => ({
     lang: 'sr',
     dark: null, primary: BRAND,
-    notif: { reminders: true, snooze: true, sound: true },
+    notif: { reminders: true, snooze: true, sound: true, morning: true, morningTime: '08:00' },
   });
   let DB = null;
   function load() {
@@ -746,6 +752,7 @@
     return Notification.permission; // default | granted | denied
   }
   function screenNotifications() {
+    if (isCloud()) return screenPushNotifications();
     const n = settings().notif; const st = notifPermState();
     const permBtn = st === 'granted' ? `<span class="chip">${icon('check', 'xs')}${esc(t('allowed'))}</span>`
       : st === 'denied' ? `<span class="chip neutral">${esc(t('blocked'))}</span>`
@@ -759,6 +766,23 @@
     </div>
     <button class="btn btn-primary btn-block" data-a="notif-save">${esc(t('saveSettings'))}</button>
     <button class="btn btn-outline btn-block" data-a="test-notif">${icon('notification_add')}${esc(t('testNotificationTitle'))}</button>`;
+    return { title: t('notifications'), html, narrow: true };
+  }
+  function screenPushNotifications() {
+    const n = settings().notif; const on = pushOnHere();
+    const supported = pushSupported();
+    const right = on ? `<span class="chip">${icon('check', 'xs')}${esc(t('pushOn'))}</span>`
+      : supported ? `<button class="btn btn-primary btn-sm" data-a="push-on">${esc(t('pushTurnOn'))}</button>`
+      : `<span class="chip neutral">${esc(t('notSupported'))}</span>`;
+    const html = `<div class="stack">
+      <div class="switch-tile" style="cursor:default">${icon('notifications_active')}<span class="grow"><b>${esc(t('pushDevice'))}</b><small>${esc(t('pushDeviceDesc'))}</small></span>${right}</div>
+      ${!supported && isIos() ? `<p class="muted" style="margin:0;font-size:13.5px">${esc(t('pushIosHint'))}</p>` : ''}
+      ${switchTile('n-rem', t('reminders'), t('remindersPushDesc'), n.reminders !== false, 'notif-set')}
+      ${switchTile('n-morning', t('morningSummary'), t('morningSummaryDesc'), n.morning !== false, 'notif-set')}
+      ${n.morning !== false ? `<div class="field picker-field"><span class="pick-ic" aria-hidden="true">${icon('schedule')}</span><label for="n-morning-time">${esc(t('morningTime'))}</label><input id="n-morning-time" type="time" value="${esc(n.morningTime || '08:00')}"></div>` : ''}
+    </div>
+    ${on ? `<button class="btn btn-outline btn-block" data-a="push-test">${icon('notification_add')}${esc(t('sendTest'))}</button>
+    <button class="btn btn-text btn-block" data-a="push-off">${esc(t('pushTurnOff'))}</button>` : ''}`;
     return { title: t('notifications'), html, narrow: true };
   }
   function screenLanguage() {
@@ -833,7 +857,7 @@
     };
     const st = {
       items: (base.items || []).map((x) => ({ ...x })),
-      date: base.date || '', time: base.time || '', hasDate: !!base.date,
+      date: base.date || '', time: base.time || '', hasDate: !!base.date, remind: base.remind == null ? 0 : Number(base.remind),
     };
     const ref = fromKey(base.date || dkey(T));
     st.rep = { type: 'none', every: 1, unit: 'day', days: [weekdayIdx(ref)], monthDay: ref.getDate(), ...(base.repeat || {}) };
@@ -904,7 +928,14 @@
         : `<button type="button" class="btn btn-outline add-date" id="ef-add-date">${icon('event')}${esc(t('addDate'))}</button>`;
       const timeHtml = showTime ? `<div class="field picker-field"><span class="pick-ic" aria-hidden="true">${icon('schedule')}</span><label for="ef-time">${esc(t('timeOptional'))}</label><input id="ef-time" type="time" value="${esc(st.time)}">
             <button type="button" class="icon-btn" id="ef-time-clear" aria-label="${esc(t('clearTime'))}" ${st.time ? '' : 'hidden'}>${icon('close', 'sm')}</button></div>` : '';
-      $('#ef-when').innerHTML = `<div class="field-row dt-row ${showTime ? '' : 'one'}">${dateHtml}${timeHtml}</div>`;
+      $('#ef-when').innerHTML = `<div class="field-row dt-row ${showTime ? '' : 'one'}">${dateHtml}${timeHtml}</div><div id="ef-remind-wrap"></div>`;
+      drawRemind();
+    }
+    function drawRemind() {
+      const box = $('#ef-remind-wrap'); if (!box) return;
+      const show = (st.hasDate || st.rep.type !== 'none') && st.time;
+      const opts = [[0, t('remindAt')], [5, t('remindBefore', { n: t('min5') })], [15, t('remindBefore', { n: t('min15') })], [30, t('remindBefore', { n: t('min30') })], [60, t('remindBefore', { n: t('hour1') })], [1440, t('remindBefore', { n: t('day1') })], [-1, t('remindOff')]];
+      box.innerHTML = show ? `<div class="field select" style="margin-top:12px"><span style="margin-left:14px;color:var(--primary-ink)">${icon('notifications')}</span><label for="ef-remind">${esc(t('remindLabel'))}</label><select id="ef-remind">${opts.map(([v, l]) => opt(v, l, st.remind)).join('')}</select></div>` : '';
     }
     function prettyDate(k) { return k ? fmtDate(fromKey(k), { day: 'numeric', month: 'short', year: 'numeric' }) : ''; }
     function openPicker(id) {
@@ -927,7 +958,7 @@
       if (dp) { const i = Number(dp.dataset.day); const s = new Set(st.rep.days); s.has(i) ? s.delete(i) : s.add(i); st.rep.days = [...s].sort(); dp.setAttribute('aria-pressed', s.has(i)); return; }
       if (e.target.closest('#ef-add-item')) addItem();
       const sk = e.target.closest('.seg-btn'); if (sk) { st.kind = sk.dataset.kind; drawKind(); err(''); return; }
-      if (e.target.closest('#ef-time-clear')) { st.time = ''; $('#ef-time').value = ''; $('#ef-time-clear').hidden = true; }
+      if (e.target.closest('#ef-time-clear')) { st.time = ''; $('#ef-time').value = ''; $('#ef-time-clear').hidden = true; drawRemind(); }
       if (e.target.closest('#ef-add-date')) { st.hasDate = true; if (!st.date) st.date = dkey(T); drawWhen(); openPicker('ef-date'); return; }
       if (e.target.closest('#ef-date-clear')) { st.hasDate = false; st.date = ''; drawWhen(); return; }
     });
@@ -935,7 +966,7 @@
       if (e.target.dataset.i != null) st.items[Number(e.target.dataset.i)].text = e.target.value;
       if (e.target.id === 'ef-every') st.rep.every = Number(e.target.value);
       if (e.target.id === 'ef-mday') st.rep.monthDay = Number(e.target.value);
-      if (e.target.id === 'ef-time') { st.time = e.target.value; $('#ef-time-clear').hidden = !e.target.value; }
+      if (e.target.id === 'ef-time') { const had = !!st.time; st.time = e.target.value; $('#ef-time-clear').hidden = !e.target.value; if (had !== !!st.time) drawRemind(); }
       if (e.target.id === 'ef-date' && e.target.value) {
         st.date = e.target.value; $('#ef-date-text').textContent = prettyDate(st.date);
         if (!existing) { const d = fromKey(st.date); st.rep.monthDay = d.getDate(); if (st.rep.days.length <= 1) st.rep.days = [weekdayIdx(d)]; if (st.rep.type === 'monthday' || st.rep.type === 'weekdays') drawRep(); }
@@ -944,6 +975,7 @@
     form.addEventListener('change', (e) => {
       if (e.target.id === 'ef-rep') { st.rep.type = e.target.value; drawRep(); drawWhen(); }
       if (e.target.id === 'ef-unit') st.rep.unit = e.target.value;
+      if (e.target.id === 'ef-remind') st.remind = Number(e.target.value);
       if (e.target.id === 'ef-imp') $('#ef-star').style.color = e.target.checked ? 'var(--star)' : 'var(--muted)';
     });
     const ni = $('#ef-new-item'); if (ni) ni.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); addItem(); } });
@@ -962,7 +994,7 @@
       if (r.type === 'monthday') { const n = Math.round(Number(r.monthDay)); if (!(n >= 1 && n <= 31)) return err(t('invalidDayOfMonth')); repeat = { type: 'monthday', monthDay: n }; }
       const data = {
         ...(existing || {}), uid: existing ? existing.uid : uuid(), kind: st.kind, type: $('#ef-type').value, name, description: $('#ef-desc').value.trim(),
-        date, time: date || repeat.type !== 'none' ? st.time || '' : '', important: $('#ef-imp').checked, repeat, items: isList ? items : [],
+        date, time: date || repeat.type !== 'none' ? st.time || '' : '', important: $('#ef-imp').checked, repeat, items: isList ? items : [], remind: st.remind,
         done: existing ? existing.done || {} : {}, checks: existing ? existing.checks || {} : {},
         createdAt: existing ? existing.createdAt : new Date().toISOString(), updatedAt: new Date().toISOString(),
       };
@@ -1092,13 +1124,14 @@
   }
   function checkDue() {
     const u = me(); if (!u || !u.settings.notif.reminders) return;
+    if (isCloud() && pushOnHere()) return; // the server sends these as push notifications
     const now = new Date(); const T = todayD(); const nowMin = now.getHours() * 60 + now.getMinutes(); const k = dkey(T);
     let changed = false;
     for (const it of entries()) {
       const body = () => (it.kind === 'list' ? `${checkedOn(it, T).length}/${it.items.length} · ` : '') + t('dontForget', { name: it.name });
       if (it.snoozedUntil && new Date(it.snoozedUntil) <= now) { delete it.snoozedUntil; changed = true; headsUp({ title: it.name, body: body(), r: it }); continue; }
-      if (!it.time || !occursOn(it, T) || isDoneOn(it, T)) continue;
-      const due = timeToMin(it.time); const fk = `${it.uid}|${k}`;
+      if (!it.time || !occursOn(it, T) || isDoneOn(it, T) || Number(it.remind) < 0) continue;
+      const due = timeToMin(it.time) - (Number(it.remind) || 0); const fk = `${it.uid}|${k}`;
       if (nowMin >= due && nowMin - due <= 2 && !DB.fired[fk]) { DB.fired[fk] = 1; changed = true; headsUp({ title: it.name, body: body(), r: it }); }
     }
     for (const fk in DB.fired) if (!fk.endsWith(k)) { delete DB.fired[fk]; changed = true; }
@@ -1153,6 +1186,53 @@
       console.warn('Firebase not available, staying local', e);
     }
   }
+  /* ---------- Web Push (server sends; see api/cron.js) ---------- */
+  const VAPID_PUBLIC = 'BM92mCsLUOMAMnxqP2lZqy7ys02Hcm2LzPYLSLEo9KUfAqsJfyuqIG1m5-pdWa6_H_S77LfdiCa7xDUb3zunr_4';
+  const PUSH_KEY = 'reminder-push-id';
+  const localTz = () => { try { return Intl.DateTimeFormat().resolvedOptions().timeZone || 'Europe/Belgrade'; } catch (e) { return 'Europe/Belgrade'; } };
+  const isIos = () => /iPhone|iPad|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  const pushSupported = () => 'serviceWorker' in navigator && 'PushManager' in window && 'Notification' in window;
+  const pushId = () => { try { return localStorage.getItem(PUSH_KEY); } catch (e) { return null; } };
+  const pushOnHere = () => !!pushId() && pushSupported() && Notification.permission === 'granted';
+  async function sha1hex(s) { const b = await crypto.subtle.digest('SHA-1', new TextEncoder().encode(s)); return [...new Uint8Array(b)].map((x) => x.toString(16).padStart(2, '0')).join(''); }
+  function b64uToBytes(s) { const p = '='.repeat((4 - (s.length % 4)) % 4); const raw = atob((s + p).replace(/-/g, '+').replace(/_/g, '/')); return Uint8Array.from(raw, (c) => c.charCodeAt(0)); }
+  async function pushSave(sub) {
+    const id = await sha1hex(sub.endpoint);
+    await Cloud.db.collection('pushSubs').doc(id).set({ uid: me().uid, sub: JSON.parse(JSON.stringify(sub)), tz: localTz(), ua: navigator.userAgent.slice(0, 160), updatedAt: new Date().toISOString() });
+    try { localStorage.setItem(PUSH_KEY, id); } catch (e) { /* ignore */ }
+    return id;
+  }
+  async function pushEnable() {
+    if (!pushSupported()) { toast(isIos() ? t('pushIosHint') : t('notSupported'), { error: true, ms: 8000 }); return; }
+    try {
+      const perm = await Notification.requestPermission();
+      if (perm !== 'granted') { toast(t('blocked'), { error: true }); return; }
+      const reg = await navigator.serviceWorker.ready;
+      const sub = (await reg.pushManager.getSubscription()) || (await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: b64uToBytes(VAPID_PUBLIC) }));
+      await pushSave(sub);
+      toast(t('pushEnabled'), { icon: 'notifications_active' });
+    } catch (e) { console.warn(e); toast(`${t('pushFailed')}: ${(e && e.message) || e}`, { error: true, ms: 7000 }); }
+  }
+  async function pushDisable() {
+    const id = pushId();
+    try { const reg = await navigator.serviceWorker.ready; const sub = await reg.pushManager.getSubscription(); if (sub) await sub.unsubscribe(); } catch (e) { /* ignore */ }
+    try { if (id) await Cloud.db.collection('pushSubs').doc(id).delete(); } catch (e) { /* ignore */ }
+    try { localStorage.removeItem(PUSH_KEY); } catch (e) { /* ignore */ }
+    toast(t('pushDisabled'));
+  }
+  // after sign-in: this device's subscription belongs to whoever is signed in now
+  async function pushRefresh() {
+    if (!pushId() || !pushSupported() || Notification.permission !== 'granted') return;
+    try { const reg = await navigator.serviceWorker.ready; const sub = await reg.pushManager.getSubscription(); if (sub) await pushSave(sub); else localStorage.removeItem(PUSH_KEY); } catch (e) { /* ignore */ }
+  }
+  async function pushTest() {
+    const id = pushId(); if (!id) return toast(t('pushNeedsOn'), { error: true });
+    try {
+      const r = await fetch('/api/push-test', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ id, lang: settings().lang }) });
+      if (r.ok) toast(t('pushTestSent'), { icon: 'notification_add' });
+      else { const j = await r.json().catch(() => ({})); toast(`${t('pushFailed')}: ${j.error || j.status || r.status}`, { error: true, ms: 7000 }); }
+    } catch (e) { toast(t('networkError'), { error: true }); }
+  }
   function cloudError(e) {
     const code = (e && e.code) || '';
     if (code === 'auth/popup-closed-by-user' || code === 'auth/cancelled-popup-request') return;
@@ -1197,9 +1277,10 @@
       const ts = window.firebase.firestore.FieldValue.serverTimestamp();
       ref.set({
         uid: fu.uid, name: u.name, email: u.email || '', emailLower: (u.email || '').toLowerCase(), photoUrl: u.photo || data.photoUrl || null,
-        language: u.settings.lang, isDarkMode: isDark(), settings: clean(u.settings), lastLogIn: ts, ...(snap.exists ? {} : { creationDate: ts }),
+        language: u.settings.lang, isDarkMode: isDark(), settings: clean(u.settings), lastLogIn: ts, tz: localTz(), ...(snap.exists ? {} : { creationDate: ts }),
       }, { merge: true }).catch(cloudError);
       await loadPartner();
+      pushRefresh();
     } catch (e) { cloudError(e); }
     if (Cloud.unsub) Cloud.unsub();
     Cloud.firstSnap = true;
@@ -1339,6 +1420,9 @@
         catch (err) { toast(t('notSupported'), { error: true }); }
         break;
       case 'notif-save': save(); toast(t('notificationSettingsSaved')); break;
+      case 'push-on': await pushEnable(); render(); break;
+      case 'push-off': await pushDisable(); render(); break;
+      case 'push-test': pushTest(); break;
       case 'pick-lang': ui.pendingLang = el.dataset.v; render(); break;
       case 'save-lang': {
         const code = ui.pendingLang || settings().lang; const changed = settings().lang !== code;
@@ -1350,12 +1434,14 @@
   });
   document.addEventListener('change', (e) => {
     const el = e.target; const a = el.dataset && el.dataset.a;
+    if (el.id === 'n-morning-time' && el.value) { settings().notif.morningTime = el.value; save(); return; }
     if (a === 'toggle-check') { const r = findR(el.dataset.id); if (r) toggleCheck(r, el.dataset.item, fromKey(el.dataset.d)); return; }
     if (!a) return;
     const s = settings();
     if (a === 'dark-toggle') { s.dark = el.checked; save(); render(); }
     else if (a === 'notif-set') {
-      const map = { 'n-rem': 'reminders', 'n-snooze': 'snooze', 'n-sound': 'sound' }; s.notif[map[el.id]] = el.checked; save();
+      const map = { 'n-rem': 'reminders', 'n-snooze': 'snooze', 'n-sound': 'sound', 'n-morning': 'morning' }; s.notif[map[el.id]] = el.checked; save();
+      if (el.id === 'n-morning') render();
     }
   });
   document.addEventListener('input', (e) => {

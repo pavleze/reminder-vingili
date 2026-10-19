@@ -1,5 +1,5 @@
 /* Reminder service worker: the app opens offline, updates arrive on the next open. */
-const CACHE = 'reminder-v1';
+const CACHE = 'reminder-v2';
 const CORE = ['/', '/index.html', '/app.js', '/i18n.js', '/manifest.webmanifest', '/assets/icon-192.png', '/assets/icon-512.png', '/assets/apple-touch-icon.png'];
 
 self.addEventListener('install', (e) => {
@@ -17,7 +17,7 @@ self.addEventListener('fetch', (e) => {
   if (req.method !== 'GET') return;
   const url = new URL(req.url);
   // never touch sign-in or database traffic
-  if (url.pathname.startsWith('/__/') || /googleapis\.com$|firebaseio\.com$|gstatic\.com$/.test(url.hostname) && !/fonts\./.test(url.hostname)) return;
+  if (url.pathname.startsWith('/__/') || url.pathname.startsWith('/api/') || /googleapis\.com$|firebaseio\.com$|gstatic\.com$/.test(url.hostname) && !/fonts\./.test(url.hostname)) return;
 
   const sameOrigin = url.origin === self.location.origin;
   const cacheable = sameOrigin || /^(fonts\.googleapis\.com|fonts\.gstatic\.com|cdn\.jsdelivr\.net)$/.test(url.hostname);
@@ -39,4 +39,23 @@ self.addEventListener('fetch', (e) => {
       }))
     );
   }
+});
+
+/* Push notifications sent by api/cron.js */
+self.addEventListener('push', (e) => {
+  let m = {};
+  try { m = e.data ? e.data.json() : {}; } catch (err) { m = { title: 'Reminder', body: e.data ? e.data.text() : '' }; }
+  e.waitUntil(self.registration.showNotification(m.title || 'Reminder', {
+    body: m.body || '', tag: m.tag || undefined, renotify: !!m.tag, data: { url: m.url || '/' },
+    icon: '/assets/icon-192.png', badge: '/assets/icon-192.png',
+  }));
+});
+
+self.addEventListener('notificationclick', (e) => {
+  e.notification.close();
+  const url = (e.notification.data && e.notification.data.url) || '/';
+  e.waitUntil(self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then((list) => {
+    for (const c of list) if ('focus' in c) return c.focus();
+    return self.clients.openWindow(url);
+  }));
 });

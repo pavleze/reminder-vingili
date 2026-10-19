@@ -25,6 +25,13 @@ service cloud.firestore {
       allow delete: if request.auth != null && request.auth.uid == resource.data.owner;
     }
 
+    // Web push: one document per device that turned notifications on.
+    // Only its owner can see or change it; the server (api/cron.js) uses the service account.
+    match /pushSubs/{id} {
+      allow read, delete: if request.auth != null && resource.data.uid == request.auth.uid;
+      allow create, update: if request.auth != null && request.resource.data.uid == request.auth.uid;
+    }
+
     // Feedback from the old app's account-deletion screen.
     match /feedback/{id} {
       allow create: if request.auth != null;
