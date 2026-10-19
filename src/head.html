@@ -349,6 +349,9 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
 .home-rows > .label-row { align-items: center; padding: 3px 0; }
 .home-rows > .label-row .rows-label { padding: 0; line-height: 1.5; color: var(--fg); }
 .home-rows > .label-row .fpill { padding-block: 2px; }
+/* the filter covers every section on Home, so it sits on its own row above them */
+.home-filter { display: grid; grid-template-columns: repeat(3, 1fr); width: 100%; max-width: 420px; align-self: center; margin: -8px 0 -10px; padding: 3px; }
+.home-filter .fpill { padding: 7px 10px; font-size: 13px; }
 .muted-date { font-weight: 500; letter-spacing: .02em; text-transform: none; font-size: 12px; opacity: .8; }
 .more-btn { align-self: center; margin: 18px 0 4px; }
 .content.wide { max-width: none; padding-bottom: 96px; gap: 12px; }

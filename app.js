@@ -509,7 +509,7 @@
     const floatOpen = floating.filter((it) => !isDone(it) && pass(it));
     const doneList = today.filter(isDone).concat(floating.filter(isDone)).filter(pass);
     const overdueF = overdue.filter(pass); const lateDoneF = lateDone.filter(pass);
-    const filterBar = `<div class="filter-pills" role="radiogroup" aria-label="Filter">${[['all', 'filterAll'], ['task', 'filterTasks'], ['event', 'filterEvents']].map(([v, k]) => `<button type="button" role="radio" class="fpill" data-a="home-filter" data-v="${v}" aria-checked="${f === v}">${esc(t(k))}</button>`).join('')}</div>`;
+    const filterBar = `<div class="filter-pills home-filter" role="radiogroup" aria-label="Filter">${[['all', 'filterAll'], ['task', 'filterTasks'], ['event', 'filterEvents']].map(([v, k]) => `<button type="button" role="radio" class="fpill" data-a="home-filter" data-v="${v}" aria-checked="${f === v}">${esc(t(k))}</button>`).join('')}</div>`;
     const html = `
       <header class="day-hero">
         <div class="day-head-txt">
@@ -518,8 +518,9 @@
         </div>
         ${totalN ? `<div class="ring ring-min" style="--p:${pct}" role="img" aria-label="${esc(t('ofDone', { a: doneN, b: totalN }))} ${esc(t('doneToday'))}"><div><b class="tnum">${doneN}/${totalN}</b><small>${esc(t('doneToday'))}</small></div></div>` : ''}
       </header>
+      ${filterBar}
       <section class="rows home-rows" aria-labelledby="today-h">
-        <div class="label-row"><h3 class="rows-label"><span class="d-long">${esc(cap(fmtDate(d, { weekday: 'long', day: 'numeric', month: 'long' })))}</span><span class="d-short">${esc(cap(fmtDate(d, { weekday: 'short', day: 'numeric', month: 'short' })))}</span></h3>${filterBar}</div>
+        <h3 class="rows-label"><span class="d-long">${esc(cap(fmtDate(d, { weekday: 'long', day: 'numeric', month: 'long' })))}</span><span class="d-short">${esc(cap(fmtDate(d, { weekday: 'short', day: 'numeric', month: 'short' })))}</span></h3>
         ${overdueF.map((it) => entryCard(it, fromKey(it.date), { overdue: true })).join('')}
         ${todayOpen.length ? todayOpen.map((it) => entryCard(it, d)).join('') : overdueF.length ? '' : `<p class="quiet">${esc(today.length ? t('allDoneToday') : t('nothingToday'))}</p>`}
       </section>
