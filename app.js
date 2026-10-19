@@ -101,7 +101,7 @@
   const BRAND = '#1E9E6A';
   const LIST_COLOR = '#4C7BD9';
   const EVENT_COLOR = '#9B6BD6';
-  const isEvent = (it) => it.kind !== 'list' && it.type === 'event';
+  const isEvent = (it) => it.type === 'event';
   const REPEAT_TYPES = [['none', 'repNone'], ['interval', 'repInterval'], ['weekdays', 'repWeekdays'], ['monthday', 'repMonthday']];
   const UNITS = [['day', 'unitDay'], ['week', 'unitWeek'], ['month', 'unitMonth']];
 
@@ -406,7 +406,7 @@
     const sub = subParts.length ? `<span class="sub">${esc(subParts.join(' · '))}</span>` : '';
     const star = it.important ? `<span class="star" aria-label="${esc(t('important'))}">${icon('star', 'fill xs')}</span>` : '';
     const time = it.time && !isFloating(it) ? `<span class="time tnum">${esc(fmtTime(it.time))}</span>` : '';
-    if (isEvent(it)) {
+    if (isEvent(it) && !isList) {
       const past = it.time && sameDay(d, todayD()) && timeToMin(it.time) < new Date().getHours() * 60 + new Date().getMinutes();
       return `<div class="entry event ${past || d < todayD() ? 'past' : ''}">
         <span class="ev-ic" aria-hidden="true">${icon('event', 'sm')}</span>
@@ -422,17 +422,17 @@
       </div>`;
     }
     const open = ui.expanded.has(it.uid + '|' + k);
-    const checked = new Set(checkedOn(it, d)); const n = it.items.length; const c = checked.size;
-    return `<div class="entry list ${done ? 'done' : ''} ${open ? 'open' : ''}">
+    const checked = new Set(checkedOn(it, d)); const n = it.items.length; const c = checked.size; const ev = isEvent(it);
+    return `<div class="entry list ${done && !ev ? 'done' : ''} ${ev ? 'event' : ''} ${open ? 'open' : ''}">
       <button class="entry-row" data-a="expand" data-id="${it.uid}" data-d="${k}" aria-expanded="${open}">
-        <span class="tick list-tick ${done ? 'on' : ''}" aria-hidden="true">${done ? icon('check', 'xs') : `<span class="tnum">${c}</span>`}</span>
-        <span class="body"><span class="title">${esc(it.name)}${star}</span><span class="sub tnum">${esc(c + '/' + n)}${subParts.length ? ' · ' + esc(subParts.join(' · ')) : ''}</span></span>
+        ${ev ? `<span class="ev-ic" aria-hidden="true">${icon('event', 'sm')}</span>` : `<span class="tick list-tick ${done ? 'on' : ''}" aria-hidden="true">${done ? icon('check', 'xs') : `<span class="tnum">${c}</span>`}</span>`}
+        <span class="body"><span class="title">${esc(it.name)}${star}</span><span class="sub tnum">${esc(ev ? String(n) : c + '/' + n)}${subParts.length ? ' · ' + esc(subParts.join(' · ')) : ''}</span></span>
         ${time}
         <span class="chev">${icon(open ? 'expand_less' : 'expand_more', 'sm')}</span>
       </button>
       ${open ? `<div class="entry-items">
         ${it.description ? `<p class="entry-desc">${esc(it.description)}</p>` : ''}
-        ${it.items.map((x) => `<label class="item-row ${checked.has(x.id) ? 'on' : ''}"><input type="checkbox" data-a="toggle-check" data-id="${it.uid}" data-item="${x.id}" data-d="${k}" ${checked.has(x.id) ? 'checked' : ''}><span>${esc(x.text)}</span></label>`).join('')}
+        ${ev ? it.items.map((x) => `<div class="item-row bullet"><span>${esc(x.text)}</span></div>`).join('') : it.items.map((x) => `<label class="item-row ${checked.has(x.id) ? 'on' : ''}"><input type="checkbox" data-a="toggle-check" data-id="${it.uid}" data-item="${x.id}" data-d="${k}" ${checked.has(x.id) ? 'checked' : ''}><span>${esc(x.text)}</span></label>`).join('')}
         <button class="link-btn" data-a="edit" data-id="${it.uid}">${esc(t('edit'))}</button>
       </div>` : ''}
     </div>`;
@@ -471,7 +471,7 @@
     <button class="icon-btn" data-a="tab" data-tab="profile" aria-label="${esc(t('profileTitle'))}">${avatarHtml(me(), 'sm')}</button>`;
 
   /* ---------- Calendar ---------- */
-  const entryColor = (it) => (it.kind === 'list' ? LIST_COLOR : isEvent(it) ? EVENT_COLOR : BRAND);
+  const entryColor = (it) => (isEvent(it) ? EVENT_COLOR : it.kind === 'list' ? LIST_COLOR : BRAND);
   function screenReminders() {
     return {
       title: t('calendarTab'),
@@ -524,7 +524,6 @@
       </div>
       <div class="cal-dow">${DOW_KEYS.map((k) => `<span>${esc(t(k))}</span>`).join('')}</div>
       <div class="cal-grid">${cells}</div>
-      <div class="legend"><span><span class="dot" style="background:${BRAND}"></span>${esc(cap(t('task')))}</span><span><span class="dot" style="background:${EVENT_COLOR}"></span>${esc(cap(t('event')))}</span><span><span class="dot" style="background:${LIST_COLOR}"></span>${esc(t('kindList'))}</span></div>
     </div>`;
   }
 
@@ -800,7 +799,6 @@
     function drawKind() {
       const list = st.kind === 'list';
       $('#ef-items-wrap').hidden = !list;
-      $('#ef-type-wrap').hidden = list;
       $('#ef-head').style.background = list ? LIST_COLOR : '';
       $('#ef-head-ic').textContent = list ? 'checklist' : 'task_alt';
       $('#ed-t').textContent = t(existing ? (list ? 'editList' : 'editTask') : (list ? 'newList' : 'newTask'));
@@ -849,7 +847,7 @@
       if (r.type === 'weekdays') { if (!r.days.length) return err(t('pickDays')); repeat = { type: 'weekdays', days: r.days.slice() }; }
       if (r.type === 'monthday') { const n = Math.round(Number(r.monthDay)); if (!(n >= 1 && n <= 31)) return err(t('invalidDayOfMonth')); repeat = { type: 'monthday', monthDay: n }; }
       const data = {
-        ...(existing || {}), uid: existing ? existing.uid : uuid(), kind: st.kind, type: st.kind === 'list' ? 'task' : $('#ef-type').value, name, description: $('#ef-desc').value.trim(),
+        ...(existing || {}), uid: existing ? existing.uid : uuid(), kind: st.kind, type: $('#ef-type').value, name, description: $('#ef-desc').value.trim(),
         date, time: date || repeat.type !== 'none' ? st.time || '' : '', important: $('#ef-imp').checked, repeat, items: isList ? items : [],
         done: existing ? existing.done || {} : {}, checks: existing ? existing.checks || {} : {},
         createdAt: existing ? existing.createdAt : new Date().toISOString(), updatedAt: new Date().toISOString(),
