@@ -17,7 +17,7 @@
     en: {
       whatToAdd: 'What do you want to add?', kindList: 'List', kindListDesc: 'Several items to check off on one day',
       kindTask: 'Task', kindTaskDesc: 'A single thing to do', newList: 'New list', newTask: 'New task', editList: 'Edit list', editTask: 'Edit task',
-      titleLabel: 'Name', descOptional: 'Description (optional)', itemsLabel: 'Items', addItem: 'Add item', newItemPh: 'New item…', needItem: 'Add at least one item',
+      titleLabel: 'Name', descOptional: 'Note (optional)', itemsLabel: 'Items', addItem: 'Add item', newItemPh: 'New item…', needItem: 'Add at least one item',
       timeOptional: 'Time (optional)', noTime: 'No time', clearTime: 'Clear time',
       repNone: 'Does not repeat', repInterval: 'Every few days, weeks or months', repWeekdays: 'On days of the week', repMonthday: 'On a day of the month',
       everyLabel: 'Every', unitDay: 'days', unitWeek: 'weeks', unitMonth: 'months',
@@ -49,7 +49,7 @@
     sr: {
       whatToAdd: 'Šta dodajete?', kindList: 'Lista', kindListDesc: 'Više stavki za čekiranje za jedan dan',
       kindTask: 'Task', kindTaskDesc: 'Jedna stvar koju treba uraditi', newList: 'Nova lista', newTask: 'Novi task', editList: 'Izmeni listu', editTask: 'Izmeni task',
-      titleLabel: 'Naziv', descOptional: 'Opis (opciono)', itemsLabel: 'Stavke', addItem: 'Dodaj stavku', newItemPh: 'Nova stavka…', needItem: 'Dodajte bar jednu stavku',
+      titleLabel: 'Naziv', descOptional: 'Beleška (opciono)', itemsLabel: 'Stavke', addItem: 'Dodaj stavku', newItemPh: 'Nova stavka…', needItem: 'Dodajte bar jednu stavku',
       timeOptional: 'Vreme (opciono)', noTime: 'Bez vremena', clearTime: 'Ukloni vreme',
       repNone: 'Ne ponavlja se', repInterval: 'Na nekoliko dana, nedelja ili meseci', repWeekdays: 'Određenim danima u nedelji', repMonthday: 'Određenog dana u mesecu',
       everyLabel: 'Na svakih', unitDay: 'dana', unitWeek: 'nedelja', unitMonth: 'meseci',
@@ -712,12 +712,12 @@
           <button type="button" role="radio" class="seg-btn" data-kind="list">${icon('checklist', 'sm')}${esc(t('kindList'))}</button>
         </div>
         <div class="field">${icon('title')}<label for="ef-name">${esc(t('titleLabel'))}</label><input id="ef-name" value="${esc(base.name)}" autocomplete="off" required></div>
-        <div class="field" style="align-items:flex-start"><label for="ef-desc">${esc(t('descOptional'))}</label><textarea id="ef-desc" rows="2">${esc(base.description || '')}</textarea></div>
         <div class="items-edit" id="ef-items-wrap"><span class="lbl">${esc(t('itemsLabel'))}</span><div id="ef-items" class="stack" style="gap:8px"></div>
           <div class="add-item"><input id="ef-new-item" placeholder="${esc(t('newItemPh'))}" autocomplete="off" aria-label="${esc(t('addItem'))}"><button type="button" class="btn btn-tonal btn-sm" id="ef-add-item">${icon('add', 'sm')}${esc(t('addItem'))}</button></div></div>
         <div id="ef-when"></div>
         <div class="field select"><span style="margin-left:14px;color:var(--primary-ink)">${icon('repeat')}</span><label for="ef-rep">${esc(t('repetition'))}</label><select id="ef-rep">${REPEAT_TYPES.map(([v, k]) => opt(v, t(k), st.rep.type)).join('')}</select></div>
         <div id="ef-rep-dyn"></div>
+        <div class="field" style="align-items:flex-start"><label for="ef-desc">${esc(t('descOptional'))}</label><textarea id="ef-desc" rows="2">${esc(base.description || '')}</textarea></div>
         <label class="inline-switch" for="ef-imp"><span class="star" id="ef-star" style="color:${base.important ? 'var(--star)' : 'var(--muted)'}">${icon('star', 'fill')}</span><span class="grow">${esc(t('important'))}</span><span class="switch"><input type="checkbox" role="switch" id="ef-imp" ${base.important ? 'checked' : ''}><i></i></span></label>
         <p class="err-text" id="ef-err" hidden></p>
       </div>
