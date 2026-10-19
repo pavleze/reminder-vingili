@@ -511,7 +511,7 @@
     const overdueF = overdue.filter(pass); const lateDoneF = lateDone.filter(pass);
     const filterBar = `<div class="filter-pills home-filter" role="radiogroup" aria-label="Filter">${[['all', 'filterAll'], ['task', 'filterTasks'], ['event', 'filterEvents']].map(([v, k]) => `<button type="button" role="radio" class="fpill" data-a="home-filter" data-v="${v}" aria-checked="${f === v}">${esc(t(k))}</button>`).join('')}</div>`;
     const html = `
-      <header class="day-hero">
+      <header class="day-hero green-band">
         <div class="day-head-txt">
           <span class="greet">${esc(t('welcomeBack'))}${first ? ', ' + esc(first) : ''}!</span>
           <h2 id="today-h">${esc(t('today'))}</h2>
@@ -544,10 +544,10 @@
   function screenReminders() {
     return {
       title: t('calendarTab'),
-      html: `<div class="seg view-seg" role="tablist">
+      html: `<header class="green-band cal-band"><div class="seg view-seg" role="tablist">
           <button type="button" role="tab" class="seg-btn" data-a="rem-tab" data-v="calendar" aria-selected="${ui.remTab !== 'list'}">${icon('calendar_month', 'sm')}${esc(t('calendarTab'))}</button>
           <button type="button" role="tab" class="seg-btn" data-a="rem-tab" data-v="list" aria-selected="${ui.remTab === 'list'}">${icon('view_agenda', 'sm')}${esc(t('listTab'))}</button>
-        </div>${ui.remTab === 'list' ? renderAgenda() : renderCalendar(entries())}`,
+        </div></header>${ui.remTab === 'list' ? renderAgenda() : renderCalendar(entries())}`,
       wide: true,
       fabs: `<button class="fab" data-a="add" aria-label="${esc(t('addReminder'))}">${icon('add')}<span class="fab-label">${esc(t('addReminder'))}</span></button>`,
       actions: avatarAction(),

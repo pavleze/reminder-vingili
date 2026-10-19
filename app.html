@@ -234,8 +234,9 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
 /* Entries (tasks & lists) — minimal rows */
 /* green band under the top bar, edge to edge with rounded bottom corners (100cqw = width of the scroll area) */
 .scroller { container-type: inline-size; }
-.day-hero { position: relative; isolation: isolate; display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 10px 0 26px; margin-top: -20px; color: #fff; }
-.day-hero::before { content: ""; position: absolute; z-index: -1; top: 0; bottom: 0; left: 50%; width: 100cqw; transform: translateX(-50%);
+.green-band { position: relative; isolation: isolate; margin-top: -20px; color: #fff; }
+.day-hero { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 10px 0 26px; }
+.green-band::before { content: ""; position: absolute; z-index: -1; top: 0; bottom: 0; left: 50%; width: 100cqw; transform: translateX(-50%);
   border-radius: 0 0 28px 28px;
   /* same left-to-right green as the top bar, so the two read as one surface; it only deepens gently toward the bottom */
   background: linear-gradient(180deg, transparent 0%, rgba(0,0,0,.05) 45%, rgba(0,0,0,.16) 100%), linear-gradient(90deg, var(--primary), var(--primary-strong)); }
@@ -352,6 +353,11 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
 /* the filter covers every section on Home, so it sits on its own row above them */
 .home-filter { display: grid; grid-template-columns: repeat(3, 1fr); width: 100%; max-width: 420px; align-self: center; margin: -8px 0 -10px; padding: 3px; }
 .home-filter .fpill { padding: 7px 10px; font-size: 13px; }
+/* Calendar: Kalendar / Lista switch sits on the green band */
+.cal-band { display: flex; justify-content: center; padding: 6px 0 22px; }
+.cal-band .view-seg { background: rgba(255,255,255,.16); border-color: rgba(255,255,255,.22); }
+.cal-band .view-seg .seg-btn { color: rgba(255,255,255,.88); }
+.cal-band .view-seg .seg-btn[aria-selected="true"] { background: #fff; color: var(--primary-strong); }
 .muted-date { font-weight: 500; letter-spacing: .02em; text-transform: none; font-size: 12px; opacity: .8; }
 .more-btn { align-self: center; margin: 18px 0 4px; }
 .content.wide { max-width: none; padding-bottom: 96px; gap: 12px; }
