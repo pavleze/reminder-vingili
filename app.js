@@ -450,7 +450,8 @@
     const fabs = `<button class="fab" data-a="add" aria-label="${esc(t('addReminder'))}">${icon('add')}<span class="fab-label">${esc(t('addReminder'))}</span></button>`;
     return { title: t('homeTitle'), html, fabs, actions: avatarAction() };
   }
-  const avatarAction = () => `<button class="icon-btn" data-a="tab" data-tab="profile" aria-label="${esc(t('profileTitle'))}">${avatarHtml(me(), 'sm')}</button>`;
+  const avatarAction = () => `<button class="icon-btn theme-btn" data-a="theme-toggle" aria-label="${esc(t('darkMode'))}" aria-pressed="${isDark()}" title="${esc(t('darkMode'))}">${icon(isDark() ? 'light_mode' : 'dark_mode')}</button>
+    <button class="icon-btn" data-a="tab" data-tab="profile" aria-label="${esc(t('profileTitle'))}">${avatarHtml(me(), 'sm')}</button>`;
 
   /* ---------- Calendar ---------- */
   const entryColor = (it) => (it.kind === 'list' ? LIST_COLOR : BRAND);
@@ -968,6 +969,7 @@
       case 'cal-today': ui.calMonth = todayD(); render(); break;
       case 'day': dayDialog(el.dataset.d); break;
       case 'modal-close': closeModal(); break;
+      case 'theme-toggle': settings().dark = !isDark(); save(); render(); break;
       case 'clear-samples': {
         const u = me(); u.tasks = u.tasks.filter((r) => !r.sample); save(); render(); toast(t('samplesRemoved')); break;
       }
