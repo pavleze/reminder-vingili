@@ -380,7 +380,7 @@
             <h1>${esc(view.title)}</h1>
             ${view.actions || ''}
           </header>
-          <div class="scroller"><main class="content ${view.narrow ? 'narrow' : ''} ${view.wide ? 'wide' : ''}">${view.html}</main></div>
+          <div class="scroller ${view.calMode ? 'cal-mode' : ''}"><main class="content ${view.narrow ? 'narrow' : ''} ${view.wide ? 'wide' : ''}">${view.html}</main></div>
           ${renderBottomNav()}
         </div>
         ${view.fabs ? `<div class="fabs">${view.fabs}</div>` : ''}
@@ -567,7 +567,7 @@
           <button type="button" role="tab" class="seg-btn" data-a="rem-tab" data-v="calendar" aria-selected="${ui.remTab !== 'list'}">${icon('calendar_month', 'sm')}${esc(t('calendarTab'))}</button>
           <button type="button" role="tab" class="seg-btn" data-a="rem-tab" data-v="list" aria-selected="${ui.remTab === 'list'}">${icon('view_agenda', 'sm')}${esc(t('listTab'))}</button>
         </div></header>${ui.remTab === 'list' ? renderAgenda() : renderCalendar(entries())}`,
-      wide: true,
+      wide: true, calMode: ui.remTab !== 'list',
       // calendar grid: no + button (tap a day to add); list keeps it
       fabs: ui.remTab !== 'list' ? '' : `<button class="fab" data-a="add" aria-label="${esc(t('addReminder'))}">${icon('add')}<span class="fab-label">${esc(t('addReminder'))}</span></button>`,
       actions: avatarAction(),
