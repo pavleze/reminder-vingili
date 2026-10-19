@@ -850,7 +850,7 @@
     openModal(`<div class="dialog" role="dialog" aria-modal="true" aria-labelledby="dd-t">
       <div class="dialog-head">${icon('notifications_active')}<div style="flex:1;min-width:0"><h2 id="dd-t">${esc(t('dailyReminders'))}</h2><p>${esc(cap(fmtDate(d, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })))}</p></div></div>
       <div style="overflow-y:auto">${items.length ? `<div class="day-list">${rows}</div>` : `<div class="dialog-body" style="align-items:center;text-align:center">${icon('notifications_off', 'xl').replace('class="ms', 'style="opacity:.35" class="ms')}<p class="muted" style="margin:0">${esc(t('noRemindersForThisDay'))}</p><button class="btn btn-text" data-a="add-on" data-d="${dateK}">${esc(t('createReminder'))}</button></div>`}</div>
-      <div class="dialog-foot"><button class="btn btn-text" data-a="modal-close">${esc(t('close'))}</button>
+      <div class="dialog-foot"><button class="btn btn-text" style="margin-right:auto" data-a="modal-close">${esc(t('close'))}</button>
         <button class="btn btn-primary" data-a="add-on" data-d="${dateK}">${icon('add', 'sm')}${esc(t('newReminder'))}</button></div></div>`);
   }
 
