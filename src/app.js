@@ -486,7 +486,7 @@
         ${totalN ? `<div class="ring ring-min" style="--p:${pct}" role="img" aria-label="${esc(t('ofDone', { a: doneN, b: totalN }))} ${esc(t('doneToday'))}"><div><b class="tnum">${doneN}/${totalN}</b><small>${esc(t('doneToday'))}</small></div></div>` : ''}
       </header>
       <section class="rows" aria-labelledby="today-h">
-        <div class="label-row"><h3 class="rows-label"><span class="d-long">${esc(cap(fmtDate(d, { weekday: 'long', day: 'numeric', month: 'long' })))}</span><span class="d-short">${esc(cap(fmtDate(d, { weekday: 'short', day: 'numeric', month: 'short' })))}</span></h3>${filterBar}</div>
+        <div class="label-row"><h3 class="rows-label">${esc(fmtDate(d, { day: 'numeric', month: 'short', year: 'numeric' }))}</h3>${filterBar}</div>
         ${overdueF.map((it) => entryCard(it, fromKey(it.date), { overdue: true })).join('')}
         ${todayOpen.length ? todayOpen.map((it) => entryCard(it, d)).join('') : overdueF.length ? '' : `<p class="quiet">${esc(today.length ? t('allDoneToday') : t('nothingToday'))}</p>`}
       </section>
