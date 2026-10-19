@@ -590,6 +590,9 @@
       const day = i === 0 ? t('today') : i === 1 ? t('tomorrow') : cap(fmtDate(d, { weekday: 'long' }));
       html += `<section class="rows agenda-day"><h3 class="rows-label ${i === 0 ? 'is-today' : ''}">${esc(fmtDate(d, { day: 'numeric', month: 'long' }))} <span class="muted-date">${esc(day)}</span></h3>${items.map((it) => entryCard(it, d)).join('')}</section>`;
     }
+    // is there anything after the shown days? (repeating items already listed don't count)
+    let hasMore = false;
+    for (let i = span + 1; i <= span + 366 && !hasMore; i++) hasMore = entriesOn(addDays(T, i)).some((it) => !isRepeating(it) || !seen.has(it.uid));
     const floating = entries().filter((it) => isFloating(it) && floatingVisible(it));
     const undated = floating.filter((it) => !isDoneOn(it, T)).concat(floating.filter((it) => isDoneOn(it, T)));
     const af = ui.agendaFilter || 'all';
@@ -598,7 +601,7 @@
     return `${bar}<div class="agenda">
       ${showGeneral && undated.length ? `<section class="rows agenda-day"><h3 class="rows-label">${esc(t('noDateSection'))}</h3>${undated.map((it) => entryCard(it, T)).join('')}</section>` : ''}
       ${showDated ? `${html || `<p class="quiet">${esc(t('nothingToday'))}</p>`}
-      <button class="btn btn-outline btn-sm more-btn" data-a="agenda-more">${icon('expand_more', 'sm')}${esc(t('showMore'))}</button>` : undated.length ? '' : `<p class="quiet">${esc(t('nothingToday'))}</p>`}
+      ${hasMore ? `<button class="btn btn-outline btn-sm more-btn" data-a="agenda-more">${icon('expand_more', 'sm')}${esc(t('showMore'))}</button>` : ''}` : undated.length ? '' : `<p class="quiet">${esc(t('nothingToday'))}</p>`}
     </div>`;
   }
   function renderCalendar(list) {
