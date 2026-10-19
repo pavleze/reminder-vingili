@@ -273,7 +273,7 @@
   /* ================= UI state & router ================= */
   const ui = {
     auth: 'login', tab: 'home', stack: [], cat: 'All', remTab: 'calendar', calMonth: todayD(), expanded: new Set(), q: '',
-    showPw: {}, splash: true,
+    showPw: {}, splash: false,
   };
   function go(name, params = {}) { ui.stack.push({ name, params }); render(); scrollTop(); }
   function back() { ui.stack.pop(); render(); }
@@ -1178,8 +1178,7 @@
     DB.seeded = true; const u = seedDemo(); hashPw('demo123').then((h) => { u.passHash = h; save(); });
     DB.session = u.uid; u.lastLogin = new Date().toISOString(); save();
   }
-  applyTheme();
-  splash();
+  render();
   setInterval(checkDue, 15000);
   setTimeout(checkDue, 4000);
   document.addEventListener('visibilitychange', () => { if (!document.hidden) { checkDue(); if (!ui.splash && !modalOpen()) render(); } });
