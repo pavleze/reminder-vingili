@@ -416,13 +416,13 @@
     let late = '';
     if (opts.overdue) {
       const n = Math.round((todayD() - d) / 864e5);
-      late = `<span class="late-tag">${esc(t(n % 10 === 1 && n % 100 !== 11 ? 'lateDay' : 'lateDays', { n }))}</span>`;
+      late = `<span class="time late-tag">(${esc(t(n % 10 === 1 && n % 100 !== 11 ? 'lateDay' : 'lateDays', { n }))})</span>`;
     }
     if (it.repeat && it.repeat.type !== 'none') subParts.push(repeatText(it));
     if (it.description && !isList) subParts.push(it.description.split('\n')[0]);
-    const sub = subParts.length || late ? `<span class="sub">${late}${late && subParts.length ? ' · ' : ''}${esc(subParts.join(' · '))}</span>` : '';
+    const sub = subParts.length ? `<span class="sub">${esc(subParts.join(' · '))}</span>` : '';
     const star = it.important ? `<span class="star" aria-label="${esc(t('important'))}">${icon('star', 'fill xs')}</span>` : '';
-    const time = it.time && !isFloating(it) && !opts.overdue ? `<span class="time tnum">${esc(fmtTime(it.time))}</span>` : '';
+    const time = late || (it.time && !isFloating(it) ? `<span class="time tnum">${esc(fmtTime(it.time))}</span>` : '');
     if (isEvent(it) && !isList) {
       const past = it.time && sameDay(d, todayD()) && timeToMin(it.time) < new Date().getHours() * 60 + new Date().getMinutes();
       return `<div class="entry event ${past || d < todayD() ? 'past' : ''}">
@@ -443,7 +443,7 @@
     return `<div class="entry list ${done && !ev ? 'done' : ''} ${ev ? 'event' : ''} ${open ? 'open' : ''}">
       <button class="entry-row" data-a="expand" data-id="${it.uid}" data-d="${k}" aria-expanded="${open}">
         ${ev ? `<span class="ev-ic" aria-hidden="true">${icon('event', 'sm')}</span>` : `<span class="tick pie ${done ? 'on' : ''}" style="--n:${Math.max(n, 1)};--p:${n ? (c / n) * 100 : 0}" aria-hidden="true">${done ? icon('check', 'xs') : ''}</span>`}
-        <span class="body"><span class="title">${esc(it.name)}${star}</span><span class="sub tnum">${late ? late + ' · ' : ''}${esc(ev ? String(n) : c + '/' + n)}${subParts.length ? ' · ' + esc(subParts.join(' · ')) : ''}</span></span>
+        <span class="body"><span class="title">${esc(it.name)}${star}</span><span class="sub tnum">${esc(ev ? String(n) : c + '/' + n)}${subParts.length ? ' · ' + esc(subParts.join(' · ')) : ''}</span></span>
         ${time}
         <span class="chev">${icon(open ? 'expand_less' : 'expand_more', 'sm')}</span>
       </button>
