@@ -400,7 +400,7 @@
     </nav>`;
   }
   function renderBottomNav() {
-    const item = (tab, ic, label) => `<button data-a="tab" data-tab="${tab}" ${ui.tab === tab ? 'aria-current="page"' : ''}><span class="pill">${icon(ic, ui.tab === tab ? 'fill' : '')}</span>${esc(label)}</button>`;
+    const item = (tab, ic, label) => `<button data-a="tab" data-tab="${tab}" aria-label="${esc(label)}" ${ui.tab === tab ? 'aria-current="page"' : ''}><span class="pill">${icon(ic, ui.tab === tab ? 'fill' : '')}</span></button>`;
     return `<nav class="bottomnav" aria-label="Main">${item('home', 'home', t('navHome'))}${item('reminders', 'calendar_month', t('calendarTab'))}${item('profile', 'person', t('navProfile'))}</nav>`;
   }
   function avatarHtml(u, size = '') {
