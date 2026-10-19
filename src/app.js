@@ -100,7 +100,7 @@
   ];
   const WEEKDAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
   const DOW_KEYS = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
-  const BRAND = '#F07D48';
+  const BRAND = '#1E9E6A';
   const COLORS = [
     [BRAND, 'Reminder'], ['#FFE4B5', 'colorMoccasin'], ['#FFF8DC', 'colorCornsilk'], ['#FFC0CB', 'colorPink'], ['#F0BAAC', 'colorLightPink'],
     ['#98FF98', 'colorMint'], ['#AFEEEE', 'colorPaleTurquoise'], ['#FF9800', 'colorOrange'], ['#FFA500', 'colorAmberOrange'],
@@ -259,7 +259,7 @@
     root.setAttribute('data-app-theme', dark ? 'dark' : 'light');
     root.setAttribute('data-motion', s.reduceMotion ? 'reduce' : 'full');
     root.lang = s.lang === 'sr' ? 'sr-Latn' : s.lang;
-    const p = s.primary || BRAND; const bg = dark ? '#000000' : '#ffffff';
+    const p = BRAND; const bg = dark ? '#08110c' : '#f5faf6';
     root.style.setProperty('--primary', p);
     root.style.setProperty('--on-primary', contrast(p, '#ffffff') >= 2.6 ? '#ffffff' : '#141416');
     let ink = p; let i = 0;
@@ -717,24 +717,9 @@
   }
   function screenAppearance() {
     const s = settings(); const dark = isDark();
-    const sw = COLORS.map(([hex, name]) => {
-      const label = name === 'Reminder' ? 'Reminder' : t(name); const on = (s.primary || BRAND).toLowerCase() === hex.toLowerCase();
-      const onC = contrast(hex, '#ffffff') >= 2.6 ? '#ffffff' : '#141416';
-      return `<button class="swatch" style="--c:${hex};--on-c:${onC}" aria-pressed="${on}" title="${esc(label)}" aria-label="${esc(label)}" data-a="pick-color" data-v="${hex}">${on ? icon('check', 'sm') : ''}</button>`;
-    }).join('');
-    const sample = reminders().find((r) => !r.status || r.status === 'active') || { uid: 'x', name: t('testNotificationTitle'), notificationTime: '09:00', category: 'Personal', repetitionTime: 'daily', priority: 'high', isImportant: true };
     const html = `
       ${switchTile('dark-switch', t('darkMode'), s.dark == null ? `${t('darkModeDesc')} · ${t('themeFollowsSystem')}` : t('darkModeDesc'), dark, 'dark-toggle')}
-      <section class="switch-tile" style="flex-direction:column;align-items:stretch;cursor:default">
-        <b style="font-size:17px">${esc(t('primaryColor'))}</b>
-        <div class="swatches">${sw}</div>
-      </section>
-      ${switchTile('motion-switch', t('reduceMotion'), t('reduceMotionDesc'), !!s.reduceMotion, 'motion-toggle')}
-      <section class="stack"><span class="muted" style="font-size:12px;letter-spacing:.06em;text-transform:uppercase;font-weight:600">${esc(t('preview'))}</span>
-        <div style="pointer-events:none">${todayCardPreview(sample)}</div>
-        <div style="display:flex;gap:10px;flex-wrap:wrap;pointer-events:none"><span class="btn btn-primary btn-sm">${esc(t('save'))}</span><span class="btn btn-outline btn-sm">${esc(t('edit'))}</span><span class="chip">${esc(t('daily'))}</span></div>
-      </section>
-      <button class="btn btn-outline btn-block" data-a="restore-defaults">${icon('restart_alt')}${esc(t('restoreDefaults'))}</button>`;
+      ${switchTile('motion-switch', t('reduceMotion'), t('reduceMotionDesc'), !!s.reduceMotion, 'motion-toggle')}`;
     return { title: t('appearance'), html, narrow: true };
   }
   function todayCardPreview(r) { return todayCard(r).replace(/data-a="[^"]*"/g, ''); }
