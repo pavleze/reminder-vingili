@@ -23,7 +23,7 @@
       everyLabel: 'Every', unitDay: 'days', unitWeek: 'weeks', unitMonth: 'months',
       everyDay: 'Every day', everyWeek: 'Every week', everyMonth: 'Every month', everyNday: 'Every {n} days', everyNweek: 'Every {n} weeks', everyNmonth: 'Every {n} months',
       monthDayEvery: 'Monthly on day {n}', pickDays: 'Pick at least one day', statTasks: 'Tasks', statLists: 'Lists', saved: 'Saved', listDone: 'List completed',
-      homeSub: "Here is what's on for today.", addDate: 'Add date', tomorrow: 'Tomorrow', changeDate: 'Change date', removeDate: 'Remove date', noDateSection: 'No date', nothingToday: 'Nothing planned for today', deleteEntry: 'Delete', deleteEntryConfirm: 'Delete “{name}”?',
+      homeSub: "Here is what's on for today.", addDate: 'Add date', tomorrow: 'Tomorrow', showMore: 'Show more', changeDate: 'Change date', removeDate: 'Remove date', noDateSection: 'No date', nothingToday: 'Nothing planned for today', deleteEntry: 'Delete', deleteEntryConfirm: 'Delete “{name}”?',
       welcomeSubtitleAuth: 'Sign in to your account', fullName: 'Full Name', confirmPassword: 'Confirm Password',
       noAccount: "Don't have an account?", registerNow: 'Register', agreeTerms: 'I agree to the Terms of Service and Privacy Policy',
       fillAllFields: 'Please fill all fields', acceptTerms: 'Please accept terms and conditions', wrongCredentials: 'Wrong email or password',
@@ -55,7 +55,7 @@
       everyLabel: 'Na svakih', unitDay: 'dana', unitWeek: 'nedelja', unitMonth: 'meseci',
       everyDay: 'Svaki dan', everyWeek: 'Svake nedelje', everyMonth: 'Svakog meseca', everyNday: 'Na svakih {n} dana', everyNweek: 'Na svakih {n} nedelja', everyNmonth: 'Na svakih {n} meseci',
       monthDayEvery: 'Svakog {n}. u mesecu', pickDays: 'Izaberite bar jedan dan', statTasks: 'Taskovi', statLists: 'Liste', saved: 'Sačuvano', listDone: 'Lista završena',
-      homeSub: 'Evo šta vas čeka danas.', addDate: 'Dodaj datum', tomorrow: 'Sutra', changeDate: 'Promeni datum', removeDate: 'Ukloni datum', noDateSection: 'Bez datuma', nothingToday: 'Za danas nema ništa', deleteEntry: 'Obriši', deleteEntryConfirm: 'Obrisati „{name}“?',
+      homeSub: 'Evo šta vas čeka danas.', addDate: 'Dodaj datum', tomorrow: 'Sutra', showMore: 'Prikaži još', changeDate: 'Promeni datum', removeDate: 'Ukloni datum', noDateSection: 'Bez datuma', nothingToday: 'Za danas nema ništa', deleteEntry: 'Obriši', deleteEntryConfirm: 'Obrisati „{name}“?',
       welcomeSubtitleAuth: 'Prijavite se na svoj nalog', fullName: 'Ime i prezime', confirmPassword: 'Potvrdite lozinku',
       noAccount: 'Nemate nalog?', registerNow: 'Registrujte se', agreeTerms: 'Prihvatam Uslove korišćenja i Politiku privatnosti',
       fillAllFields: 'Popunite sva polja', acceptTerms: 'Prihvatite uslove korišćenja', wrongCredentials: 'Pogrešan email ili lozinka',
@@ -474,10 +474,29 @@
   const entryColor = (it) => (it.kind === 'list' ? LIST_COLOR : isEvent(it) ? EVENT_COLOR : BRAND);
   function screenReminders() {
     return {
-      title: t('calendarTab'), html: renderCalendar(entries()), wide: true,
+      title: t('calendarTab'),
+      html: `<div class="seg view-seg" role="tablist">
+          <button type="button" role="tab" class="seg-btn" data-a="rem-tab" data-v="calendar" aria-selected="${ui.remTab !== 'list'}">${icon('calendar_month', 'sm')}${esc(t('calendarTab'))}</button>
+          <button type="button" role="tab" class="seg-btn" data-a="rem-tab" data-v="list" aria-selected="${ui.remTab === 'list'}">${icon('view_agenda', 'sm')}${esc(t('listTab'))}</button>
+        </div>${ui.remTab === 'list' ? renderAgenda() : renderCalendar(entries())}`,
+      wide: true,
       fabs: `<button class="fab" data-a="add" aria-label="${esc(t('addReminder'))}">${icon('add')}<span class="fab-label">${esc(t('addReminder'))}</span></button>`,
       actions: avatarAction(),
     };
+  }
+  function renderAgenda() {
+    const T = todayD(); const span = ui.agendaDays || 30; let html = '';
+    for (let i = 0; i < span; i++) {
+      const d = addDays(T, i); const items = entriesOn(d); if (!items.length) continue;
+      const label = i === 0 ? t('today') : i === 1 ? t('tomorrow') : cap(fmtDate(d, { weekday: 'long', day: 'numeric', month: 'long' }));
+      html += `<section class="rows agenda-day"><h3 class="rows-label">${esc(label)}${i <= 1 ? ` <span class="muted-date">${esc(fmtDate(d, { day: 'numeric', month: 'long' }))}</span>` : ''}</h3>${items.map((it) => entryCard(it, d)).join('')}</section>`;
+    }
+    const floating = entries().filter((it) => isFloating(it) && floatingVisible(it));
+    return `<div class="agenda">
+      ${html || `<p class="quiet">${esc(t('nothingToday'))}</p>`}
+      <button class="btn btn-outline btn-sm more-btn" data-a="agenda-more">${icon('expand_more', 'sm')}${esc(t('showMore'))}</button>
+      ${floating.length ? `<section class="rows"><h3 class="rows-label">${esc(t('noDateSection'))}</h3>${floating.map((it) => entryCard(it, T)).join('')}</section>` : ''}
+    </div>`;
   }
   function renderCalendar(list) {
     const m = ui.calMonth; const y = m.getFullYear(), mo = m.getMonth();
@@ -994,6 +1013,8 @@
       case 'cal-prev': ui.calMonth = new Date(ui.calMonth.getFullYear(), ui.calMonth.getMonth() - 1, 1); render(); break;
       case 'cal-next': ui.calMonth = new Date(ui.calMonth.getFullYear(), ui.calMonth.getMonth() + 1, 1); render(); break;
       case 'cal-today': ui.calMonth = todayD(); render(); break;
+      case 'rem-tab': ui.remTab = el.dataset.v; render(); scrollTop(); break;
+      case 'agenda-more': ui.agendaDays = (ui.agendaDays || 30) + 30; render(); break;
       case 'day': dayDialog(el.dataset.d); break;
       case 'modal-close': closeModal(); break;
       case 'theme-toggle': settings().dark = !isDark(); save(); render(); break;

@@ -21,7 +21,7 @@ Demo nalog: `demo@reminder.app` / `demo123`
   - lista: stavke koje se čekiraju; svako ponavljanje kreće sa praznim čekovima
   - ponavljanje: ne ponavlja se / na svakih N dana, nedelja ili meseci / određenim danima u nedelji / određenog dana u mesecu
 - **Početna:** današnji taskovi i liste jedno ispod drugog (po vremenu, bez vremena na kraju); liste su skupljene, klik ih otvara
-- **Kalendar:** mesečni prikaz; klik na dan otvara isti prikaz kao početna za taj dan
+- **Kalendar:** prekidač Kalendar / Lista; kalendar preko celog ekrana sa uspravnim danima i nazivima, lista = sve narednih 30 dana po danima (+ „Prikaži još“) i „Bez datuma“; klik na dan otvara isti prikaz kao početna
 - **Profil:** podaci i statistika, sigurnost, povezani nalozi, povratne informacije, brisanje naloga, obaveštenja, jezik (7), izgled (tamni režim)
 
 ## Model podataka (po korisniku, `tasks[]`)
