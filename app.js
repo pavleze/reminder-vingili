@@ -517,7 +517,7 @@
       if (n < 1 || n > days) { cells += '<div class="cal-cell pad" aria-hidden="true"></div>'; continue; }
       const d = new Date(y, mo, n); const items = entriesOn(d, list); const isT = sameDay(d, T);
       const label = `${fmtDate(d, { weekday: 'long', day: 'numeric', month: 'long' })}, ${items.length}`;
-      cells += `<button class="cal-cell ${isT ? 'today' : ''}" data-a="day" data-d="${dkey(d)}" aria-label="${esc(label)}">
+      cells += `<button class="cal-cell ${isT ? 'today' : ''} ${d < T ? 'past' : ''}" data-a="day" data-d="${dkey(d)}" aria-label="${esc(label)}">
         <span class="n tnum">${n}</span>
         <span class="items">${items.slice(0, 4).map((it) => `<span class="it ${isDoneOn(it, d) ? 'done' : ''}" style="--c:${entryColor(it)}">${esc(it.name)}</span>`).join('')}</span>
         ${items.length > 4 ? `<span class="more">${esc(t('moreN', { n: items.length - 4 }))}</span>` : ''}
