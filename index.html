@@ -243,10 +243,11 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
 .banner p { margin: 0; flex: 1; min-width: 0; }
 
 /* Entries (tasks & lists) — minimal rows */
-/* green band under the top bar, edge to edge (border-image outset reaches past the content padding) */
-.day-hero { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 10px 0 24px; margin-top: -20px; color: #fff;
-  border-image: linear-gradient(180deg, var(--primary-strong) 0%, color-mix(in srgb, #000 28%, var(--primary)) 100%) fill 0 / / 0 100vmax;
-  clip-path: inset(0 -100vmax); }
+/* green band under the top bar, edge to edge with rounded bottom corners (100cqw = width of the scroll area) */
+.scroller { container-type: inline-size; }
+.day-hero { position: relative; isolation: isolate; display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 10px 0 26px; margin-top: -20px; color: #fff; }
+.day-hero::before { content: ""; position: absolute; z-index: -1; top: 0; bottom: 0; left: 50%; width: 100cqw; transform: translateX(-50%);
+  border-radius: 0 0 28px 28px; background: linear-gradient(180deg, var(--primary-strong) 0%, color-mix(in srgb, #000 28%, var(--primary)) 100%); }
 .day-hero .greet, .day-hero h2 { color: #fff; }
 .day-hero .greet { opacity: .85; }
 .day-hero .ring-min { background: none; position: relative; }
