@@ -398,57 +398,59 @@
   /* ---------- Home ---------- */
   function entryCard(it, d = todayD()) {
     const k = dkey(d); const done = isDoneOn(it, d); const isList = it.kind === 'list';
-    const repTxt = it.repeat && it.repeat.type !== 'none' ? `<span class="cat">${icon('repeat', 'xs')}${esc(repeatText(it))}</span>` : '';
-    const meta = isFloating(it) ? (it.description && !isList ? `<span class="when"><span class="cat">${esc(it.description.split('\n')[0])}</span></span>` : '')
-      : `<span class="when tnum">${icon('schedule', 'xs')}${esc(it.time ? fmtTime(it.time) : t('noTime'))}${repTxt}</span>`;
-    const star = it.important ? `<span class="star">${icon('star', 'fill xs')}</span> ` : '';
+    const subParts = [];
+    if (it.repeat && it.repeat.type !== 'none') subParts.push(repeatText(it));
+    if (it.description && !isList) subParts.push(it.description.split('\n')[0]);
+    const sub = subParts.length ? `<span class="sub">${esc(subParts.join(' · '))}</span>` : '';
+    const star = it.important ? `<span class="star" aria-label="${esc(t('important'))}">${icon('star', 'fill xs')}</span>` : '';
+    const time = it.time && !isFloating(it) ? `<span class="time tnum">${esc(fmtTime(it.time))}</span>` : '';
     if (!isList) {
       return `<div class="entry ${done ? 'done' : ''}">
-        <button class="icon-btn check-btn ${done ? 'on' : ''}" data-a="toggle-done" data-id="${it.uid}" data-d="${k}" aria-pressed="${done}" aria-label="${esc(t('done'))}">${icon(done ? 'check_circle' : 'radio_button_unchecked', done ? 'fill lg' : 'lg')}</button>
-        <button class="body" data-a="edit" data-id="${it.uid}"><span class="title">${star}${esc(it.name)}</span>${meta}</button>
+        <button class="tick ${done ? 'on' : ''}" data-a="toggle-done" data-id="${it.uid}" data-d="${k}" aria-pressed="${done}" aria-label="${esc(t('done'))}: ${esc(it.name)}">${done ? icon('check', 'xs') : ''}</button>
+        <button class="body" data-a="edit" data-id="${it.uid}"><span class="title">${esc(it.name)}${star}</span>${sub}</button>
+        ${time}
       </div>`;
     }
     const open = ui.expanded.has(it.uid + '|' + k);
     const checked = new Set(checkedOn(it, d)); const n = it.items.length; const c = checked.size;
     return `<div class="entry list ${done ? 'done' : ''} ${open ? 'open' : ''}">
-      <div class="entry-head">
-        <span class="list-ic" aria-hidden="true">${icon(done ? 'task_alt' : 'checklist', 'lg')}</span>
-        <button class="body" data-a="expand" data-id="${it.uid}" data-d="${k}" aria-expanded="${open}"><span class="title">${star}${esc(it.name)}</span>${meta}</button>
-        <span class="progress-chip tnum" style="--p:${n ? Math.round((c / n) * 100) : 0}">${c}/${n}</span>
-        <button class="icon-btn" data-a="expand" data-id="${it.uid}" data-d="${k}" aria-label="${esc(it.name)}">${icon(open ? 'expand_less' : 'expand_more')}</button>
-      </div>
+      <button class="entry-row" data-a="expand" data-id="${it.uid}" data-d="${k}" aria-expanded="${open}">
+        <span class="tick list-tick ${done ? 'on' : ''}" aria-hidden="true">${done ? icon('check', 'xs') : `<span class="tnum">${c}</span>`}</span>
+        <span class="body"><span class="title">${esc(it.name)}${star}</span><span class="sub tnum">${esc(c + '/' + n)}${subParts.length ? ' · ' + esc(subParts.join(' · ')) : ''}</span></span>
+        ${time}
+        <span class="chev">${icon(open ? 'expand_less' : 'expand_more', 'sm')}</span>
+      </button>
       ${open ? `<div class="entry-items">
         ${it.description ? `<p class="entry-desc">${esc(it.description)}</p>` : ''}
         ${it.items.map((x) => `<label class="item-row ${checked.has(x.id) ? 'on' : ''}"><input type="checkbox" data-a="toggle-check" data-id="${it.uid}" data-item="${x.id}" data-d="${k}" ${checked.has(x.id) ? 'checked' : ''}><span>${esc(x.text)}</span></label>`).join('')}
-        <div class="entry-actions"><button class="btn btn-text btn-sm" data-a="edit" data-id="${it.uid}">${icon('edit', 'sm')}${esc(t('edit'))}</button></div>
+        <button class="link-btn" data-a="edit" data-id="${it.uid}">${esc(t('edit'))}</button>
       </div>` : ''}
     </div>`;
   }
   function screenHome() {
-    const u = me(); const d = todayD();
+    const d = todayD();
     const today = entriesOn(d);
     const floating = entries().filter((it) => isFloating(it) && floatingVisible(it))
       .sort((a, b) => isDoneOn(a, d) - isDoneOn(b, d) || (b.important ? 1 : 0) - (a.important ? 1 : 0) || a.name.localeCompare(b.name));
     const doneN = today.filter((it) => isDoneOn(it, d)).length;
     const pct = today.length ? Math.round((doneN / today.length) * 100) : 0;
-    const first = (u.name || '').split(' ')[0];
     const hasSamples = entries().some((it) => it.sample);
     const html = `
-      <section class="welcome">
-        <div class="txt"><h2>${esc(t('welcomeBack'))}${first ? ', ' + esc(first) : ''}!</h2><p>${esc(t('homeSub'))}</p></div>
-        <div class="ring" style="--p:${pct}" role="img" aria-label="${esc(t('ofDone', { a: doneN, b: today.length }))} ${esc(t('doneToday'))}"><div><span><b class="tnum">${doneN}/${today.length}</b><br><small>${esc(t('doneToday'))}</small></span></div></div>
+      <header class="day-hero">
+        <span class="eyebrow">${esc(cap(fmtDate(d, { weekday: 'long', day: 'numeric', month: 'long' })))}</span>
+        <div class="day-title"><h2 id="today-h">${esc(t('today'))}</h2>${today.length ? `<span class="count tnum">${doneN}/${today.length}</span>` : ''}</div>
+        ${today.length ? `<div class="thin-bar" role="progressbar" aria-valuemin="0" aria-valuemax="${today.length}" aria-valuenow="${doneN}" aria-label="${esc(t('doneToday'))}"><i style="width:${pct}%"></i></div>` : ''}
+      </header>
+      <section class="rows" aria-labelledby="today-h">
+        ${today.length ? today.map((it) => entryCard(it, d)).join('') : `<p class="quiet">${esc(t('nothingToday'))}</p>`}
       </section>
-      ${hasSamples ? `<div class="banner">${icon('info')}<p>${esc(t('sampleData'))}</p><button class="btn btn-text btn-sm" data-a="clear-samples">${esc(t('clearSamples'))}</button></div>` : ''}
-      <section class="stack" aria-labelledby="today-h">
-        <div class="section-head"><h2 id="today-h">${esc(t('today'))}</h2><span class="meta">${esc(cap(fmtDate(d, { weekday: 'long', day: 'numeric', month: 'long' })))}</span></div>
-        ${today.length ? today.map((it) => entryCard(it, d)).join('') : `<div class="empty">${icon('event_available', 'xl')}<span>${esc(t('nothingToday'))}</span></div>`}
-      </section>
-      ${floating.length ? `<section class="stack" aria-labelledby="nodate-h">
-        <div class="section-head"><h2 id="nodate-h">${esc(t('noDateSection'))}</h2></div>
+      ${floating.length ? `<section class="rows" aria-labelledby="nodate-h">
+        <h3 class="rows-label" id="nodate-h">${esc(t('noDateSection'))}</h3>
         ${floating.map((it) => entryCard(it, d)).join('')}
-      </section>` : ''}`;
+      </section>` : ''}
+      ${hasSamples ? `<p class="quiet small">${esc(t('sampleData'))} <button class="link-btn" data-a="clear-samples">${esc(t('clearSamples'))}</button></p>` : ''}`;
     const fabs = `<button class="fab" data-a="add" aria-label="${esc(t('addReminder'))}">${icon('add')}<span class="fab-label">${esc(t('addReminder'))}</span></button>`;
-    return { title: t('homeTitle'), html, fabs, actions: avatarAction() };
+    return { title: t('homeTitle'), html, fabs, actions: avatarAction(), narrow: true };
   }
   const avatarAction = () => `<button class="icon-btn theme-btn" data-a="theme-toggle" aria-label="${esc(t('darkMode'))}" aria-pressed="${isDark()}" title="${esc(t('darkMode'))}">${icon(isDark() ? 'light_mode' : 'dark_mode')}</button>
     <button class="icon-btn" data-a="tab" data-tab="profile" aria-label="${esc(t('profileTitle'))}">${avatarHtml(me(), 'sm')}</button>`;
