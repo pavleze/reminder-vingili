@@ -23,7 +23,7 @@
       everyLabel: 'Every', unitDay: 'days', unitWeek: 'weeks', unitMonth: 'months',
       everyDay: 'Every day', everyWeek: 'Every week', everyMonth: 'Every month', everyNday: 'Every {n} days', everyNweek: 'Every {n} weeks', everyNmonth: 'Every {n} months',
       monthDayEvery: 'Monthly on day {n}', pickDays: 'Pick at least one day', statTasks: 'Tasks', statLists: 'Lists', saved: 'Saved', listDone: 'List completed',
-      homeSub: "Here is what's on for today.", nothingToday: 'Nothing planned for today', deleteEntry: 'Delete', deleteEntryConfirm: 'Delete “{name}”?',
+      homeSub: "Here is what's on for today.", addDate: 'Add date', removeDate: 'Remove date', noDateSection: 'No date', nothingToday: 'Nothing planned for today', deleteEntry: 'Delete', deleteEntryConfirm: 'Delete “{name}”?',
       welcomeSubtitleAuth: 'Sign in to your account', fullName: 'Full Name', confirmPassword: 'Confirm Password',
       noAccount: "Don't have an account?", registerNow: 'Register', agreeTerms: 'I agree to the Terms of Service and Privacy Policy',
       fillAllFields: 'Please fill all fields', acceptTerms: 'Please accept terms and conditions', wrongCredentials: 'Wrong email or password',
@@ -55,7 +55,7 @@
       everyLabel: 'Na svakih', unitDay: 'dana', unitWeek: 'nedelja', unitMonth: 'meseci',
       everyDay: 'Svaki dan', everyWeek: 'Svake nedelje', everyMonth: 'Svakog meseca', everyNday: 'Na svakih {n} dana', everyNweek: 'Na svakih {n} nedelja', everyNmonth: 'Na svakih {n} meseci',
       monthDayEvery: 'Svakog {n}. u mesecu', pickDays: 'Izaberite bar jedan dan', statTasks: 'Taskovi', statLists: 'Liste', saved: 'Sačuvano', listDone: 'Lista završena',
-      homeSub: 'Evo šta vas čeka danas.', nothingToday: 'Za danas nema ništa', deleteEntry: 'Obriši', deleteEntryConfirm: 'Obrisati „{name}“?',
+      homeSub: 'Evo šta vas čeka danas.', addDate: 'Dodaj datum', removeDate: 'Ukloni datum', noDateSection: 'Bez datuma', nothingToday: 'Za danas nema ništa', deleteEntry: 'Obriši', deleteEntryConfirm: 'Obrisati „{name}“?',
       welcomeSubtitleAuth: 'Prijavite se na svoj nalog', fullName: 'Ime i prezime', confirmPassword: 'Potvrdite lozinku',
       noAccount: 'Nemate nalog?', registerNow: 'Registrujte se', agreeTerms: 'Prihvatam Uslove korišćenja i Politiku privatnosti',
       fillAllFields: 'Popunite sva polja', acceptTerms: 'Prihvatite uslove korišćenja', wrongCredentials: 'Pogrešan email ili lozinka',
@@ -140,7 +140,7 @@
   const validEmail = (e) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);
 
   /* ================= Store (swap for Firebase later) ================= */
-  const KEY = 'todays-v2';
+  const KEY = 'todays-v3';
   const defaultSettings = () => ({
     lang: (() => { const n = (navigator.language || 'en').slice(0, 2).toLowerCase(); if (['sr', 'hr', 'bs', 'me'].includes(n)) return 'sr'; return LANGS.some((l) => l.code === n) ? n : 'en'; })(),
     dark: null, primary: BRAND, reduceMotion: false,
@@ -190,7 +190,8 @@
       mk({ name: sr ? 'Jutarnji trening' : 'Morning workout', description: sr ? '20 min istezanje + 5 km trčanja' : '20 min stretching + 5 km run', date: dkey(addDays(T, -20)), time: '07:30', repeat: { type: 'interval', every: 1, unit: 'day' }, done: { [k]: true } }),
       mk({ kind: 'list', name: sr ? 'Jutarnja rutina' : 'Morning routine', date: dkey(addDays(T, -14)), repeat: { type: 'weekdays', days: [...new Set([0, 1, 2, 3, 4, wd])].sort() }, items: morning, checks: { [k]: [morning[0].id] } }),
       mk({ name: sr ? 'Sastanak tima' : 'Team stand-up', date: dkey(addDays(T, -21)), time: '10:00', repeat: { type: 'weekdays', days: [...new Set([0, 3, wd])].sort() } }),
-      mk({ kind: 'list', name: sr ? 'Kupovina' : 'Groceries', time: '18:00', items: shop, checks: { [k]: [shop[0].id, shop[1].id] } }),
+      mk({ kind: 'list', name: sr ? 'Kupovina' : 'Groceries', date: '', items: shop, checks: { any: [shop[0].id, shop[1].id] } }),
+      mk({ name: sr ? 'Pozovi majstora za bojler' : 'Call the plumber', date: '' }),
       mk({ name: sr ? 'Zalij biljke' : 'Water the plants', time: '19:00', repeat: { type: 'interval', every: 3, unit: 'day' } }),
       mk({ name: sr ? 'Pročitaj 20 strana' : 'Read 20 pages', date: dkey(addDays(T, -10)), repeat: { type: 'interval', every: 1, unit: 'day' } }),
       mk({ name: sr ? 'Plati kiriju' : 'Pay the rent', important: true, date: dkey(addDays(T, -30)), time: '12:00', repeat: { type: 'monthday', monthDay: addDays(T, 2).getDate() } }),
@@ -201,8 +202,11 @@
 
   /* ================= Recurrence ================= */
   const lastDay = (d) => new Date(d.getFullYear(), d.getMonth() + 1, 0).getDate();
+  const isFloating = (it) => !it.date && (!it.repeat || it.repeat.type === 'none');
+  const okey = (it, d) => (isFloating(it) ? 'any' : dkey(d));
   function occursOn(it, d) {
-    const start = fromKey(it.date);
+    if (isFloating(it)) return false;
+    const start = fromKey(it.date || it.anchor || dkey(new Date(it.createdAt || Date.now())));
     if (d < start) return false;
     const r = it.repeat || { type: 'none' };
     switch (r.type) {
@@ -220,10 +224,16 @@
       default: return sameDay(d, start);
     }
   }
-  const checkedOn = (it, d) => { const ids = new Set((it.items || []).map((x) => x.id)); return ((it.checks || {})[dkey(d)] || []).filter((id) => ids.has(id)); };
+  const checkedOn = (it, d) => { const ids = new Set((it.items || []).map((x) => x.id)); return ((it.checks || {})[okey(it, d)] || []).filter((id) => ids.has(id)); };
   function isDoneOn(it, d) {
     if (it.kind === 'list') return (it.items || []).length > 0 && checkedOn(it, d).length === it.items.length;
-    return !!(it.done || {})[dkey(d)];
+    return !!(it.done || {})[okey(it, d)];
+  }
+  // undated one-offs stay on Home until done; done ones remain visible (struck through) for the rest of that day
+  function floatingVisible(it) {
+    const T = dkey(todayD());
+    if (!isDoneOn(it, todayD())) return true;
+    return it.kind === 'list' ? it.doneAt === T : (it.done || {}).any === T;
   }
   function nextOccurrence(it, from = todayD()) {
     for (let i = 0; i < 400; i++) { const d = addDays(from, i); if (occursOn(it, d)) return d; }
@@ -388,7 +398,9 @@
   /* ---------- Home ---------- */
   function entryCard(it, d = todayD()) {
     const k = dkey(d); const done = isDoneOn(it, d); const isList = it.kind === 'list';
-    const meta = `<span class="when tnum">${icon(it.time ? 'schedule' : 'schedule', 'xs')}${esc(it.time ? fmtTime(it.time) : t('noTime'))}${it.repeat && it.repeat.type !== 'none' ? `<span class="cat">${icon('repeat', 'xs')}${esc(repeatText(it))}</span>` : ''}</span>`;
+    const repTxt = it.repeat && it.repeat.type !== 'none' ? `<span class="cat">${icon('repeat', 'xs')}${esc(repeatText(it))}</span>` : '';
+    const meta = isFloating(it) ? (it.description && !isList ? `<span class="when"><span class="cat">${esc(it.description.split('\n')[0])}</span></span>` : '')
+      : `<span class="when tnum">${icon('schedule', 'xs')}${esc(it.time ? fmtTime(it.time) : t('noTime'))}${repTxt}</span>`;
     const star = it.important ? `<span class="star">${icon('star', 'fill xs')}</span> ` : '';
     if (!isList) {
       return `<div class="entry ${done ? 'done' : ''}">
@@ -415,6 +427,8 @@
   function screenHome() {
     const u = me(); const d = todayD();
     const today = entriesOn(d);
+    const floating = entries().filter((it) => isFloating(it) && floatingVisible(it))
+      .sort((a, b) => isDoneOn(a, d) - isDoneOn(b, d) || (b.important ? 1 : 0) - (a.important ? 1 : 0) || a.name.localeCompare(b.name));
     const doneN = today.filter((it) => isDoneOn(it, d)).length;
     const pct = today.length ? Math.round((doneN / today.length) * 100) : 0;
     const first = (u.name || '').split(' ')[0];
@@ -428,7 +442,11 @@
       <section class="stack" aria-labelledby="today-h">
         <div class="section-head"><h2 id="today-h">${esc(t('today'))}</h2><span class="meta">${esc(cap(fmtDate(d, { weekday: 'long', day: 'numeric', month: 'long' })))}</span></div>
         ${today.length ? today.map((it) => entryCard(it, d)).join('') : `<div class="empty">${icon('event_available', 'xl')}<span>${esc(t('nothingToday'))}</span></div>`}
-      </section>`;
+      </section>
+      ${floating.length ? `<section class="stack" aria-labelledby="nodate-h">
+        <div class="section-head"><h2 id="nodate-h">${esc(t('noDateSection'))}</h2></div>
+        ${floating.map((it) => entryCard(it, d)).join('')}
+      </section>` : ''}`;
     const fabs = `<button class="fab" data-a="add" aria-label="${esc(t('addReminder'))}">${icon('add')}<span class="fab-label">${esc(t('addReminder'))}</span></button>`;
     return { title: t('homeTitle'), html, fabs, actions: avatarAction() };
   }
@@ -678,14 +696,16 @@
   function entryDialog(kind, existing, dateK) {
     const T = todayD();
     const base = existing ? JSON.parse(JSON.stringify(existing)) : {
-      kind, name: '', description: '', date: dateK || dkey(T), time: '', important: false, repeat: { type: 'none' }, items: [],
+      kind, name: '', description: '', date: dateK || '', time: '', important: false, repeat: { type: 'none' }, items: [],
     };
     const isList = base.kind === 'list';
     const st = {
       items: (base.items || []).map((x) => ({ ...x })),
-      rep: { type: 'none', every: 1, unit: 'day', days: [weekdayIdx(fromKey(base.date))], monthDay: fromKey(base.date).getDate(), ...(base.repeat || {}) },
+      date: base.date || '', time: base.time || '', hasDate: !!base.date,
     };
-    if (!st.rep.days || !st.rep.days.length) st.rep.days = [weekdayIdx(fromKey(base.date))];
+    const ref = fromKey(base.date || dkey(T));
+    st.rep = { type: 'none', every: 1, unit: 'day', days: [weekdayIdx(ref)], monthDay: ref.getDate(), ...(base.repeat || {}) };
+    if (!st.rep.days || !st.rep.days.length) st.rep.days = [weekdayIdx(ref)];
     const opt = (v, label, cur) => `<option value="${v}" ${String(cur) === String(v) ? 'selected' : ''}>${esc(label)}</option>`;
     openModal(`<form class="dialog" id="entry-form" role="dialog" aria-modal="true" aria-labelledby="ed-t" novalidate>
       <div class="dialog-head" style="${isList ? `background:${LIST_COLOR}` : ''}">${icon(isList ? 'checklist' : 'task_alt')}<h2 id="ed-t">${esc(t(existing ? (isList ? 'editList' : 'editTask') : (isList ? 'newList' : 'newTask')))}</h2>
@@ -695,11 +715,7 @@
         <div class="field" style="align-items:flex-start"><label for="ef-desc">${esc(t('descOptional'))}</label><textarea id="ef-desc" rows="2">${esc(base.description || '')}</textarea></div>
         ${isList ? `<div class="items-edit"><span class="lbl">${esc(t('itemsLabel'))}</span><div id="ef-items" class="stack" style="gap:8px"></div>
           <div class="add-item"><input id="ef-new-item" placeholder="${esc(t('newItemPh'))}" autocomplete="off" aria-label="${esc(t('addItem'))}"><button type="button" class="btn btn-tonal btn-sm" id="ef-add-item">${icon('add', 'sm')}${esc(t('addItem'))}</button></div></div>` : ''}
-        <div class="field-row dt-row">
-          <div class="field">${icon('event')}<label for="ef-date">${esc(t('date'))}</label><input id="ef-date" type="date" value="${esc(base.date)}" required></div>
-          <div class="field">${icon('schedule')}<label for="ef-time">${esc(t('timeOptional'))}</label><input id="ef-time" type="time" value="${esc(base.time || '')}">
-            <button type="button" class="icon-btn" id="ef-time-clear" aria-label="${esc(t('clearTime'))}" ${base.time ? '' : 'hidden'}>${icon('close', 'sm')}</button></div>
-        </div>
+        <div id="ef-when"></div>
         <div class="field select"><span style="margin-left:14px;color:var(--primary-ink)">${icon('repeat')}</span><label for="ef-rep">${esc(t('repetition'))}</label><select id="ef-rep">${REPEAT_TYPES.map(([v, k]) => opt(v, t(k), st.rep.type)).join('')}</select></div>
         <div id="ef-rep-dyn"></div>
         <label class="inline-switch" for="ef-imp"><span class="star" id="ef-star" style="color:${base.important ? 'var(--star)' : 'var(--muted)'}">${icon('star', 'fill')}</span><span class="grow">${esc(t('important'))}</span><span class="switch"><input type="checkbox" role="switch" id="ef-imp" ${base.important ? 'checked' : ''}><i></i></span></label>
@@ -734,26 +750,42 @@
       }
       const box = $('#ef-rep-dyn'); box.innerHTML = h; box.hidden = !h;
     }
-    drawItems(); drawRep();
+    function drawWhen() {
+      const showTime = st.hasDate || st.rep.type !== 'none';
+      const dateHtml = st.hasDate
+        ? `<div class="field">${icon('event')}<label for="ef-date">${esc(t('date'))}</label><input id="ef-date" type="date" value="${esc(st.date)}">
+            <button type="button" class="icon-btn" id="ef-date-clear" aria-label="${esc(t('removeDate'))}">${icon('close', 'sm')}</button></div>`
+        : `<button type="button" class="btn btn-outline add-date" id="ef-add-date">${icon('event')}${esc(t('addDate'))}</button>`;
+      const timeHtml = showTime ? `<div class="field">${icon('schedule')}<label for="ef-time">${esc(t('timeOptional'))}</label><input id="ef-time" type="time" value="${esc(st.time)}">
+            <button type="button" class="icon-btn" id="ef-time-clear" aria-label="${esc(t('clearTime'))}" ${st.time ? '' : 'hidden'}>${icon('close', 'sm')}</button></div>` : '';
+      $('#ef-when').innerHTML = `<div class="field-row dt-row ${showTime ? '' : 'one'}">${dateHtml}${timeHtml}</div>`;
+    }
+    drawItems(); drawRep(); drawWhen();
     const form = $('#entry-form');
     form.addEventListener('click', (e) => {
       const rm = e.target.closest('[data-rm]'); if (rm) { st.items.splice(Number(rm.dataset.rm), 1); drawItems(); return; }
       const dp = e.target.closest('.day-pill');
       if (dp) { const i = Number(dp.dataset.day); const s = new Set(st.rep.days); s.has(i) ? s.delete(i) : s.add(i); st.rep.days = [...s].sort(); dp.setAttribute('aria-pressed', s.has(i)); return; }
       if (e.target.closest('#ef-add-item')) addItem();
-      if (e.target.closest('#ef-time-clear')) { $('#ef-time').value = ''; $('#ef-time-clear').hidden = true; }
+      if (e.target.closest('#ef-time-clear')) { st.time = ''; $('#ef-time').value = ''; $('#ef-time-clear').hidden = true; }
+      if (e.target.closest('#ef-add-date')) {
+        st.hasDate = true; if (!st.date) st.date = dkey(T); drawWhen();
+        const di = $('#ef-date'); if (di) { di.focus(); try { di.showPicker && di.showPicker(); } catch (er) { /* picker needs user gesture support */ } }
+      }
+      if (e.target.closest('#ef-date-clear')) { st.hasDate = false; st.date = ''; drawWhen(); }
     });
     form.addEventListener('input', (e) => {
       if (e.target.dataset.i != null) st.items[Number(e.target.dataset.i)].text = e.target.value;
       if (e.target.id === 'ef-every') st.rep.every = Number(e.target.value);
       if (e.target.id === 'ef-mday') st.rep.monthDay = Number(e.target.value);
-      if (e.target.id === 'ef-time') $('#ef-time-clear').hidden = !e.target.value;
+      if (e.target.id === 'ef-time') { st.time = e.target.value; $('#ef-time-clear').hidden = !e.target.value; }
+      if (e.target.id === 'ef-date') st.date = e.target.value;
     });
     form.addEventListener('change', (e) => {
-      if (e.target.id === 'ef-rep') { st.rep.type = e.target.value; drawRep(); }
+      if (e.target.id === 'ef-rep') { st.rep.type = e.target.value; drawRep(); drawWhen(); }
       if (e.target.id === 'ef-unit') st.rep.unit = e.target.value;
       if (e.target.id === 'ef-imp') $('#ef-star').style.color = e.target.checked ? 'var(--star)' : 'var(--muted)';
-      if (e.target.id === 'ef-date' && !existing) { const d = fromKey(e.target.value); st.rep.monthDay = d.getDate(); if (st.rep.days.length <= 1) st.rep.days = [weekdayIdx(d)]; if (st.rep.type === 'monthday' || st.rep.type === 'weekdays') drawRep(); }
+      if (e.target.id === 'ef-date' && !existing && e.target.value) { st.date = e.target.value; const d = fromKey(e.target.value); st.rep.monthDay = d.getDate(); if (st.rep.days.length <= 1) st.rep.days = [weekdayIdx(d)]; if (st.rep.type === 'monthday' || st.rep.type === 'weekdays') drawRep(); }
     });
     const ni = $('#ef-new-item'); if (ni) ni.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); addItem(); } });
     form.addEventListener('submit', (e) => {
@@ -761,7 +793,7 @@
       if (ni && ni.value.trim()) addItem();
       const name = $('#ef-name').value.trim();
       if (!name) { err(t('nameEmptyWarning')); $('#ef-name').focus(); return; }
-      const date = $('#ef-date').value; if (!date) return err(t('pickDateFirst'));
+      const date = st.hasDate ? st.date : ''; if (st.hasDate && !date) return err(t('pickDateFirst'));
       const items = st.items.map((x) => ({ ...x, text: x.text.trim() })).filter((x) => x.text);
       if (isList && !items.length) return err(t('needItem'));
       const r = st.rep; let repeat = { type: 'none' };
@@ -770,11 +802,12 @@
       if (r.type === 'monthday') { const n = Math.round(Number(r.monthDay)); if (!(n >= 1 && n <= 31)) return err(t('invalidDayOfMonth')); repeat = { type: 'monthday', monthDay: n }; }
       const data = {
         ...(existing || {}), uid: existing ? existing.uid : uuid(), kind: base.kind, name, description: $('#ef-desc').value.trim(),
-        date, time: $('#ef-time').value || '', important: $('#ef-imp').checked, repeat, items: isList ? items : [],
+        date, time: date || repeat.type !== 'none' ? st.time || '' : '', important: $('#ef-imp').checked, repeat, items: isList ? items : [],
         done: existing ? existing.done || {} : {}, checks: existing ? existing.checks || {} : {},
         createdAt: existing ? existing.createdAt : new Date().toISOString(), updatedAt: new Date().toISOString(),
       };
       delete data.snoozedUntil; delete data.sample;
+      if (!date && repeat.type !== 'none') data.anchor = (existing && existing.anchor) || dkey(T); else delete data.anchor;
       const list = me().tasks; const i = list.findIndex((x) => x.uid === data.uid);
       if (i >= 0) list[i] = data; else list.push(data);
       save(); closeModal(); render(); toast(t('saved'));
@@ -820,14 +853,15 @@
   /* ================= Actions ================= */
   function findR(id) { return entries().find((r) => r.uid === id); }
   function toggleDone(it, d = todayD()) {
-    const k = dkey(d); it.done = it.done || {};
-    if (it.done[k]) delete it.done[k]; else { it.done[k] = true; delete it.snoozedUntil; }
+    const k = okey(it, d); it.done = it.done || {};
+    if (it.done[k]) delete it.done[k]; else { it.done[k] = k === 'any' ? dkey(todayD()) : true; delete it.snoozedUntil; }
     save(); refresh();
   }
   function toggleCheck(it, itemId, d = todayD()) {
-    const k = dkey(d); it.checks = it.checks || {};
+    const k = okey(it, d); it.checks = it.checks || {};
     const s = new Set(it.checks[k] || []); s.has(itemId) ? s.delete(itemId) : s.add(itemId);
     it.checks[k] = [...s]; if (!it.checks[k].length) delete it.checks[k];
+    if (k === 'any') { if (isDoneOn(it, d)) it.doneAt = dkey(todayD()); else delete it.doneAt; }
     save(); refresh();
     if (isDoneOn(it, d)) toast(t('listDone'), { icon: 'task_alt' });
   }
@@ -882,7 +916,7 @@
     if (r) {
       const sn = el.querySelector('[data-snooze]');
       if (sn) sn.addEventListener('click', () => { const x = findR(r.uid); if (x) { x.snoozedUntil = new Date(Date.now() + 10 * 60e3).toISOString(); save(); toast(t('snoozedUntil', { time: new Intl.DateTimeFormat(loc(), { hour: 'numeric', minute: '2-digit' }).format(new Date(x.snoozedUntil)) }), { icon: 'snooze' }); } kill(); });
-      el.querySelector('[data-done]').addEventListener('click', () => { const x = findR(r.uid); const T = todayD(); if (x && !isDoneOn(x, T)) { if (x.kind === 'list') { x.checks = x.checks || {}; x.checks[dkey(T)] = x.items.map((i) => i.id); save(); refresh(); } else toggleDone(x, T); } toast(t('markedDone'), { icon: 'task_alt' }); kill(); });
+      el.querySelector('[data-done]').addEventListener('click', () => { const x = findR(r.uid); const T = todayD(); if (x && !isDoneOn(x, T)) { if (x.kind === 'list') { x.checks = x.checks || {}; x.checks[okey(x, T)] = x.items.map((i) => i.id); save(); refresh(); } else toggleDone(x, T); } toast(t('markedDone'), { icon: 'task_alt' }); kill(); });
     }
     box.prepend(el);
     while (box.children.length > 3) box.lastChild.remove();

@@ -280,6 +280,8 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
 .day-pill[aria-pressed="true"] { background: var(--primary); border-color: var(--primary); color: var(--on-primary); }
 @media (max-width: 420px) { .kind-grid { grid-template-columns: 1fr; } }
 @media (max-width: 520px) { .dt-row { grid-template-columns: minmax(0, 1fr); } }
+.dt-row.one { grid-template-columns: minmax(0, 1fr); }
+.add-date { justify-content: flex-start; min-height: 52px; border-style: dashed; border-width: 1.5px; }
 
 /* Calendar */
 .cal-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 6px; border-radius: var(--r-md); background: var(--surface); box-shadow: var(--shadow); }
