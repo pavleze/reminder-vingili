@@ -48,7 +48,7 @@
     },
     sr: {
       whatToAdd: 'Šta dodajete?', kindList: 'Lista', kindListDesc: 'Više stavki za čekiranje za jedan dan',
-      kindTask: 'Single', kindTaskDesc: 'Jedna stvar koju treba uraditi', newList: 'Nova lista', newTask: 'Novi task', editList: 'Izmeni listu', editTask: 'Izmeni task',
+      kindTask: 'Pojedinačno', kindTaskDesc: 'Jedna stvar koju treba uraditi', newList: 'Nova lista', newTask: 'Novi task', editList: 'Izmeni listu', editTask: 'Izmeni task',
       titleLabel: 'Naziv', descOptional: 'Beleška (opciono)', itemsLabel: 'Stavke', addItem: 'Dodaj stavku', newItemPh: 'Nova stavka…', needItem: 'Dodajte bar jednu stavku',
       timeOptional: 'Vreme (opciono)', noTime: 'Bez vremena', clearTime: 'Ukloni vreme',
       repNone: 'Ne ponavlja se', repInterval: 'Na nekoliko dana, nedelja ili meseci', repWeekdays: 'Određenim danima u nedelji', repMonthday: 'Određenog dana u mesecu',
