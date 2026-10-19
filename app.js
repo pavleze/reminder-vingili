@@ -16,7 +16,7 @@
   const EXTRA = {
     en: {
       whatToAdd: 'What do you want to add?', kindList: 'List', kindListDesc: 'Several items to check off on one day',
-      kindTask: 'Task', kindTaskDesc: 'A single thing to do', newList: 'New list', newTask: 'New task', editList: 'Edit list', editTask: 'Edit task',
+      kindTask: 'Single', kindTaskDesc: 'A single thing to do', newList: 'New list', newTask: 'New task', editList: 'Edit list', editTask: 'Edit task',
       titleLabel: 'Name', descOptional: 'Note (optional)', itemsLabel: 'Items', addItem: 'Add item', newItemPh: 'New item…', needItem: 'Add at least one item',
       timeOptional: 'Time (optional)', noTime: 'No time', clearTime: 'Clear time',
       repNone: 'Does not repeat', repInterval: 'Every few days, weeks or months', repWeekdays: 'On days of the week', repMonthday: 'On a day of the month',
@@ -48,7 +48,7 @@
     },
     sr: {
       whatToAdd: 'Šta dodajete?', kindList: 'Lista', kindListDesc: 'Više stavki za čekiranje za jedan dan',
-      kindTask: 'Task', kindTaskDesc: 'Jedna stvar koju treba uraditi', newList: 'Nova lista', newTask: 'Novi task', editList: 'Izmeni listu', editTask: 'Izmeni task',
+      kindTask: 'Single', kindTaskDesc: 'Jedna stvar koju treba uraditi', newList: 'Nova lista', newTask: 'Novi task', editList: 'Izmeni listu', editTask: 'Izmeni task',
       titleLabel: 'Naziv', descOptional: 'Beleška (opciono)', itemsLabel: 'Stavke', addItem: 'Dodaj stavku', newItemPh: 'Nova stavka…', needItem: 'Dodajte bar jednu stavku',
       timeOptional: 'Vreme (opciono)', noTime: 'Bez vremena', clearTime: 'Ukloni vreme',
       repNone: 'Ne ponavlja se', repInterval: 'Na nekoliko dana, nedelja ili meseci', repWeekdays: 'Određenim danima u nedelji', repMonthday: 'Određenog dana u mesecu',
