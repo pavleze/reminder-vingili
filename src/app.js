@@ -1165,6 +1165,7 @@
     u.lastLogin = new Date().toISOString();
     if (!prev || prev.uid !== fu.uid) { ui.tab = 'home'; ui.stack = []; ui.expanded.clear(); }
     Cloud.user = fu; DB.session = fu.uid; save(false);
+    render(); // into the app right away; profile and items fill in as they arrive
     // profile doc: lets the partner find you by email; settings follow you across devices
     const ref = Cloud.db.collection(PEOPLE).doc(fu.uid);
     try {
@@ -1177,10 +1178,10 @@
       u.partnerUid = data.partnerUid || null;
       if (data.creationDate && data.creationDate.toDate) u.createdAt = data.creationDate.toDate().toISOString();
       const ts = window.firebase.firestore.FieldValue.serverTimestamp();
-      await ref.set({
+      ref.set({
         uid: fu.uid, name: u.name, email: u.email || '', emailLower: (u.email || '').toLowerCase(), photoUrl: u.photo || data.photoUrl || null,
         language: u.settings.lang, isDarkMode: isDark(), settings: clean(u.settings), lastLogIn: ts, ...(snap.exists ? {} : { creationDate: ts }),
-      }, { merge: true });
+      }, { merge: true }).catch(cloudError);
       await loadPartner();
     } catch (e) { cloudError(e); }
     if (Cloud.unsub) Cloud.unsub();
