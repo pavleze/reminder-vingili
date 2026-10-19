@@ -468,11 +468,11 @@
         <div class="day-head-txt">
           <span class="greet">${esc(t('welcomeBack'))}${first ? ', ' + esc(first) : ''}!</span>
           <h2 id="today-h">${esc(t('today'))}</h2>
-          <span class="eyebrow">${esc(cap(fmtDate(d, { weekday: 'long', day: 'numeric', month: 'long' })))}</span>
         </div>
         ${doable.length ? `<div class="ring ring-min" style="--p:${pct}" role="img" aria-label="${esc(t('ofDone', { a: doneN, b: doable.length }))} ${esc(t('doneToday'))}"><div><b class="tnum">${doneN}/${doable.length}</b><small>${esc(t('doneToday'))}</small></div></div>` : ''}
       </header>
       <section class="rows" aria-labelledby="today-h">
+        <h3 class="rows-label">${esc(cap(fmtDate(d, { weekday: 'long', day: 'numeric', month: 'long' })))}</h3>
         ${todayOpen.length ? todayOpen.map((it) => entryCard(it, d)).join('') : `<p class="quiet">${esc(today.length ? t('allDoneToday') : t('nothingToday'))}</p>`}
       </section>
       ${floatOpen.length ? `<section class="rows" aria-labelledby="nodate-h">
