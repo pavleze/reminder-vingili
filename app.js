@@ -23,12 +23,12 @@
       everyLabel: 'Every', unitDay: 'days', unitWeek: 'weeks', unitMonth: 'months', unitYear: 'years', everyYear: 'Every year', everyNyear: 'Every {n} years',
       everyDay: 'Every day', everyWeek: 'Every week', everyMonth: 'Every month', everyNday: 'Every {n} days', everyNweek: 'Every {n} weeks', everyNmonth: 'Every {n} months',
       monthDayEvery: 'Monthly on day {n}', pickDays: 'Pick at least one day', statTasks: 'Tasks', statLists: 'Lists', saved: 'Saved', listDone: 'List completed',
-      homeSub: "Here is what's on for today.", addDate: 'Add date', tomorrow: 'Tomorrow', showMore: 'Show more', changeDate: 'Change date', removeDate: 'Remove date', noDateSection: 'No date', doneSection: 'Done', unauthorizedDomain: 'This website is not yet allowed in Firebase (Authentication → Settings → Authorized domains).', networkError: 'No internet connection', permissionDenied: 'Firebase rules do not allow this yet (see README).',
+      homeSub: "Here is what's on for today.", addDate: 'Add date', tomorrow: 'Tomorrow', showMore: 'Show more', changeDate: 'Change date', removeDate: 'Remove date', noDateSection: 'General', doneSection: 'Done', unauthorizedDomain: 'This website is not yet allowed in Firebase (Authentication → Settings → Authorized domains).', networkError: 'No internet connection', permissionDenied: 'Firebase rules do not allow this yet (see README).',
       importedLocal: 'Moved {n} items from this device to your account', migratedOld: 'Brought over {n} reminders from the old app', partnerTitle: 'Partner', partnerDesc: 'Share items with one person', partnerEmail: "Partner's email",
       partnerHelp: 'Your partner needs to sign in with Google once. Then enter their email here.', linkBtn: 'Link', unlinkBtn: 'Remove', partnerSelf: "That's your own email",
       partnerNotFound: "No account with that email yet. Ask them to sign in with Google first.", partnerLinked: 'Linked with {name}', shareWith: 'Share with {name}',
       sharedBy: 'Shared by {name}', sharedWith: 'Shared with {name}', partnerLinkFirst: 'Link a partner in Profile to share items', signInGoogleHint: 'Sign in to sync across devices and share with your partner',
-      repUnits: 'day|days|days;week|weeks|weeks;month|months|months;year|years|years', filterAll: 'All', filterTasks: 'Tasks', filterEvents: 'Events', lateDay: '{n} day late', lateDays: '{n} days late', allDoneToday: 'All done for today', nothingToday: 'Nothing planned for today', deleteEntry: 'Delete', deleteEntryConfirm: 'Delete “{name}”?',
+      repUnits: 'day|days|days;week|weeks|weeks;month|months|months;year|years|years', filterDated: 'With date', filterAll: 'All', filterTasks: 'Tasks', filterEvents: 'Events', lateDay: '{n} day late', lateDays: '{n} days late', allDoneToday: 'All done for today', nothingToday: 'Nothing planned for today', deleteEntry: 'Delete', deleteEntryConfirm: 'Delete “{name}”?',
       welcomeSubtitleAuth: 'Sign in to your account', fullName: 'Full Name', confirmPassword: 'Confirm Password',
       noAccount: "Don't have an account?", registerNow: 'Register', agreeTerms: 'I agree to the Terms of Service and Privacy Policy',
       fillAllFields: 'Please fill all fields', acceptTerms: 'Please accept terms and conditions', wrongCredentials: 'Wrong email or password',
@@ -60,12 +60,12 @@
       everyLabel: 'Na svakih', unitDay: 'dana', unitWeek: 'nedelja', unitMonth: 'meseci', unitYear: 'godina', everyYear: 'Svake godine', everyNyear: 'Na svakih {n} godina',
       everyDay: 'Svaki dan', everyWeek: 'Svake nedelje', everyMonth: 'Svakog meseca', everyNday: 'Na svakih {n} dana', everyNweek: 'Na svakih {n} nedelja', everyNmonth: 'Na svakih {n} meseci',
       monthDayEvery: 'Svakog {n}. u mesecu', pickDays: 'Izaberite bar jedan dan', statTasks: 'Taskovi', statLists: 'Liste', saved: 'Sačuvano', listDone: 'Lista završena',
-      homeSub: 'Evo šta vas čeka danas.', addDate: 'Dodaj datum', tomorrow: 'Sutra', showMore: 'Prikaži još', changeDate: 'Promeni datum', removeDate: 'Ukloni datum', noDateSection: 'Bez datuma', doneSection: 'Urađeno', unauthorizedDomain: 'Ovaj sajt još nije dozvoljen u Firebase-u (Authentication → Settings → Authorized domains).', networkError: 'Nema internet konekcije', permissionDenied: 'Firebase pravila ovo još ne dozvoljavaju (pogledajte README).',
+      homeSub: 'Evo šta vas čeka danas.', addDate: 'Dodaj datum', tomorrow: 'Sutra', showMore: 'Prikaži još', changeDate: 'Promeni datum', removeDate: 'Ukloni datum', noDateSection: 'Opšte', doneSection: 'Urađeno', unauthorizedDomain: 'Ovaj sajt još nije dozvoljen u Firebase-u (Authentication → Settings → Authorized domains).', networkError: 'Nema internet konekcije', permissionDenied: 'Firebase pravila ovo još ne dozvoljavaju (pogledajte README).',
       importedLocal: 'Prebačeno {n} stavki sa ovog uređaja na vaš nalog', migratedOld: 'Preneto {n} podsetnika iz stare aplikacije', partnerTitle: 'Partner', partnerDesc: 'Delite stavke sa jednom osobom', partnerEmail: 'Email partnera',
       partnerHelp: 'Partner treba jednom da se prijavi preko Google-a. Zatim ovde unesite njegov email.', linkBtn: 'Poveži', unlinkBtn: 'Ukloni', partnerSelf: 'To je vaš email',
       partnerNotFound: 'Nema naloga sa tim emailom. Neka se partner prvo prijavi preko Google-a.', partnerLinked: 'Povezani ste sa: {name}', shareWith: 'Podeli sa: {name}',
       sharedBy: 'Podelio/la: {name}', sharedWith: 'Podeljeno sa: {name}', partnerLinkFirst: 'Povežite partnera u Profilu da biste delili stavke', signInGoogleHint: 'Prijavite se da biste imali iste podatke na svim uređajima i delili sa partnerom',
-      repUnits: 'dan|dana|dana;nedelja|nedelje|nedelja;mesec|meseca|meseci;godina|godine|godina', filterAll: 'Sve', filterTasks: 'Zadaci', filterEvents: 'Događaji', lateDay: 'kasni {n} dan', lateDays: 'kasni {n} dana', allDoneToday: 'Sve za danas je urađeno', nothingToday: 'Za danas nema ništa', deleteEntry: 'Obriši', deleteEntryConfirm: 'Obrisati „{name}“?',
+      repUnits: 'dan|dana|dana;nedelja|nedelje|nedelja;mesec|meseca|meseci;godina|godine|godina', filterDated: 'Sa datumom', filterAll: 'Sve', filterTasks: 'Zadaci', filterEvents: 'Događaji', lateDay: 'kasni {n} dan', lateDays: 'kasni {n} dana', allDoneToday: 'Sve za danas je urađeno', nothingToday: 'Za danas nema ništa', deleteEntry: 'Obriši', deleteEntryConfirm: 'Obrisati „{name}“?',
       welcomeSubtitleAuth: 'Prijavite se na svoj nalog', fullName: 'Ime i prezime', confirmPassword: 'Potvrdite lozinku',
       noAccount: 'Nemate nalog?', registerNow: 'Registrujte se', agreeTerms: 'Prihvatam Uslove korišćenja i Politiku privatnosti',
       fillAllFields: 'Popunite sva polja', acceptTerms: 'Prihvatite uslove korišćenja', wrongCredentials: 'Pogrešan email ili lozinka',
@@ -322,7 +322,7 @@
   const UI_KEY = 'todays-ui';
   function saveUi() {
     try {
-      localStorage.setItem(UI_KEY, JSON.stringify({ tab: ui.tab, stack: ui.stack, remTab: ui.remTab, calMonth: dkey(ui.calMonth), homeFilter: ui.homeFilter, agendaDays: ui.agendaDays, expanded: [...ui.expanded], scroll: ($('.scroller') || {}).scrollTop || 0 }));
+      localStorage.setItem(UI_KEY, JSON.stringify({ tab: ui.tab, stack: ui.stack, remTab: ui.remTab, calMonth: dkey(ui.calMonth), homeFilter: ui.homeFilter, agendaFilter: ui.agendaFilter, agendaDays: ui.agendaDays, expanded: [...ui.expanded], scroll: ($('.scroller') || {}).scrollTop || 0 }));
     } catch (e) { /* storage unavailable */ }
   }
   function restoreUi() {
@@ -334,6 +334,7 @@
     if (v.remTab) ui.remTab = v.remTab;
     if (v.calMonth) ui.calMonth = fromKey(v.calMonth);
     if (v.homeFilter) ui.homeFilter = v.homeFilter;
+    if (v.agendaFilter) ui.agendaFilter = v.agendaFilter;
     if (v.agendaDays) ui.agendaDays = v.agendaDays;
     if (Array.isArray(v.expanded)) ui.expanded = new Set(v.expanded);
     return v.scroll || 0;
@@ -583,10 +584,13 @@
     }
     const floating = entries().filter((it) => isFloating(it) && floatingVisible(it));
     const undated = floating.filter((it) => !isDoneOn(it, T)).concat(floating.filter((it) => isDoneOn(it, T)));
-    return `<div class="agenda">
-      ${undated.length ? `<section class="rows agenda-day"><h3 class="rows-label">${esc(t('noDateSection'))}</h3>${undated.map((it) => entryCard(it, T)).join('')}</section>` : ''}
-      ${html || `<p class="quiet">${esc(t('nothingToday'))}</p>`}
-      <button class="btn btn-outline btn-sm more-btn" data-a="agenda-more">${icon('expand_more', 'sm')}${esc(t('showMore'))}</button>
+    const af = ui.agendaFilter || 'all';
+    const bar = `<div class="filter-pills home-filter agenda-filter" role="radiogroup" aria-label="Filter">${[['all', 'filterAll'], ['dated', 'filterDated'], ['general', 'noDateSection']].map(([v, k]) => `<button type="button" role="radio" class="fpill" data-a="agenda-filter" data-v="${v}" aria-checked="${af === v}">${esc(t(k))}</button>`).join('')}</div>`;
+    const showGeneral = af !== 'dated', showDated = af !== 'general';
+    return `${bar}<div class="agenda">
+      ${showGeneral && undated.length ? `<section class="rows agenda-day"><h3 class="rows-label">${esc(t('noDateSection'))}</h3>${undated.map((it) => entryCard(it, T)).join('')}</section>` : ''}
+      ${showDated ? `${html || `<p class="quiet">${esc(t('nothingToday'))}</p>`}
+      <button class="btn btn-outline btn-sm more-btn" data-a="agenda-more">${icon('expand_more', 'sm')}${esc(t('showMore'))}</button>` : undated.length ? '' : `<p class="quiet">${esc(t('nothingToday'))}</p>`}
     </div>`;
   }
   function renderCalendar(list) {
@@ -1310,6 +1314,7 @@
       case 'cal-today': ui.calMonth = todayD(); render(); break;
       case 'rem-tab': ui.remTab = el.dataset.v; render(); scrollTop(); break;
       case 'home-filter': ui.homeFilter = el.dataset.v; render(); break;
+      case 'agenda-filter': ui.agendaFilter = el.dataset.v; render(); break;
       case 'partner-unlink': unlinkPartner(); break;
       case 'agenda-more': ui.agendaDays = (ui.agendaDays || 30) + 30; render(); break;
       case 'day': dayDialog(el.dataset.d); break;
