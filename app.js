@@ -256,6 +256,8 @@
   }
   const byTime = (a, b) => (a.time ? timeToMin(a.time) : 1e4) - (b.time ? timeToMin(b.time) : 1e4) || a.name.localeCompare(b.name);
   function entriesOn(d, list = entries()) { return list.filter((it) => occursOn(it, d)).sort(byTime); }
+  // same, but finished items sink to the bottom of the day
+  const doneLast = (d) => (a, b) => (!isEvent(a) && isDoneOn(a, d)) - (!isEvent(b) && isDoneOn(b, d));
   function repeatText(it) {
     const r = it.repeat || { type: 'none' };
     if (r.type === 'interval') {
@@ -531,6 +533,7 @@
         seen.add(it.uid); return true;
       });
       if (!items.length) continue;
+      items.sort(doneLast(d));
       const label = i === 1 ? t('tomorrow') : cap(fmtDate(d, { weekday: 'long', day: 'numeric', month: 'long' }));
       html += `<section class="rows agenda-day"><h3 class="rows-label">${esc(label)}${i === 1 ? ` <span class="muted-date">${esc(fmtDate(d, { day: 'numeric', month: 'long' }))}</span>` : ''}</h3>${items.map((it) => entryCard(it, d)).join('')}</section>`;
     }
@@ -915,7 +918,7 @@
   }
   function drawDay() {
     const box = $('#day-body'); if (!box || !ui.dayOpen) return;
-    const d = fromKey(ui.dayOpen); const items = entriesOn(d);
+    const d = fromKey(ui.dayOpen); const items = entriesOn(d).sort(doneLast(d));
     box.innerHTML = items.length ? items.map((it) => entryCard(it, d)).join('')
       : `<div style="text-align:center;padding:12px 0" class="muted">${icon('event_busy', 'xl')}<p style="margin:6px 0 0">${esc(t('nothingToday'))}</p></div>`;
   }
