@@ -684,22 +684,11 @@
     $('#cd-ok').addEventListener('click', () => { closeModal(); onOk(); });
   }
 
-  function kindChooser(dateK) {
-    openModal(`<div class="dialog sm" role="dialog" aria-modal="true" aria-labelledby="kc-t">
-      <div class="dialog-head plain"><h2 id="kc-t">${esc(t('whatToAdd'))}</h2>
-        <button type="button" class="icon-btn" data-a="modal-close" aria-label="${esc(t('cancel'))}">${icon('close')}</button></div>
-      <div class="dialog-body kind-grid" style="padding-top:8px">
-        <button class="kind-btn" data-a="pick-kind" data-v="list" ${dateK ? `data-d="${dateK}"` : ''} style="--c:${LIST_COLOR}"><span class="kind-ic">${icon('checklist', 'lg')}</span><b>${esc(t('kindList'))}</b><small>${esc(t('kindListDesc'))}</small></button>
-        <button class="kind-btn" data-a="pick-kind" data-v="task" ${dateK ? `data-d="${dateK}"` : ''} style="--c:${BRAND}"><span class="kind-ic">${icon('task_alt', 'lg')}</span><b>${esc(t('kindTask'))}</b><small>${esc(t('kindTaskDesc'))}</small></button>
-      </div></div>`);
-  }
-
   function entryDialog(kind, existing, dateK) {
     const T = todayD();
     const base = existing ? JSON.parse(JSON.stringify(existing)) : {
       kind, name: '', description: '', date: dateK || '', time: '', important: false, repeat: { type: 'none' }, items: [],
     };
-    const isList = base.kind === 'list';
     const st = {
       items: (base.items || []).map((x) => ({ ...x })),
       date: base.date || '', time: base.time || '', hasDate: !!base.date,
@@ -709,13 +698,17 @@
     if (!st.rep.days || !st.rep.days.length) st.rep.days = [weekdayIdx(ref)];
     const opt = (v, label, cur) => `<option value="${v}" ${String(cur) === String(v) ? 'selected' : ''}>${esc(label)}</option>`;
     openModal(`<form class="dialog" id="entry-form" role="dialog" aria-modal="true" aria-labelledby="ed-t" novalidate>
-      <div class="dialog-head" style="${isList ? `background:${LIST_COLOR}` : ''}">${icon(isList ? 'checklist' : 'task_alt')}<h2 id="ed-t">${esc(t(existing ? (isList ? 'editList' : 'editTask') : (isList ? 'newList' : 'newTask')))}</h2>
+      <div class="dialog-head" id="ef-head"><span class="ms" id="ef-head-ic" aria-hidden="true">task_alt</span><h2 id="ed-t"></h2>
         <button type="button" class="icon-btn" data-a="modal-close" aria-label="${esc(t('cancel'))}">${icon('close')}</button></div>
       <div class="dialog-body">
+        <div class="seg" role="radiogroup" aria-label="${esc(t('whatToAdd'))}">
+          <button type="button" role="radio" class="seg-btn" data-kind="task">${icon('task_alt', 'sm')}${esc(t('kindTask'))}</button>
+          <button type="button" role="radio" class="seg-btn" data-kind="list">${icon('checklist', 'sm')}${esc(t('kindList'))}</button>
+        </div>
         <div class="field">${icon('title')}<label for="ef-name">${esc(t('titleLabel'))}</label><input id="ef-name" value="${esc(base.name)}" autocomplete="off" required></div>
         <div class="field" style="align-items:flex-start"><label for="ef-desc">${esc(t('descOptional'))}</label><textarea id="ef-desc" rows="2">${esc(base.description || '')}</textarea></div>
-        ${isList ? `<div class="items-edit"><span class="lbl">${esc(t('itemsLabel'))}</span><div id="ef-items" class="stack" style="gap:8px"></div>
-          <div class="add-item"><input id="ef-new-item" placeholder="${esc(t('newItemPh'))}" autocomplete="off" aria-label="${esc(t('addItem'))}"><button type="button" class="btn btn-tonal btn-sm" id="ef-add-item">${icon('add', 'sm')}${esc(t('addItem'))}</button></div></div>` : ''}
+        <div class="items-edit" id="ef-items-wrap"><span class="lbl">${esc(t('itemsLabel'))}</span><div id="ef-items" class="stack" style="gap:8px"></div>
+          <div class="add-item"><input id="ef-new-item" placeholder="${esc(t('newItemPh'))}" autocomplete="off" aria-label="${esc(t('addItem'))}"><button type="button" class="btn btn-tonal btn-sm" id="ef-add-item">${icon('add', 'sm')}${esc(t('addItem'))}</button></div></div>
         <div id="ef-when"></div>
         <div class="field select"><span style="margin-left:14px;color:var(--primary-ink)">${icon('repeat')}</span><label for="ef-rep">${esc(t('repetition'))}</label><select id="ef-rep">${REPEAT_TYPES.map(([v, k]) => opt(v, t(k), st.rep.type)).join('')}</select></div>
         <div id="ef-rep-dyn"></div>
@@ -761,13 +754,23 @@
             <button type="button" class="icon-btn" id="ef-time-clear" aria-label="${esc(t('clearTime'))}" ${st.time ? '' : 'hidden'}>${icon('close', 'sm')}</button></div>` : '';
       $('#ef-when').innerHTML = `<div class="field-row dt-row ${showTime ? '' : 'one'}">${dateHtml}${timeHtml}</div>`;
     }
-    drawItems(); drawRep(); drawWhen();
+    function drawKind() {
+      const list = st.kind === 'list';
+      $('#ef-items-wrap').hidden = !list;
+      $('#ef-head').style.background = list ? LIST_COLOR : '';
+      $('#ef-head-ic').textContent = list ? 'checklist' : 'task_alt';
+      $('#ed-t').textContent = t(existing ? (list ? 'editList' : 'editTask') : (list ? 'newList' : 'newTask'));
+      document.querySelectorAll('#entry-form .seg-btn').forEach((b) => b.setAttribute('aria-checked', b.dataset.kind === st.kind));
+    }
+    st.kind = base.kind === 'list' ? 'list' : 'task';
+    drawItems(); drawRep(); drawWhen(); drawKind();
     const form = $('#entry-form');
     form.addEventListener('click', (e) => {
       const rm = e.target.closest('[data-rm]'); if (rm) { st.items.splice(Number(rm.dataset.rm), 1); drawItems(); return; }
       const dp = e.target.closest('.day-pill');
       if (dp) { const i = Number(dp.dataset.day); const s = new Set(st.rep.days); s.has(i) ? s.delete(i) : s.add(i); st.rep.days = [...s].sort(); dp.setAttribute('aria-pressed', s.has(i)); return; }
       if (e.target.closest('#ef-add-item')) addItem();
+      const sk = e.target.closest('.seg-btn'); if (sk) { st.kind = sk.dataset.kind; drawKind(); err(''); if (st.kind === 'list' && !st.items.length) $('#ef-new-item').focus(); return; }
       if (e.target.closest('#ef-time-clear')) { st.time = ''; $('#ef-time').value = ''; $('#ef-time-clear').hidden = true; }
       if (e.target.closest('#ef-add-date')) {
         st.hasDate = true; if (!st.date) st.date = dkey(T); drawWhen();
@@ -791,7 +794,8 @@
     const ni = $('#ef-new-item'); if (ni) ni.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); addItem(); } });
     form.addEventListener('submit', (e) => {
       e.preventDefault();
-      if (ni && ni.value.trim()) addItem();
+      const isList = st.kind === 'list';
+      if (isList && ni && ni.value.trim()) addItem();
       const name = $('#ef-name').value.trim();
       if (!name) { err(t('nameEmptyWarning')); $('#ef-name').focus(); return; }
       const date = st.hasDate ? st.date : ''; if (st.hasDate && !date) return err(t('pickDateFirst'));
@@ -802,7 +806,7 @@
       if (r.type === 'weekdays') { if (!r.days.length) return err(t('pickDays')); repeat = { type: 'weekdays', days: r.days.slice() }; }
       if (r.type === 'monthday') { const n = Math.round(Number(r.monthDay)); if (!(n >= 1 && n <= 31)) return err(t('invalidDayOfMonth')); repeat = { type: 'monthday', monthDay: n }; }
       const data = {
-        ...(existing || {}), uid: existing ? existing.uid : uuid(), kind: base.kind, name, description: $('#ef-desc').value.trim(),
+        ...(existing || {}), uid: existing ? existing.uid : uuid(), kind: st.kind, name, description: $('#ef-desc').value.trim(),
         date, time: date || repeat.type !== 'none' ? st.time || '' : '', important: $('#ef-imp').checked, repeat, items: isList ? items : [],
         done: existing ? existing.done || {} : {}, checks: existing ? existing.checks || {} : {},
         createdAt: existing ? existing.createdAt : new Date().toISOString(), updatedAt: new Date().toISOString(),
@@ -957,9 +961,8 @@
       case 'demo': await loginDemo(); break;
       case 'google':
         confirmDialog({ title: t('signInWithGoogle'), body: t('googleNeedsFirebase'), ok: t('continueDemo'), onOk: loginDemo }); break;
-      case 'add': closeModal(); kindChooser(); break;
-      case 'add-on': closeModal(); kindChooser(el.dataset.d); break;
-      case 'pick-kind': { const d = el.dataset.d; closeModal(); entryDialog(el.dataset.v, null, d); break; }
+      case 'add': closeModal(); entryDialog('task'); break;
+      case 'add-on': { const d = el.dataset.d; closeModal(); entryDialog('task', null, d); break; }
       case 'edit': { const r = findR(el.dataset.id); if (r) { closeModal(); entryDialog(r.kind, r); } break; }
       case 'delete': closeModal(); deleteR(el.dataset.id); break;
       case 'toggle-done': { const r = findR(el.dataset.id); if (r) toggleDone(r, el.dataset.d ? fromKey(el.dataset.d) : todayD()); break; }

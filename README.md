@@ -13,7 +13,7 @@ Demo nalog: `demo@reminder.app` / `demo123`
 
 ## Šta je unutra
 - Prijava, registracija, zaboravljena lozinka (podaci lokalno u pregledaču za sada)
-- **Dodavanje (+):** prvo biraš **Lista** ili **Task**
+- **Dodavanje (+):** otvara formu; na vrhu prekidač **Task / Lista**
   - zajedničko: naziv, opcioni opis, **opcioni datum** (dugme „Dodaj datum“), opciono vreme (ako postoji, stiže obaveštenje), važno
   - bez datuma i bez ponavljanja → sekcija „Bez datuma“ na početnoj dok se ne završi (završeno ostaje precrtano do kraja dana)
   - bez datuma, sa ponavljanjem → ponavljanje se računa od dana kreiranja (`anchor`)
