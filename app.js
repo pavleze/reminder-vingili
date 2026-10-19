@@ -23,7 +23,12 @@
       everyLabel: 'Every', unitDay: 'days', unitWeek: 'weeks', unitMonth: 'months', unitYear: 'years', everyYear: 'Every year', everyNyear: 'Every {n} years',
       everyDay: 'Every day', everyWeek: 'Every week', everyMonth: 'Every month', everyNday: 'Every {n} days', everyNweek: 'Every {n} weeks', everyNmonth: 'Every {n} months',
       monthDayEvery: 'Monthly on day {n}', pickDays: 'Pick at least one day', statTasks: 'Tasks', statLists: 'Lists', saved: 'Saved', listDone: 'List completed',
-      homeSub: "Here is what's on for today.", addDate: 'Add date', tomorrow: 'Tomorrow', showMore: 'Show more', changeDate: 'Change date', removeDate: 'Remove date', noDateSection: 'No date', doneSection: 'Done', filterAll: 'All', filterTasks: 'Tasks', filterEvents: 'Events', lateDay: '{n} day late', lateDays: '{n} days late', allDoneToday: 'All done for today', nothingToday: 'Nothing planned for today', deleteEntry: 'Delete', deleteEntryConfirm: 'Delete “{name}”?',
+      homeSub: "Here is what's on for today.", addDate: 'Add date', tomorrow: 'Tomorrow', showMore: 'Show more', changeDate: 'Change date', removeDate: 'Remove date', noDateSection: 'No date', doneSection: 'Done', unauthorizedDomain: 'This website is not yet allowed in Firebase (Authentication → Settings → Authorized domains).', networkError: 'No internet connection', permissionDenied: 'Firebase rules do not allow this yet (see README).',
+      importedLocal: 'Moved {n} items from this device to your account', partnerTitle: 'Partner', partnerDesc: 'Share items with one person', partnerEmail: "Partner's email",
+      partnerHelp: 'Your partner needs to sign in with Google once. Then enter their email here.', linkBtn: 'Link', unlinkBtn: 'Remove', partnerSelf: "That's your own email",
+      partnerNotFound: "No account with that email yet. Ask them to sign in with Google first.", partnerLinked: 'Linked with {name}', shareWith: 'Share with {name}',
+      sharedBy: 'Shared by {name}', sharedWith: 'Shared with {name}', partnerLinkFirst: 'Link a partner in Profile to share items', signInGoogleHint: 'Sign in to sync across devices and share with your partner',
+      filterAll: 'All', filterTasks: 'Tasks', filterEvents: 'Events', lateDay: '{n} day late', lateDays: '{n} days late', allDoneToday: 'All done for today', nothingToday: 'Nothing planned for today', deleteEntry: 'Delete', deleteEntryConfirm: 'Delete “{name}”?',
       welcomeSubtitleAuth: 'Sign in to your account', fullName: 'Full Name', confirmPassword: 'Confirm Password',
       noAccount: "Don't have an account?", registerNow: 'Register', agreeTerms: 'I agree to the Terms of Service and Privacy Policy',
       fillAllFields: 'Please fill all fields', acceptTerms: 'Please accept terms and conditions', wrongCredentials: 'Wrong email or password',
@@ -55,7 +60,12 @@
       everyLabel: 'Na svakih', unitDay: 'dana', unitWeek: 'nedelja', unitMonth: 'meseci', unitYear: 'godina', everyYear: 'Svake godine', everyNyear: 'Na svakih {n} godina',
       everyDay: 'Svaki dan', everyWeek: 'Svake nedelje', everyMonth: 'Svakog meseca', everyNday: 'Na svakih {n} dana', everyNweek: 'Na svakih {n} nedelja', everyNmonth: 'Na svakih {n} meseci',
       monthDayEvery: 'Svakog {n}. u mesecu', pickDays: 'Izaberite bar jedan dan', statTasks: 'Taskovi', statLists: 'Liste', saved: 'Sačuvano', listDone: 'Lista završena',
-      homeSub: 'Evo šta vas čeka danas.', addDate: 'Dodaj datum', tomorrow: 'Sutra', showMore: 'Prikaži još', changeDate: 'Promeni datum', removeDate: 'Ukloni datum', noDateSection: 'Bez datuma', doneSection: 'Urađeno', filterAll: 'Sve', filterTasks: 'Zadaci', filterEvents: 'Događaji', lateDay: 'kasni {n} dan', lateDays: 'kasni {n} dana', allDoneToday: 'Sve za danas je urađeno', nothingToday: 'Za danas nema ništa', deleteEntry: 'Obriši', deleteEntryConfirm: 'Obrisati „{name}“?',
+      homeSub: 'Evo šta vas čeka danas.', addDate: 'Dodaj datum', tomorrow: 'Sutra', showMore: 'Prikaži još', changeDate: 'Promeni datum', removeDate: 'Ukloni datum', noDateSection: 'Bez datuma', doneSection: 'Urađeno', unauthorizedDomain: 'Ovaj sajt još nije dozvoljen u Firebase-u (Authentication → Settings → Authorized domains).', networkError: 'Nema internet konekcije', permissionDenied: 'Firebase pravila ovo još ne dozvoljavaju (pogledajte README).',
+      importedLocal: 'Prebačeno {n} stavki sa ovog uređaja na vaš nalog', partnerTitle: 'Partner', partnerDesc: 'Delite stavke sa jednom osobom', partnerEmail: 'Email partnera',
+      partnerHelp: 'Partner treba jednom da se prijavi preko Google-a. Zatim ovde unesite njegov email.', linkBtn: 'Poveži', unlinkBtn: 'Ukloni', partnerSelf: 'To je vaš email',
+      partnerNotFound: 'Nema naloga sa tim emailom. Neka se partner prvo prijavi preko Google-a.', partnerLinked: 'Povezani ste sa: {name}', shareWith: 'Podeli sa: {name}',
+      sharedBy: 'Podelio/la: {name}', sharedWith: 'Podeljeno sa: {name}', partnerLinkFirst: 'Povežite partnera u Profilu da biste delili stavke', signInGoogleHint: 'Prijavite se da biste imali iste podatke na svim uređajima i delili sa partnerom',
+      filterAll: 'Sve', filterTasks: 'Zadaci', filterEvents: 'Događaji', lateDay: 'kasni {n} dan', lateDays: 'kasni {n} dana', allDoneToday: 'Sve za danas je urađeno', nothingToday: 'Za danas nema ništa', deleteEntry: 'Obriši', deleteEntryConfirm: 'Obrisati „{name}“?',
       welcomeSubtitleAuth: 'Prijavite se na svoj nalog', fullName: 'Ime i prezime', confirmPassword: 'Potvrdite lozinku',
       noAccount: 'Nemate nalog?', registerNow: 'Registrujte se', agreeTerms: 'Prihvatam Uslove korišćenja i Politiku privatnosti',
       fillAllFields: 'Popunite sva polja', acceptTerms: 'Prihvatite uslove korišćenja', wrongCredentials: 'Pogrešan email ili lozinka',
@@ -162,7 +172,7 @@
     if (!u.tasks || !u.tasks.some((x) => x.sample)) return;
     u.tasks = u.tasks.filter((x) => !x.sample).concat(sampleEntries(u.settings.lang));
   }
-  function save() { try { localStorage.setItem(KEY, JSON.stringify(DB)); } catch (e) { /* storage unavailable: keep in memory */ } }
+  function save(sync = true) { try { localStorage.setItem(KEY, JSON.stringify(DB)); } catch (e) { /* storage unavailable: keep in memory */ } if (sync && typeof syncCloud === 'function') syncCloud(); }
   const me = () => (DB.session && DB.users[DB.session]) || null;
   const settings = () => (me() ? me().settings : DB.guest);
   const entries = () => (me() ? (me().tasks = me().tasks || []) : []);
@@ -426,9 +436,9 @@
       <button class="btn btn-primary btn-block" type="submit">${esc(t('signIn'))}</button>
       <div class="divider">${esc(t('or'))}</div>
       <button class="btn btn-plain btn-block" type="button" data-a="google">${icon('account_circle')}${esc(t('signInWithGoogle'))}</button>
-      <button class="btn btn-tonal btn-block" type="button" data-a="demo">${icon('play_circle')}${esc(t('tryDemo'))}</button>
+      ${Cloud.on ? `<p class="demo-hint">${esc(t('signInGoogleHint'))}</p>` : `<button class="btn btn-tonal btn-block" type="button" data-a="demo">${icon('play_circle')}${esc(t('tryDemo'))}</button>`}
       <p class="auth-foot">${esc(t('noAccount'))} <button type="button" class="link" data-a="auth" data-v="register">${esc(t('registerNow'))}</button></p>
-      <p class="demo-hint">${esc(t('demoHint'))}</p>
+      ${Cloud.on ? '' : `<p class="demo-hint">${esc(t('demoHint'))}</p>`}
     </form></div>`;
   }
 
@@ -450,14 +460,14 @@
       const past = it.time && sameDay(d, todayD()) && timeToMin(it.time) < new Date().getHours() * 60 + new Date().getMinutes();
       return `<div class="entry event ${past || d < todayD() ? 'past' : ''}">
         <span class="ev-ic" aria-hidden="true">${icon('event', 'sm')}</span>
-        <button class="body" data-a="edit" data-id="${it.uid}"><span class="title">${esc(it.name)}${star}</span>${sub}</button>
+        <button class="body" data-a="edit" data-id="${it.uid}"><span class="title">${esc(it.name)}${star}${shareBadge(it)}</span>${sub}</button>
         ${time}
       </div>`;
     }
     if (!isList) {
       return `<div class="entry ${done ? 'done' : ''}">
         <button class="tick ${done ? 'on' : ''}" data-a="toggle-done" data-id="${it.uid}" data-d="${k}" aria-pressed="${done}" aria-label="${esc(t('done'))}: ${esc(it.name)}">${done ? icon('check', 'xs') : ''}</button>
-        <button class="body" data-a="edit" data-id="${it.uid}"><span class="title">${esc(it.name)}${star}</span>${sub}</button>
+        <button class="body" data-a="edit" data-id="${it.uid}"><span class="title">${esc(it.name)}${star}${shareBadge(it)}</span>${sub}</button>
         ${time}
       </div>`;
     }
@@ -466,7 +476,7 @@
     return `<div class="entry list ${done && !ev ? 'done' : ''} ${ev ? 'event' : ''} ${open ? 'open' : ''}">
       <button class="entry-row" data-a="expand" data-id="${it.uid}" data-d="${k}" aria-expanded="${open}">
         ${ev ? `<span class="ev-ic" aria-hidden="true">${icon('event', 'sm')}</span>` : `<span class="tick pie ${done ? 'on' : ''}" style="--n:${Math.max(n, 1)};--p:${n ? (c / n) * 100 : 0}" aria-hidden="true">${done ? icon('check', 'xs') : ''}</span>`}
-        <span class="body"><span class="title">${esc(it.name)}${star}</span><span class="sub tnum">${esc(ev ? String(n) : c + '/' + n)}${subParts.length ? ' · ' + esc(subParts.join(' · ')) : ''}</span></span>
+        <span class="body"><span class="title">${esc(it.name)}${star}${shareBadge(it)}</span><span class="sub tnum">${esc(ev ? String(n) : c + '/' + n)}${subParts.length ? ' · ' + esc(subParts.join(' · ')) : ''}</span></span>
         ${time}
         <span class="chev">${icon(open ? 'expand_less' : 'expand_more', 'sm')}</span>
       </button>
@@ -602,6 +612,7 @@
     const html = `
       <div class="profile-head">${avatarHtml(u)}<h2>${esc(u.name || t('noName'))}</h2><span class="mail">${esc(u.email || t('noEmail'))}</span></div>
       <div class="stack" style="margin-top:12px">
+        ${isCloud() ? opt('partner', 'group', t('partnerTitle') + (Cloud.partner ? ' · ' + (Cloud.partner.name || Cloud.partner.email) : '')) : ''}
         ${opt('accountCenter', 'account_balance', t('accountCenter'))}
         ${opt('notifications', 'notifications', t('notifications'))}
         ${opt('language', 'language', t('language'))}
@@ -685,6 +696,19 @@
       </form>`;
     return { title: t('changePasswordTitle'), html, narrow: true };
   }
+  function screenPartner() {
+    const p = Cloud.partner;
+    const html = p
+      ? `<div class="tile" style="cursor:default">${avatarHtml({ name: p.name, photo: p.photo }, 'sm')}<span class="grow"><b>${esc(p.name || p.email)}</b><small>${esc(p.email)}</small></span>
+          <button class="btn btn-outline danger btn-sm" data-a="partner-unlink">${esc(t('unlinkBtn'))}</button></div>
+         <p class="muted" style="margin:0">${esc(t('partnerDesc'))}</p>`
+      : `<p class="muted" style="margin:0">${esc(t('partnerHelp'))}</p>
+         <form class="stack" id="partner-form" novalidate style="gap:14px">
+           ${field({ id: 'partner-email', label: t('partnerEmail'), type: 'email', ic: 'mail', auto: 'off' })}
+           <button class="btn btn-primary btn-block" type="submit">${icon('group_add')}${esc(t('linkBtn'))}</button>
+         </form>`;
+    return { title: t('partnerTitle'), html, narrow: true };
+  }
   function screenConnected() {
     const u = me();
     const html = u.googleLinked
@@ -759,7 +783,7 @@
 
   const TABS = { home: screenHome, reminders: screenReminders, profile: screenProfile };
   const SCREENS = {
-    accountCenter: screenAccountCenter, profileData: screenProfileData, security: screenSecurity,
+    partner: screenPartner, accountCenter: screenAccountCenter, profileData: screenProfileData, security: screenSecurity,
     changePassword: screenChangePassword, connected: screenConnected, notifications: screenNotifications, language: screenLanguage,
     appearance: screenAppearance, credits: screenCredits, deletion: screenDeletion,
   };
@@ -816,6 +840,11 @@
         <div class="field select"><span style="margin-left:14px;color:var(--primary-ink)">${icon('repeat')}</span><label for="ef-rep">${esc(t('repetition'))}</label><select id="ef-rep">${REPEAT_TYPES.map(([v, k]) => opt(v, t(k), st.rep.type)).join('')}</select></div>
         <div id="ef-rep-dyn"></div>
         <div class="field" style="align-items:flex-start"><label for="ef-desc">${esc(t('descOptional'))}</label><textarea id="ef-desc" rows="2">${esc(base.description || '')}</textarea></div>
+        ${isCloud() ? (existing && ownerIsPartner(existing)
+          ? `<p class="muted" style="margin:0;display:flex;gap:8px;align-items:center">${icon('group', 'sm')}${esc(t('sharedBy', { name: (Cloud.partner && Cloud.partner.name) || '' }))}</p>`
+          : Cloud.partner
+            ? `<label class="inline-switch" for="ef-share"><span style="color:var(--primary-ink);display:grid">${icon('group')}</span><span class="grow">${esc(t('shareWith', { name: Cloud.partner.name || Cloud.partner.email }))}</span><span class="switch"><input type="checkbox" role="switch" id="ef-share" ${existing && sharedWithPartner(existing) ? 'checked' : ''}><i></i></span></label>`
+            : `<p class="muted" style="margin:0;font-size:13px">${esc(t('partnerLinkFirst'))}</p>`) : ''}
         <label class="inline-switch" for="ef-imp"><span class="star" id="ef-star" style="color:${base.important ? 'var(--star)' : 'var(--muted)'}">${icon('star', 'fill')}</span><span class="grow">${esc(t('important'))}</span><span class="switch"><input type="checkbox" role="switch" id="ef-imp" ${base.important ? 'checked' : ''}><i></i></span></label>
         <p class="err-text" id="ef-err" hidden></p>
       </div>
@@ -921,6 +950,13 @@
         createdAt: existing ? existing.createdAt : new Date().toISOString(), updatedAt: new Date().toISOString(),
       };
       delete data.snoozedUntil; delete data.sample;
+      if (isCloud()) {
+        const meUid = me().uid; data.owner = data.owner || meUid;
+        if (data.owner === meUid) {
+          const sh = $('#ef-share'); const share = !!(sh && sh.checked && Cloud.partner);
+          data.members = share ? [meUid, Cloud.partner.uid] : [meUid];
+        } else data.members = (existing && existing.members) || [data.owner, meUid];
+      }
       if (!date && repeat.type !== 'none') data.anchor = (existing && existing.anchor) || dkey(T); else delete data.anchor;
       const list = me().tasks; const i = list.findIndex((x) => x.uid === data.uid);
       if (i >= 0) list[i] = data; else list.push(data);
@@ -1002,7 +1038,7 @@
     if (!u.passHash) u.passHash = await hashPw('demo123');
     startSession(u);
   }
-  function logout() { DB.guest = { ...settings(), notif: { ...settings().notif } }; DB.session = null; ui.auth = 'login'; ui.stack = []; save(); render(); }
+  function logout() { if (isCloud() && Cloud.on) { DB.guest = { ...settings(), notif: { ...settings().notif } }; window.firebase.auth().signOut(); return; } DB.guest = { ...settings(), notif: { ...settings().notif } }; DB.session = null; ui.auth = 'login'; ui.stack = []; save(); render(); }
 
   /* ---------- Notifications engine ---------- */
   let audioCtx = null;
@@ -1052,6 +1088,168 @@
     if (changed) save();
   }
 
+  /* ================= Cloud (Firebase): Google sign-in, sync, sharing with a partner ================= */
+  // Runs only on a real host (Vercel / localhost). Inside the Claude preview the app stays in local demo mode.
+  const FIREBASE_CONFIG = {
+    apiKey: 'AIzaSyDh5rwxZ93C5LkCDLFfv4T4fTrpOw-AxeY',
+    authDomain: 'reminder-c29a5.firebaseapp.com',
+    projectId: 'reminder-c29a5',
+    storageBucket: 'reminder-c29a5.appspot.com',
+    messagingSenderId: '81351094737',
+    appId: '1:81351094737:web:8831b721352a691b20f0f0',
+  };
+  const FB_VER = '10.12.2';
+  const ITEMS = 'todays_items', PEOPLE = 'todays_users';
+  const Cloud = { on: false, ready: false, fb: null, db: null, user: null, unsub: null, last: {}, partner: null, firstSnap: true, prevLocal: null };
+  const cloudHost = () => {
+    const h = location.hostname;
+    if (location.protocol === 'file:') return false;
+    if (/claude|anthropic|claudeusercontent/.test(h)) return false;
+    try { if (window.self !== window.top) return false; } catch (e) { return false; }
+    return true;
+  };
+  const isCloud = () => !!(me() && me().cloud);
+  const loadScript = (src) => new Promise((res, rej) => { const s = document.createElement('script'); s.src = src; s.onload = res; s.onerror = rej; document.head.appendChild(s); });
+  const clean = (o) => JSON.parse(JSON.stringify(o));
+  const taskJson = (it) => { const c = clean(it); delete c.sample; return JSON.stringify(c); };
+
+  async function initCloud() {
+    if (!cloudHost()) return;
+    try {
+      const base = `https://cdn.jsdelivr.net/npm/firebase@${FB_VER}/`;
+      await loadScript(base + 'firebase-app-compat.js');
+      await Promise.all([loadScript(base + 'firebase-auth-compat.js'), loadScript(base + 'firebase-firestore-compat.js')]);
+      const cfg = { ...FIREBASE_CONFIG };
+      // On our own domain the /__/auth/* pages are proxied to Firebase (vercel.json), which keeps Google sign-in working on iPhone.
+      if (!/^(localhost|127\.)/.test(location.hostname)) cfg.authDomain = location.host;
+      Cloud.fb = window.firebase.initializeApp(cfg);
+      Cloud.db = window.firebase.firestore();
+      Cloud.on = true;
+      try { await window.firebase.auth().getRedirectResult(); } catch (e) { cloudError(e); }
+      window.firebase.auth().onAuthStateChanged((fu) => { Cloud.ready = true; if (fu) cloudSession(fu); else if (isCloud()) { cloudSignedOut(); } else render(); });
+      render();
+    } catch (e) {
+      console.warn('Firebase not available, staying local', e);
+    }
+  }
+  function cloudError(e) {
+    const code = (e && e.code) || '';
+    if (code === 'auth/popup-closed-by-user' || code === 'auth/cancelled-popup-request') return;
+    const map = {
+      'auth/unauthorized-domain': 'unauthorizedDomain', 'auth/wrong-password': 'wrongCredentials', 'auth/invalid-credential': 'wrongCredentials',
+      'auth/user-not-found': 'wrongCredentials', 'auth/email-already-in-use': 'emailInUse', 'auth/weak-password': 'passwordMinLength',
+      'auth/network-request-failed': 'networkError', 'permission-denied': 'permissionDenied',
+    };
+    toast(map[code] ? t(map[code]) : `${t('unknownError')}: ${code || (e && e.message) || e}`, { error: true, ms: 6000 });
+  }
+  async function cloudGoogle() {
+    const auth = window.firebase.auth(); const prov = new window.firebase.auth.GoogleAuthProvider();
+    prov.setCustomParameters({ prompt: 'select_account' });
+    const standalone = (window.matchMedia && matchMedia('(display-mode: standalone)').matches) || navigator.standalone;
+    try { if (standalone) await auth.signInWithRedirect(prov); else await auth.signInWithPopup(prov); }
+    catch (e) {
+      if (e && (e.code === 'auth/popup-blocked' || e.code === 'auth/operation-not-supported-in-this-environment')) { try { await auth.signInWithRedirect(prov); } catch (e2) { cloudError(e2); } }
+      else cloudError(e);
+    }
+  }
+  async function cloudSession(fu) {
+    const prev = me(); Cloud.prevLocal = prev && !prev.cloud ? prev : Cloud.prevLocal;
+    let u = DB.users[fu.uid];
+    if (!u) { u = newUser({ name: fu.displayName || (fu.email || '').split('@')[0], email: fu.email || '', passHash: null, provider: 'google' }); delete DB.users[u.uid]; u.uid = fu.uid; DB.users[fu.uid] = u; }
+    u.cloud = true; u.name = fu.displayName || u.name; u.email = fu.email || u.email; u.photo = fu.photoURL || u.photo; u.googleLinked = true;
+    if (fu.metadata && fu.metadata.creationTime) u.createdAt = new Date(fu.metadata.creationTime).toISOString();
+    u.lastLogin = new Date().toISOString();
+    if (!prev || prev.uid !== fu.uid) { ui.tab = 'home'; ui.stack = []; ui.expanded.clear(); }
+    Cloud.user = fu; DB.session = fu.uid; save(false);
+    // profile doc: lets the partner find you by email; settings follow you across devices
+    const ref = Cloud.db.collection(PEOPLE).doc(fu.uid);
+    try {
+      const snap = await ref.get(); const data = snap.exists ? snap.data() : {};
+      if (data.settings) u.settings = { ...u.settings, ...data.settings, notif: { ...u.settings.notif, ...(data.settings.notif || {}) } };
+      u.partnerUid = data.partnerUid || null;
+      await ref.set({ uid: fu.uid, name: u.name, email: (u.email || '').toLowerCase(), photo: u.photo || null, settings: clean(u.settings), lastLogin: u.lastLogin }, { merge: true });
+      await loadPartner();
+    } catch (e) { cloudError(e); }
+    if (Cloud.unsub) Cloud.unsub();
+    Cloud.firstSnap = true;
+    Cloud.unsub = Cloud.db.collection(ITEMS).where('members', 'array-contains', fu.uid).onSnapshot((qs) => {
+      const tasks = []; const last = {};
+      qs.forEach((doc) => { const it = { ...doc.data(), uid: doc.id }; tasks.push(it); last[it.uid] = taskJson(it); });
+      const mine = DB.users[fu.uid]; if (!mine) return;
+      mine.tasks = tasks; Cloud.last = last;
+      if (Cloud.firstSnap) { Cloud.firstSnap = false; importLocal(mine); }
+      save(false); refresh();
+    }, (e) => cloudError(e));
+    render();
+  }
+  async function importLocal(u) {
+    // first Google sign-in: bring over what was made on this device before (examples excluded)
+    if ((u.tasks || []).length || !Cloud.prevLocal) return;
+    const own = (Cloud.prevLocal.tasks || []).filter((x) => !x.sample);
+    if (!own.length) return;
+    u.tasks = own.map((x) => ({ ...x, owner: u.uid, members: [u.uid] }));
+    Cloud.prevLocal = null; save(); toast(t('importedLocal', { n: own.length }), { icon: 'cloud_upload' });
+  }
+  async function loadPartner() {
+    const u = me(); Cloud.partner = null;
+    if (!u || !u.partnerUid) return;
+    try { const s = await Cloud.db.collection(PEOPLE).doc(u.partnerUid).get(); if (s.exists) Cloud.partner = s.data(); } catch (e) { cloudError(e); }
+  }
+  async function linkPartner(email) {
+    const u = me(); const em = String(email || '').trim().toLowerCase();
+    if (!validEmail(em)) return toast(t('invalidEmail'), { error: true });
+    if (em === (u.email || '').toLowerCase()) return toast(t('partnerSelf'), { error: true });
+    try {
+      const qs = await Cloud.db.collection(PEOPLE).where('email', '==', em).limit(1).get();
+      if (qs.empty) return toast(t('partnerNotFound'), { error: true, ms: 6000 });
+      const p = qs.docs[0].data();
+      u.partnerUid = p.uid; Cloud.partner = p;
+      await Cloud.db.collection(PEOPLE).doc(u.uid).set({ partnerUid: p.uid }, { merge: true });
+      save(false); render(); toast(t('partnerLinked', { name: p.name || p.email }), { icon: 'group' });
+    } catch (e) { cloudError(e); }
+  }
+  async function unlinkPartner() {
+    const u = me(); u.partnerUid = null; Cloud.partner = null;
+    try { await Cloud.db.collection(PEOPLE).doc(u.uid).set({ partnerUid: null }, { merge: true }); } catch (e) { cloudError(e); }
+    save(false); render();
+  }
+  // push local changes (add / edit / check / delete) to Firestore
+  function syncCloud() {
+    const u = me(); if (!u || !u.cloud || !Cloud.db) return;
+    const col = Cloud.db.collection(ITEMS); const seen = new Set();
+    for (const it of u.tasks || []) {
+      seen.add(it.uid);
+      if (!it.owner) it.owner = u.uid;
+      if (!Array.isArray(it.members) || !it.members.length) it.members = [it.owner];
+      const j = taskJson(it);
+      if (Cloud.last[it.uid] === j) continue;
+      Cloud.last[it.uid] = j;
+      const data = clean(it); delete data.uid; delete data.sample;
+      col.doc(it.uid).set(data).catch(cloudError);
+    }
+    for (const id of Object.keys(Cloud.last)) {
+      if (seen.has(id)) continue;
+      const was = JSON.parse(Cloud.last[id]); delete Cloud.last[id];
+      if (was.owner === u.uid) col.doc(id).delete().catch(cloudError);
+      else col.doc(id).update({ members: window.firebase.firestore.FieldValue.arrayRemove(u.uid) }).catch(cloudError);
+    }
+    const sj = JSON.stringify(u.settings);
+    if (Cloud.lastSettings !== sj) { Cloud.lastSettings = sj; Cloud.db.collection(PEOPLE).doc(u.uid).set({ settings: clean(u.settings) }, { merge: true }).catch(() => {}); }
+  }
+  function cloudSignedOut() {
+    if (Cloud.unsub) { Cloud.unsub(); Cloud.unsub = null; }
+    Cloud.user = null; Cloud.partner = null; Cloud.last = {};
+    if (isCloud()) { DB.session = null; }
+    ui.auth = 'login'; ui.stack = []; save(false); render();
+  }
+  const sharedWithPartner = (it) => !!(Cloud.partner && Array.isArray(it.members) && it.members.includes(Cloud.partner.uid));
+  const ownerIsPartner = (it) => !!(me() && it.owner && it.owner !== me().uid);
+  function shareBadge(it) {
+    if (!isCloud() || !Array.isArray(it.members) || it.members.length < 2) return '';
+    const who = ownerIsPartner(it) ? (Cloud.partner && Cloud.partner.name) || '' : (Cloud.partner && Cloud.partner.name) || '';
+    return `<span class="share-badge" title="${esc(t('sharedWith', { name: who }))}" aria-label="${esc(t('sharedWith', { name: who }))}">${icon('group', 'xs')}</span>`;
+  }
+
   /* ================= Event wiring ================= */
   document.addEventListener('click', async (e) => {
     const el = e.target.closest('[data-a]'); if (!el) return;
@@ -1070,6 +1268,7 @@
       }
       case 'demo': await loginDemo(); break;
       case 'google':
+        if (Cloud.on) { cloudGoogle(); break; }
         confirmDialog({ title: t('signInWithGoogle'), body: t('googleNeedsFirebase'), ok: t('continueDemo'), onOk: loginDemo }); break;
       case 'add': closeModal(); entryDialog('task'); break;
       case 'add-on': { const d = el.dataset.d; closeModal(); entryDialog('task', null, d); break; }
@@ -1082,6 +1281,7 @@
       case 'cal-today': ui.calMonth = todayD(); render(); break;
       case 'rem-tab': ui.remTab = el.dataset.v; render(); scrollTop(); break;
       case 'home-filter': ui.homeFilter = el.dataset.v; render(); break;
+      case 'partner-unlink': unlinkPartner(); break;
       case 'agenda-more': ui.agendaDays = (ui.agendaDays || 30) + 30; render(); break;
       case 'day': dayDialog(el.dataset.d); break;
       case 'modal-close': closeModal(); break;
@@ -1133,13 +1333,15 @@
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && modalOpen()) closeModal(); });
   document.addEventListener('submit', async (e) => {
     const f = e.target; if (!f.id) return;
-    if (['login-form', 'register-form', 'forgot-form', 'chpw-form', 'setpw-form', 'del-form'].includes(f.id)) e.preventDefault(); else return;
+    if (['login-form', 'register-form', 'forgot-form', 'chpw-form', 'setpw-form', 'del-form', 'partner-form'].includes(f.id)) e.preventDefault(); else return;
+    if (f.id === 'partner-form') { linkPartner((document.getElementById('partner-email') || {}).value); return; }
     const v = (id) => (document.getElementById(id) || {}).value || '';
     if (f.id === 'login-form') {
       const em = v('login-email').trim(), pw = v('login-pass');
       if (!em) return toast(t('emailRequired'), { error: true });
       if (!validEmail(em)) return toast(t('invalidEmail'), { error: true });
       if (!pw) return toast(t('passwordRequired'), { error: true });
+      if (Cloud.on) { try { await window.firebase.auth().signInWithEmailAndPassword(em, pw); } catch (er) { cloudError(er); } return; }
       if (!(await login(em, pw))) toast(t('wrongCredentials'), { error: true });
     } else if (f.id === 'register-form') {
       const name = v('reg-name').trim(), em = v('reg-email').trim(), pw = v('reg-pass'), pw2 = v('reg-pass2');
@@ -1148,6 +1350,7 @@
       if (pw.length < 6) return toast(t('passwordMinLength'), { error: true });
       if (pw !== pw2) return toast(t('passwordsDontMatch'), { error: true });
       if (!$('#reg-terms').checked) return toast(t('acceptTerms'), { error: true });
+      if (Cloud.on) { try { const cr = await window.firebase.auth().createUserWithEmailAndPassword(em, pw); await cr.user.updateProfile({ displayName: name }); cloudSession(window.firebase.auth().currentUser); } catch (er) { cloudError(er); } return; }
       if (findUserByEmail(em)) return toast(t('emailInUse'), { error: true });
       const u = newUser({ name, email: em, passHash: await hashPw(pw) }); startSession(u);
     } else if (f.id === 'forgot-form') {
@@ -1176,6 +1379,9 @@
   /* ================= Boot ================= */
 
   load();
+  if (!DB.seeded && cloudHost()) { DB.seeded = true; save(false); }
+  // on the real site a local (demo) session is replaced by the sign-in screen; its own items are offered to the first Google account
+  if (cloudHost() && me() && !me().cloud) { Cloud.prevLocal = me(); DB.session = null; save(false); }
   if (!DB.seeded) { // first visit: open in a realistic working state with the demo account
     DB.seeded = true; const u = seedDemo(); hashPw('demo123').then((h) => { u.passHash = h; save(); });
     DB.session = u.uid; u.lastLogin = new Date().toISOString(); save();
@@ -1186,6 +1392,7 @@
   let scrollT = null;
   document.addEventListener('scroll', () => { clearTimeout(scrollT); scrollT = setTimeout(saveUi, 200); }, true);
   try { if (window.claude && window.claude.hot && window.claude.hot.snapshot) window.claude.hot.snapshot(() => { saveUi(); return { ui: JSON.parse(localStorage.getItem(UI_KEY) || 'null') }; }); } catch (e) { /* not in a viewer */ }
+  initCloud();
   setInterval(checkDue, 15000);
   setTimeout(checkDue, 4000);
   document.addEventListener('visibilitychange', () => { if (!document.hidden) { checkDue(); if (!ui.splash && !modalOpen()) render(); } });

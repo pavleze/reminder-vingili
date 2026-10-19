@@ -34,12 +34,29 @@ Demo nalog: `demo@reminder.app` / `demo123`
 }
 ```
 
-## Podaci
-Za sada se sve čuva lokalno u pregledaču (localStorage). Sav pristup podacima je u objektu `Store` u `src/app.js`
-(`load`, `save`, `newUser`, `login`…), pa je to jedino mesto koje treba zameniti Firebase Auth + Firestore pozivima
-(config je u starom `lib/main.dart`).
+## Podaci i nalozi
+
+- **Na pravom sajtu (Vercel, localhost):** prijava preko Google-a ili email/lozinke (Firebase Auth), a podaci su u Firestore-u i sinhronizuju se na svim uređajima.
+- **U Claude pregledu i kad se `index.html` otvori kao fajl:** lokalni demo u pregledaču (localStorage), bez prijave.
+- **Partner:** Profil → Partner → email partnera (partner mora bar jednom da se prijavi). Posle toga forma ima prekidač „Podeli sa …“; podeljene stavke vide i menjaju oboje (ikonica 👥 pored naziva).
+
+Kolekcije (ne diraju podatke stare Android aplikacije u `users`):
+- `todays_users/{uid}` – ime, email, slika, podešavanja, `partnerUid`
+- `todays_items/{id}` – stavka + `owner` i `members` (ko je vidi)
+
+### Jednokratno podešavanje (Firebase projekat `reminder-c29a5`)
+
+1. **Authentication → Sign-in method:** uključi **Google** (i Email/Password ako želiš i to).
+2. **Authentication → Settings → Authorized domains:** dodaj svoj Vercel domen, npr. `reminder-vingili.vercel.app`.
+3. **Google prijava preko tvog domena** (bitno za iPhone): u [Google Cloud Console](https://console.cloud.google.com/apis/credentials?project=reminder-c29a5) → Credentials → *Web client (auto created by Google Service)* → **Authorized redirect URIs** dodaj  
+   `https://<tvoj-domen>.vercel.app/__/auth/handler`  
+   (`vercel.json` već prosleđuje `/__/auth/*` na Firebase.)
+4. **Firestore Database → Rules:** dodaj dva `match` bloka iz fajla `firestore.rules` (ne briši postojeća pravila stare aplikacije) i klikni **Publish**.
+5. Oboje se prijavite preko Google-a, jedno od vas u Profil → Partner unese email drugog.
 
 ## Struktura
 - `index.html` — gotova stranica (generiše se)
+- `vercel.json` — prosleđivanje Firebase prijave preko tvog domena
+- `firestore.rules` — pravila pristupa za Firestore
 - `app.js`, `i18n.js`, `assets/` — kod, prevodi, logoi
 - `src/head.html`, `src/app.js` — izvor; `python build.py` ponovo pravi `index.html` i `app.js`

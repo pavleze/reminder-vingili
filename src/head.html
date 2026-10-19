@@ -279,6 +279,7 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
 .entry.event.past .title, .entry.event.past .time { color: var(--muted); }
 .chev { color: var(--muted); display: grid; place-items: center; flex: none; }
 .star { color: var(--star); display: inline-grid; }
+.share-badge { display: inline-grid; color: var(--primary-ink); margin-left: 2px; }
 .entry-items { padding: 0 0 10px 38px; display: flex; flex-direction: column; align-items: flex-start; animation: open .2s ease; }
 @keyframes open { from { opacity: 0; transform: translateY(-4px); } }
 .entry-desc { margin: 0 0 4px; color: var(--muted); font-size: 13.5px; white-space: pre-wrap; }
@@ -327,7 +328,7 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
 .agenda { width: 100%; max-width: 760px; align-self: center; display: flex; flex-direction: column; }
 .agenda .agenda-day { margin-top: 0; }
 .agenda .agenda-day:first-child { margin-top: 4px; }
-.agenda .rows-label { --band: color-mix(in srgb, var(--primary) 13%, var(--surface)); display: flex; align-items: center; gap: 8px; padding: 3px 0; line-height: 1.5; color: var(--fg);
+.agenda .rows-label { --band: color-mix(in srgb, var(--primary) 7%, var(--bg)); display: flex; align-items: center; gap: 8px; padding: 3px 0; line-height: 1.5; color: var(--fg);
   background: var(--band); box-shadow: 0 0 0 100vmax var(--band); clip-path: inset(0 -100vmax); position: sticky; top: 0; z-index: 2; }
 .muted-date { font-weight: 500; letter-spacing: .02em; text-transform: none; font-size: 12px; opacity: .8; }
 .more-btn { align-self: center; margin: 18px 0 4px; }
