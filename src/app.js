@@ -1181,7 +1181,6 @@
         uid: fu.uid, name: u.name, email: u.email || '', emailLower: (u.email || '').toLowerCase(), photoUrl: u.photo || data.photoUrl || null,
         language: u.settings.lang, isDarkMode: isDark(), settings: clean(u.settings), lastLogIn: ts, ...(snap.exists ? {} : { creationDate: ts }),
       }, { merge: true });
-      Cloud.legacy = !data.migratedAt && Array.isArray(data.reminders) && data.reminders.length ? data.reminders : null;
       await loadPartner();
     } catch (e) { cloudError(e); }
     if (Cloud.unsub) Cloud.unsub();
@@ -1191,50 +1190,10 @@
       qs.forEach((doc) => { const it = { ...doc.data(), uid: doc.id }; tasks.push(it); last[it.uid] = taskJson(it); });
       const mine = DB.users[fu.uid]; if (!mine) return;
       mine.tasks = tasks; Cloud.last = last;
-      if (Cloud.firstSnap) { Cloud.firstSnap = false; migrateLegacy(mine); importLocal(mine); }
+      if (Cloud.firstSnap) { Cloud.firstSnap = false; importLocal(mine); }
       save(false); refresh();
     }, (e) => cloudError(e));
     render();
-  }
-  // old Android app kept reminders as an array inside users/{uid}; turn each one into a document in `reminders`
-  function legacyToItem(r, owner) {
-    const toDate = (v) => (v && v.toDate ? v.toDate() : typeof v === 'string' ? new Date(v) : v && v.seconds ? new Date(v.seconds * 1000) : null);
-    const okDate = (d) => d && !isNaN(d.getTime());
-    const hhmm = (str) => {
-      const m = String(str || '').trim().match(/^(\d{1,2}):(\d{2})\s*([AaPp][Mm])?$/); if (!m) return '';
-      let h = Number(m[1]); const min = Number(m[2]); const ap = (m[3] || '').toUpperCase();
-      if (ap === 'PM' && h !== 12) h += 12; if (ap === 'AM' && h === 12) h = 0; return `${pad(h)}:${pad(min)}`;
-    };
-    const once = toDate(r.oneTimeDate); const start = toDate(r.startDate) || toDate(r.createdAt) || toDate(r.creationDate);
-    const dayIdx = { monday: 0, tuesday: 1, wednesday: 2, thursday: 3, friday: 4, saturday: 5, sunday: 6 };
-    let repeat = { type: 'none' }; let date = '';
-    switch (r.repetitionTime) {
-      case 'daily': repeat = { type: 'interval', every: 1, unit: 'day' }; break;
-      case 'weekly': repeat = { type: 'weekdays', days: [dayIdx[String(r.dayOfWeek || '').toLowerCase()] ?? weekdayIdx(okDate(start) ? start : new Date())] }; break;
-      case 'monthly': repeat = { type: 'monthday', monthDay: Number(r.dayOfMonth) || (okDate(start) ? start.getDate() : 1) }; break;
-      case 'yearly': repeat = { type: 'interval', every: 1, unit: 'year' }; if (okDate(once)) date = dkey(once); break;
-      case 'custom': repeat = { type: 'weekdays', days: (r.customDays || []).map((n) => (Number(n) + 6) % 7).filter((n) => n >= 0 && n < 7) }; if (!repeat.days.length) repeat = { type: 'none' }; break;
-      default: if (okDate(once)) date = dkey(once);
-    }
-    if (repeat.type !== 'none' && !date) date = okDate(start) ? dkey(start) : dkey(todayD());
-    const time = hhmm(r.notificationTime);
-    const done = {};
-    if (repeat.type === 'none' && (r.status === 'completed' || r.completed === true)) done[date || 'any'] = date ? true : dkey(todayD());
-    return clean({
-      uid: uuid(), kind: 'task', type: r.type === 'event' ? 'event' : 'task', name: String(r.name || '').trim() || t('unnamedReminder'),
-      description: [r.description, r.location, r.meetingLink].filter(Boolean).join('\n'), date, time: r.hasNotification === false ? '' : time,
-      important: !!r.isImportant, repeat, items: [], done, checks: {}, owner, members: [owner],
-      createdAt: (okDate(start) ? start : new Date()).toISOString(), legacyUid: r.uid || null, source: r.source || 'android',
-    });
-  }
-  async function migrateLegacy(u) {
-    const old = Cloud.legacy; if (!old) return;
-    Cloud.legacy = null;
-    const have = new Set((u.tasks || []).map((x) => x.legacyUid).filter(Boolean));
-    const fresh = old.filter((r) => r && typeof r === 'object' && !(r.uid && have.has(r.uid))).map((r) => legacyToItem(r, u.uid));
-    if (fresh.length) { u.tasks = (u.tasks || []).concat(fresh); save(); }
-    try { await Cloud.db.collection(PEOPLE).doc(u.uid).set({ migratedAt: window.firebase.firestore.FieldValue.serverTimestamp() }, { merge: true }); } catch (e) { cloudError(e); }
-    if (fresh.length) toast(t('migratedOld', { n: fresh.length }), { icon: 'cloud_done', ms: 5000 });
   }
   async function importLocal(u) {
     // first Google sign-in: bring over what was made on this device before (examples excluded)

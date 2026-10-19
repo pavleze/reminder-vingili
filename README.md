@@ -41,12 +41,10 @@ Demo nalog: `demo@reminder.app` / `demo123`
 - **Partner:** Profil → Partner → email partnera (partner mora bar jednom da se prijavi). Posle toga forma ima prekidač „Podeli sa …“; podeljene stavke vide i menjaju oboje (ikonica 👥 pored naziva).
 
 Baza je **ista kao kod stare Android aplikacije** (Firebase projekat `reminder-c29a5`):
-- `users/{uid}` – postojeći profil iz stare aplikacije (ime, email, slika, jezik, tamna tema); web dodaje `settings`, `emailLower`, `partnerUid`, `migratedAt`
+- `users/{uid}` – postojeći profil iz stare aplikacije (ime, email, slika, jezik, tamna tema); web dodaje `settings`, `emailLower`, `partnerUid`
 - `reminders/{id}` – jedna stavka po dokumentu (zadatak / događaj / lista) + `owner` i `members` (ko je vidi)
 
-**Prenos iz stare aplikacije:** pri prvoj prijavi, podsetnici iz niza `users/{uid}.reminders` automatski se pretvaraju u nove stavke
-(dnevno → svaki dan, nedeljno → dan u nedelji, mesečno → dan u mesecu, godišnje → svake godine, jednokratno → datum; vreme, tip, „važno“ i završeni jednokratni se zadržavaju; lokacija ide u belešku).
-Stari niz ostaje netaknut, a `migratedAt` sprečava dupli prenos.
+Stari podsetnici iz niza `users/{uid}.reminders` se **ne prenose** u novu aplikaciju (ostaju netaknuti za staru).
 
 ### Jednokratno podešavanje (Firebase projekat `reminder-c29a5`)
 
