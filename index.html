@@ -354,6 +354,12 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
 .agenda .agenda-day:first-child { margin-top: 4px; }
 .agenda .rows-label { --band: color-mix(in srgb, var(--primary) 7%, var(--bg)); display: flex; align-items: center; gap: 8px; padding: 3px 0; line-height: 1.5; color: var(--fg);
   background: var(--band); box-shadow: 0 0 0 100vmax var(--band); clip-path: inset(0 -100vmax); position: sticky; top: 0; z-index: 2; }
+/* home section titles: same light band as the calendar list */
+.home-rows > .rows-label, .home-rows > .label-row { --band: color-mix(in srgb, var(--primary) 7%, var(--bg)); background: var(--band); box-shadow: 0 0 0 100vmax var(--band); clip-path: inset(0 -100vmax); }
+.home-rows > .rows-label { display: flex; align-items: center; gap: 8px; padding: 3px 0; line-height: 1.5; color: var(--fg); }
+.home-rows > .label-row { align-items: center; padding: 3px 0; }
+.home-rows > .label-row .rows-label { padding: 0; line-height: 1.5; color: var(--fg); }
+.home-rows > .label-row .fpill { padding-block: 2px; }
 .muted-date { font-weight: 500; letter-spacing: .02em; text-transform: none; font-size: 12px; opacity: .8; }
 .more-btn { align-self: center; margin: 18px 0 4px; }
 .content.wide { max-width: none; padding-bottom: 96px; gap: 12px; }

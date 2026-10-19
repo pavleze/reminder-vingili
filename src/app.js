@@ -518,16 +518,16 @@
         </div>
         ${totalN ? `<div class="ring ring-min" style="--p:${pct}" role="img" aria-label="${esc(t('ofDone', { a: doneN, b: totalN }))} ${esc(t('doneToday'))}"><div><b class="tnum">${doneN}/${totalN}</b><small>${esc(t('doneToday'))}</small></div></div>` : ''}
       </header>
-      <section class="rows" aria-labelledby="today-h">
+      <section class="rows home-rows" aria-labelledby="today-h">
         <div class="label-row"><h3 class="rows-label"><span class="d-long">${esc(cap(fmtDate(d, { weekday: 'long', day: 'numeric', month: 'long' })))}</span><span class="d-short">${esc(cap(fmtDate(d, { weekday: 'short', day: 'numeric', month: 'short' })))}</span></h3>${filterBar}</div>
         ${overdueF.map((it) => entryCard(it, fromKey(it.date), { overdue: true })).join('')}
         ${todayOpen.length ? todayOpen.map((it) => entryCard(it, d)).join('') : overdueF.length ? '' : `<p class="quiet">${esc(today.length ? t('allDoneToday') : t('nothingToday'))}</p>`}
       </section>
-      ${floatOpen.length ? `<section class="rows" aria-labelledby="nodate-h">
+      ${floatOpen.length ? `<section class="rows home-rows" aria-labelledby="nodate-h">
         <h3 class="rows-label" id="nodate-h">${esc(t('noDateSection'))}</h3>
         ${floatOpen.map((it) => entryCard(it, d)).join('')}
       </section>` : ''}
-      ${doneList.length + lateDoneF.length ? `<section class="rows done-sec" aria-labelledby="done-h">
+      ${doneList.length + lateDoneF.length ? `<section class="rows home-rows done-sec" aria-labelledby="done-h">
         <h3 class="rows-label" id="done-h">${esc(t('doneSection'))} <span class="muted-date tnum">${doneList.length + lateDoneF.length}</span></h3>
         ${lateDoneF.map((it) => entryCard(it, fromKey(it.date))).join('')}${doneList.map((it) => entryCard(it, d)).join('')}
       </section>` : ''}
