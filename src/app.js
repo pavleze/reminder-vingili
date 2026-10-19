@@ -753,11 +753,11 @@
     function drawWhen() {
       const showTime = st.hasDate || st.rep.type !== 'none';
       const dateHtml = st.hasDate
-        ? `<div class="field"><button type="button" class="icon-btn pick-ic" data-open-picker="ef-date" aria-label="${esc(t('changeDate'))}">${icon('event')}</button><label for="ef-date">${esc(t('date'))}</label>
+        ? `<div class="field picker-field"><span class="pick-ic" aria-hidden="true">${icon('event')}</span><label for="ef-date">${esc(t('date'))}</label>
             <input id="ef-date" type="date" value="${esc(st.date)}">
             <button type="button" class="icon-btn" id="ef-date-clear" aria-label="${esc(t('removeDate'))}">${icon('close', 'sm')}</button></div>`
         : `<button type="button" class="btn btn-outline add-date" id="ef-add-date">${icon('event')}${esc(t('addDate'))}</button>`;
-      const timeHtml = showTime ? `<div class="field"><button type="button" class="icon-btn pick-ic" data-open-picker="ef-time" aria-label="${esc(t('timeOptional'))}">${icon('schedule')}</button><label for="ef-time">${esc(t('timeOptional'))}</label><input id="ef-time" type="time" value="${esc(st.time)}">
+      const timeHtml = showTime ? `<div class="field picker-field"><span class="pick-ic" aria-hidden="true">${icon('schedule')}</span><label for="ef-time">${esc(t('timeOptional'))}</label><input id="ef-time" type="time" value="${esc(st.time)}">
             <button type="button" class="icon-btn" id="ef-time-clear" aria-label="${esc(t('clearTime'))}" ${st.time ? '' : 'hidden'}>${icon('close', 'sm')}</button></div>` : '';
       $('#ef-when').innerHTML = `<div class="field-row dt-row ${showTime ? '' : 'one'}">${dateHtml}${timeHtml}</div>`;
     }
@@ -785,7 +785,6 @@
       if (e.target.closest('#ef-time-clear')) { st.time = ''; $('#ef-time').value = ''; $('#ef-time-clear').hidden = true; }
       if (e.target.closest('#ef-add-date')) { st.hasDate = true; if (!st.date) st.date = dkey(T); drawWhen(); openPicker('ef-date'); return; }
       if (e.target.closest('#ef-date-clear')) { st.hasDate = false; st.date = ''; drawWhen(); return; }
-      const op = e.target.closest('[data-open-picker]'); if (op) { openPicker(op.dataset.openPicker); return; }
     });
     form.addEventListener('input', (e) => {
       if (e.target.dataset.i != null) st.items[Number(e.target.dataset.i)].text = e.target.value;

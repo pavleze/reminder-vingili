@@ -288,7 +288,11 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
 .day-pill[aria-pressed="true"] { background: var(--primary); border-color: var(--primary); color: var(--on-primary); }
 @media (max-width: 520px) { .dt-row { grid-template-columns: minmax(0, 1fr); } }
 .dt-row.one { grid-template-columns: minmax(0, 1fr); }
-.field > .pick-ic { margin-left: 4px; color: var(--primary-ink); }
+.picker-field { cursor: pointer; }
+.picker-field .pick-ic { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--primary-ink); pointer-events: none; display: grid; }
+.picker-field input { position: relative; padding-left: 50px; cursor: pointer; }
+/* the browser's own picker button stretches over the whole field, so any tap (icon included) opens the built-in calendar/clock */
+.picker-field input::-webkit-calendar-picker-indicator { position: absolute; inset: 0; width: auto; height: auto; margin: 0; padding: 0; opacity: 0; cursor: pointer; }
 .add-date { justify-content: flex-start; min-height: 52px; border-style: dashed; border-width: 1.5px; }
 
 /* Calendar */
