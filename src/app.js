@@ -28,7 +28,7 @@
       partnerHelp: 'Your partner needs to sign in with Google once. Then enter their email here.', linkBtn: 'Link', unlinkBtn: 'Remove', partnerSelf: "That's your own email",
       partnerNotFound: "No account with that email yet. Ask them to sign in with Google first.", partnerLinked: 'Linked with {name}', shareWith: 'Share with {name}',
       sharedBy: 'Shared by {name}', sharedWith: 'Shared with {name}', partnerLinkFirst: 'Link a partner in Profile to share items', signInGoogleHint: 'Sign in to sync across devices and share with your partner',
-      filterAll: 'All', filterTasks: 'Tasks', filterEvents: 'Events', lateDay: '{n} day late', lateDays: '{n} days late', allDoneToday: 'All done for today', nothingToday: 'Nothing planned for today', deleteEntry: 'Delete', deleteEntryConfirm: 'Delete “{name}”?',
+      repUnits: 'day|days|days;week|weeks|weeks;month|months|months;year|years|years', filterAll: 'All', filterTasks: 'Tasks', filterEvents: 'Events', lateDay: '{n} day late', lateDays: '{n} days late', allDoneToday: 'All done for today', nothingToday: 'Nothing planned for today', deleteEntry: 'Delete', deleteEntryConfirm: 'Delete “{name}”?',
       welcomeSubtitleAuth: 'Sign in to your account', fullName: 'Full Name', confirmPassword: 'Confirm Password',
       noAccount: "Don't have an account?", registerNow: 'Register', agreeTerms: 'I agree to the Terms of Service and Privacy Policy',
       fillAllFields: 'Please fill all fields', acceptTerms: 'Please accept terms and conditions', wrongCredentials: 'Wrong email or password',
@@ -65,7 +65,7 @@
       partnerHelp: 'Partner treba jednom da se prijavi preko Google-a. Zatim ovde unesite njegov email.', linkBtn: 'Poveži', unlinkBtn: 'Ukloni', partnerSelf: 'To je vaš email',
       partnerNotFound: 'Nema naloga sa tim emailom. Neka se partner prvo prijavi preko Google-a.', partnerLinked: 'Povezani ste sa: {name}', shareWith: 'Podeli sa: {name}',
       sharedBy: 'Podelio/la: {name}', sharedWith: 'Podeljeno sa: {name}', partnerLinkFirst: 'Povežite partnera u Profilu da biste delili stavke', signInGoogleHint: 'Prijavite se da biste imali iste podatke na svim uređajima i delili sa partnerom',
-      filterAll: 'Sve', filterTasks: 'Zadaci', filterEvents: 'Događaji', lateDay: 'kasni {n} dan', lateDays: 'kasni {n} dana', allDoneToday: 'Sve za danas je urađeno', nothingToday: 'Za danas nema ništa', deleteEntry: 'Obriši', deleteEntryConfirm: 'Obrisati „{name}“?',
+      repUnits: 'dan|dana|dana;nedelja|nedelje|nedelja;mesec|meseca|meseci;godina|godine|godina', filterAll: 'Sve', filterTasks: 'Zadaci', filterEvents: 'Događaji', lateDay: 'kasni {n} dan', lateDays: 'kasni {n} dana', allDoneToday: 'Sve za danas je urađeno', nothingToday: 'Za danas nema ništa', deleteEntry: 'Obriši', deleteEntryConfirm: 'Obrisati „{name}“?',
       welcomeSubtitleAuth: 'Prijavite se na svoj nalog', fullName: 'Ime i prezime', confirmPassword: 'Potvrdite lozinku',
       noAccount: 'Nemate nalog?', registerNow: 'Registrujte se', agreeTerms: 'Prihvatam Uslove korišćenja i Politiku privatnosti',
       fillAllFields: 'Popunite sva polja', acceptTerms: 'Prihvatite uslove korišćenja', wrongCredentials: 'Pogrešan email ili lozinka',
@@ -278,6 +278,16 @@
     if (r.type === 'monthday') return t('monthDayEvery', { n: r.monthDay });
     return t('oneTime');
   }
+  // short label shown on the right of a row for "every N days/weeks/…" repeats, e.g. "2 nedelje"
+  function repeatShort(it) {
+    const r = it.repeat || {};
+    if (r.type !== 'interval') return '';
+    const n = Math.max(1, Number(r.every) || 1); const u = r.unit || 'day';
+    if (n === 1) return t({ day: 'everyDay', week: 'everyWeek', month: 'everyMonth', year: 'everyYear' }[u]);
+    const forms = t('repUnits').split(';')[['day', 'week', 'month', 'year'].indexOf(u)].split('|');
+    const few = n % 10 >= 2 && n % 10 <= 4 && !(n % 100 >= 12 && n % 100 <= 14);
+    return `${n} ${n % 10 === 1 && n % 100 !== 11 ? forms[0] : few ? forms[1] : forms[2]}`;
+  }
 
   /* ================= Theme ================= */
   const mql = window.matchMedia ? window.matchMedia('(prefers-color-scheme: dark)') : null;
@@ -451,11 +461,13 @@
       const n = Math.round((todayD() - d) / 864e5);
       late = `<span class="time late-tag">(${esc(t(n % 10 === 1 && n % 100 !== 11 ? 'lateDay' : 'lateDays', { n }))})</span>`;
     }
-    if (it.repeat && it.repeat.type !== 'none') subParts.push(repeatText(it));
+    const rep = repeatShort(it);
+    if (it.repeat && it.repeat.type !== 'none' && !rep) subParts.push(repeatText(it));
     if (it.description && !isList) subParts.push(it.description.split('\n')[0]);
     const sub = subParts.length ? `<span class="sub">${esc(subParts.join(' · '))}</span>` : '';
     const star = it.important ? `<span class="star" aria-label="${esc(t('important'))}">${icon('star', 'fill xs')}</span>` : '';
-    const time = late || (it.time && !isFloating(it) ? `<span class="time tnum">${esc(fmtTime(it.time))}</span>` : '');
+    const repTag = rep ? `<span class="rep-tag">${icon('repeat', 'xs')}${esc(rep)}</span>` : '';
+    const time = late || (repTag || it.time && !isFloating(it) ? `<span class="time tnum">${repTag}${it.time && !isFloating(it) ? esc(fmtTime(it.time)) : ''}</span>` : '');
     if (isEvent(it) && !isList) {
       const past = it.time && sameDay(d, todayD()) && timeToMin(it.time) < new Date().getHours() * 60 + new Date().getMinutes();
       return `<div class="entry event ${past || d < todayD() ? 'past' : ''}">

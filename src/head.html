@@ -275,7 +275,9 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
 .entry .body { flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: flex-start; gap: 2px; border: 0; background: none; padding: 14px 0; text-align: left; color: inherit; }
 .entry .title { font-size: 16px; font-weight: 500; max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: inline-flex; align-items: center; gap: 6px; }
 .entry .sub { font-size: 12.5px; color: var(--muted); max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.entry .time { font-size: 13.5px; color: var(--muted); flex: none; }
+.entry .time { font-size: 13.5px; color: var(--muted); flex: none; display: inline-flex; align-items: center; gap: 10px; }
+.rep-tag { display: inline-flex; align-items: center; gap: 3px; font-size: 12px; white-space: nowrap; }
+.rep-tag .ms { font-size: 14px; }
 .entry.done .title { text-decoration: line-through; color: var(--muted); }
 .tick { flex: none; width: 24px; height: 24px; border-radius: 50%; border: 1.5px solid color-mix(in srgb, var(--fg) 35%, transparent); background: transparent; display: grid; place-items: center; padding: 0; color: var(--on-primary); transition: background .15s, border-color .15s; }
 .tick:hover { border-color: var(--primary-ink); }
