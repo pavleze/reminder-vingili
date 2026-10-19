@@ -323,14 +323,14 @@
     return `<nav class="rail" aria-label="Main">
       <div class="rail-logo"><img src="assets/logo.svg" alt="Reminder"></div>
       <button class="btn btn-primary rail-add" data-a="add">${icon('add')}${esc(t('addReminder'))}</button>
-      ${item('home', 'home', t('navHome'))}${item('reminders', 'alarm', t('navReminders'))}${item('profile', 'person', t('navProfile'))}
+      ${item('home', 'home', t('navHome'))}${item('reminders', 'calendar_month', t('calendarTab'))}${item('profile', 'person', t('navProfile'))}
       <div class="spacer"></div>
       <div class="rail-user">${avatarHtml(u, 'sm')}<div><b>${esc(u.name || t('noName'))}</b><small>${esc(u.email)}</small></div></div>
     </nav>`;
   }
   function renderBottomNav() {
     const item = (tab, ic, label) => `<button data-a="tab" data-tab="${tab}" ${ui.tab === tab ? 'aria-current="page"' : ''}><span class="pill">${icon(ic, ui.tab === tab ? 'fill' : '')}</span>${esc(label)}</button>`;
-    return `<nav class="bottomnav" aria-label="Main">${item('home', 'home', t('navHome'))}${item('reminders', 'alarm', t('navReminders'))}${item('profile', 'person', t('navProfile'))}</nav>`;
+    return `<nav class="bottomnav" aria-label="Main">${item('home', 'home', t('navHome'))}${item('reminders', 'calendar_month', t('calendarTab'))}${item('profile', 'person', t('navProfile'))}</nav>`;
   }
   function avatarHtml(u, size = '') {
     if (u && u.photo) return `<div class="avatar ${size}"><img src="${esc(u.photo)}" alt=""></div>`;
@@ -441,8 +441,8 @@
       <button role="tab" aria-selected="${ui.remTab === 'list'}" data-a="rem-tab" data-v="list">${icon('list')}${esc(t('listTab'))}</button></div>`;
     const body = ui.remTab === 'calendar' ? renderCalendar(filtered()) : renderList(filtered(), true);
     return {
-      title: t('remindersTitle'),
-      html: `<div class="chips-row" role="group" aria-label="${esc(t('category'))}">${chips}</div>${tabs}${body}`,
+      title: t('calendarTab'),
+      html: `${tabs}${body}`,
       fabs: `<button class="fab" data-a="add" aria-label="${esc(t('addReminder'))}">${icon('add')}<span class="fab-label">${esc(t('addReminder'))}</span></button>`,
       actions: avatarAction(),
     };
