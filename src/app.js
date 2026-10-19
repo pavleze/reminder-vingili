@@ -298,6 +298,26 @@
     auth: 'login', tab: 'home', stack: [], cat: 'All', remTab: 'calendar', calMonth: todayD(), expanded: new Set(), q: '',
     showPw: {}, splash: false,
   };
+  // remember where the user was, so a reload (or a new version) reopens the same screen
+  const UI_KEY = 'todays-ui';
+  function saveUi() {
+    try {
+      localStorage.setItem(UI_KEY, JSON.stringify({ tab: ui.tab, stack: ui.stack, remTab: ui.remTab, calMonth: dkey(ui.calMonth), homeFilter: ui.homeFilter, agendaDays: ui.agendaDays, expanded: [...ui.expanded], scroll: ($('.scroller') || {}).scrollTop || 0 }));
+    } catch (e) { /* storage unavailable */ }
+  }
+  function restoreUi() {
+    let v = null;
+    try { v = (window.claude && window.claude.hot && window.claude.hot.data && window.claude.hot.data.ui) || JSON.parse(localStorage.getItem(UI_KEY) || 'null'); } catch (e) { v = null; }
+    if (!v) return 0;
+    if (['home', 'reminders', 'profile'].includes(v.tab)) ui.tab = v.tab;
+    if (Array.isArray(v.stack)) ui.stack = v.stack.filter((x) => x && SCREENS[x.name]);
+    if (v.remTab) ui.remTab = v.remTab;
+    if (v.calMonth) ui.calMonth = fromKey(v.calMonth);
+    if (v.homeFilter) ui.homeFilter = v.homeFilter;
+    if (v.agendaDays) ui.agendaDays = v.agendaDays;
+    if (Array.isArray(v.expanded)) ui.expanded = new Set(v.expanded);
+    return v.scroll || 0;
+  }
   function go(name, params = {}) { ui.stack.push({ name, params }); render(); scrollTop(); }
   function back() { ui.stack.pop(); render(); }
   function setTab(tab) { ui.tab = tab; ui.stack = []; render(); scrollTop(); }
@@ -339,6 +359,7 @@
         ${view.fabs ? `<div class="fabs">${view.fabs}</div>` : ''}
       </div>`;
     bindAfterRender();
+    saveUi();
   }
   function renderRail() {
     const u = me();
@@ -1159,7 +1180,12 @@
     DB.seeded = true; const u = seedDemo(); hashPw('demo123').then((h) => { u.passHash = h; save(); });
     DB.session = u.uid; u.lastLogin = new Date().toISOString(); save();
   }
+  const startScroll = restoreUi();
   render();
+  if (startScroll) { const sc = $('.scroller'); if (sc) sc.scrollTop = startScroll; }
+  let scrollT = null;
+  document.addEventListener('scroll', () => { clearTimeout(scrollT); scrollT = setTimeout(saveUi, 200); }, true);
+  try { if (window.claude && window.claude.hot && window.claude.hot.snapshot) window.claude.hot.snapshot(() => { saveUi(); return { ui: JSON.parse(localStorage.getItem(UI_KEY) || 'null') }; }); } catch (e) { /* not in a viewer */ }
   setInterval(checkDue, 15000);
   setTimeout(checkDue, 4000);
   document.addEventListener('visibilitychange', () => { if (!document.hidden) { checkDue(); if (!ui.splash && !modalOpen()) render(); } });
