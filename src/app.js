@@ -437,9 +437,11 @@
     const hasSamples = entries().some((it) => it.sample);
     const html = `
       <header class="day-hero">
-        <span class="eyebrow">${esc(cap(fmtDate(d, { weekday: 'long', day: 'numeric', month: 'long' })))}</span>
-        <div class="day-title"><h2 id="today-h">${esc(t('today'))}</h2>${today.length ? `<span class="count tnum">${doneN}/${today.length}</span>` : ''}</div>
-        ${today.length ? `<div class="thin-bar" role="progressbar" aria-valuemin="0" aria-valuemax="${today.length}" aria-valuenow="${doneN}" aria-label="${esc(t('doneToday'))}"><i style="width:${pct}%"></i></div>` : ''}
+        <div class="day-head-txt">
+          <span class="eyebrow">${esc(cap(fmtDate(d, { weekday: 'long', day: 'numeric', month: 'long' })))}</span>
+          <h2 id="today-h">${esc(t('today'))}</h2>
+        </div>
+        ${today.length ? `<div class="ring ring-min" style="--p:${pct}" role="img" aria-label="${esc(t('ofDone', { a: doneN, b: today.length }))} ${esc(t('doneToday'))}"><div><b class="tnum">${doneN}/${today.length}</b><small>${esc(t('doneToday'))}</small></div></div>` : ''}
       </header>
       <section class="rows" aria-labelledby="today-h">
         ${today.length ? today.map((it) => entryCard(it, d)).join('') : `<p class="quiet">${esc(t('nothingToday'))}</p>`}
