@@ -319,7 +319,7 @@
             <h1>${esc(view.title)}</h1>
             ${view.actions || ''}
           </header>
-          <div class="scroller"><main class="content ${view.narrow ? 'narrow' : ''}">${view.html}</main></div>
+          <div class="scroller"><main class="content ${view.narrow ? 'narrow' : ''} ${view.wide ? 'wide' : ''}">${view.html}</main></div>
           ${renderBottomNav()}
         </div>
         ${view.fabs ? `<div class="fabs">${view.fabs}</div>` : ''}
@@ -474,7 +474,7 @@
   const entryColor = (it) => (it.kind === 'list' ? LIST_COLOR : isEvent(it) ? EVENT_COLOR : BRAND);
   function screenReminders() {
     return {
-      title: t('calendarTab'), html: renderCalendar(entries()),
+      title: t('calendarTab'), html: renderCalendar(entries()), wide: true,
       fabs: `<button class="fab" data-a="add" aria-label="${esc(t('addReminder'))}">${icon('add')}<span class="fab-label">${esc(t('addReminder'))}</span></button>`,
       actions: avatarAction(),
     };
@@ -491,9 +491,8 @@
       const label = `${fmtDate(d, { weekday: 'long', day: 'numeric', month: 'long' })}, ${items.length}`;
       cells += `<button class="cal-cell ${isT ? 'today' : ''}" data-a="day" data-d="${dkey(d)}" aria-label="${esc(label)}">
         <span class="n tnum">${n}</span>
-        <span class="items">${items.slice(0, 3).map((it) => `<span class="it ${isDoneOn(it, d) ? 'done' : ''}"><span class="dot" style="background:${entryColor(it)}"></span><span>${esc(it.name)}</span></span>`).join('')}</span>
-        ${items.length > 3 ? `<span class="more">${esc(t('moreN', { n: items.length - 3 }))}</span>` : ''}
-        <span class="dots">${items.slice(0, 4).map((it) => `<span class="dot" style="background:${entryColor(it)}"></span>`).join('')}</span>
+        <span class="items">${items.slice(0, 4).map((it) => `<span class="it ${isDoneOn(it, d) ? 'done' : ''}" style="--c:${entryColor(it)}">${esc(it.name)}</span>`).join('')}</span>
+        ${items.length > 4 ? `<span class="more">${esc(t('moreN', { n: items.length - 4 }))}</span>` : ''}
       </button>`;
     }
     const monthTitle = new Intl.DateTimeFormat(loc(), { month: 'long', year: 'numeric' }).format(m);
