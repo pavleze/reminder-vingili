@@ -1121,8 +1121,11 @@
       await loadScript(base + 'firebase-app-compat.js');
       await Promise.all([loadScript(base + 'firebase-auth-compat.js'), loadScript(base + 'firebase-firestore-compat.js')]);
       const cfg = { ...FIREBASE_CONFIG };
-      // On our own domain the /__/auth/* pages are proxied to Firebase (vercel.json), which keeps Google sign-in working on iPhone.
-      if (!/^(localhost|127\.)/.test(location.hostname)) cfg.authDomain = location.host;
+      // In a normal browser the default Firebase domain is used (popup sign-in, nothing extra to configure).
+      // In the iPhone home-screen app a redirect is needed, so there we use our own domain: /__/auth/* is proxied
+      // to Firebase by vercel.json (requires https://<domain>/__/auth/handler as an OAuth redirect URI).
+      const standaloneApp = (window.matchMedia && matchMedia('(display-mode: standalone)').matches) || navigator.standalone;
+      if (standaloneApp && !/^(localhost|127\.)/.test(location.hostname)) cfg.authDomain = location.host;
       Cloud.fb = window.firebase.initializeApp(cfg);
       Cloud.db = window.firebase.firestore();
       Cloud.on = true;
