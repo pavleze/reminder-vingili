@@ -500,17 +500,16 @@
     const T = todayD(); const span = ui.agendaDays || 30; let html = '';
     const seen = new Set(); // repeating entries appear only at their next upcoming occurrence
     const isRepeating = (it) => it.repeat && it.repeat.type !== 'none';
-    for (let i = 0; i < span; i++) {
+    for (let i = 1; i <= span; i++) { // starts tomorrow: today lives on Home
       const d = addDays(T, i);
       const items = entriesOn(d).filter((it) => {
         if (!isRepeating(it)) return true;
         if (seen.has(it.uid)) return false;
-        if (i === 0 && !isEvent(it) && isDoneOn(it, d)) return false; // already done today → show the next one
         seen.add(it.uid); return true;
       });
       if (!items.length) continue;
-      const label = i === 0 ? t('today') : i === 1 ? t('tomorrow') : cap(fmtDate(d, { weekday: 'long', day: 'numeric', month: 'long' }));
-      html += `<section class="rows agenda-day"><h3 class="rows-label">${esc(label)}${i <= 1 ? ` <span class="muted-date">${esc(fmtDate(d, { day: 'numeric', month: 'long' }))}</span>` : ''}</h3>${items.map((it) => entryCard(it, d)).join('')}</section>`;
+      const label = i === 1 ? t('tomorrow') : cap(fmtDate(d, { weekday: 'long', day: 'numeric', month: 'long' }));
+      html += `<section class="rows agenda-day"><h3 class="rows-label">${esc(label)}${i === 1 ? ` <span class="muted-date">${esc(fmtDate(d, { day: 'numeric', month: 'long' }))}</span>` : ''}</h3>${items.map((it) => entryCard(it, d)).join('')}</section>`;
     }
     const floating = entries().filter((it) => isFloating(it) && floatingVisible(it));
     return `<div class="agenda">
