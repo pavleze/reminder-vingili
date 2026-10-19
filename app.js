@@ -416,7 +416,7 @@
       ${hasSamples ? `<div class="banner">${icon('info')}<p>${esc(t('sampleData'))}</p><button class="btn btn-text btn-sm" data-a="clear-samples">${esc(t('clearSamples'))}</button></div>` : ''}
       <div class="home-grid">
         <section class="stack" aria-labelledby="today-h">
-          <div class="section-head"><h2 id="today-h">${esc(t('todaysUpcomingReminders'))}</h2><span class="meta">${esc(cap(fmtDate(d, { day: 'numeric', month: 'long', year: 'numeric' })))}</span></div>
+          <div class="section-head"><h2 id="today-h">${esc(t('today'))}</h2><span class="meta">${esc(cap(fmtDate(d, { day: 'numeric', month: 'long', year: 'numeric' })))}</span></div>
           ${today.length ? today.map(todayCard).join('') : `<div class="empty">${icon('notifications', 'xl')}<span>${esc(t('noRemindersToday'))}</span><button class="btn btn-tonal btn-sm" data-a="add">${icon('add', 'sm')}${esc(t('addReminder'))}</button></div>`}
         </section>
         <section class="stack" aria-labelledby="cat-h">
