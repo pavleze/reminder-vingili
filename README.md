@@ -12,13 +12,24 @@ pa otvori http://localhost:8080 (ili dupli klik na `index.html`).
 Demo nalog: `demo@reminder.app` / `demo123`
 
 ## Šta je unutra
-- Splash ekran, prijava, registracija, zaboravljena lozinka
-- Početna: dobrodošlica, napredak za danas, današnji podsetnici, 9 kategorija
-- Podsetnici: filter po kategoriji, kalendar (mesec) i lista sa pretragom, proširive kartice
-- Dodavanje/izmena: tip, prioritet, kategorija, ponavljanje (dnevno/nedeljno/mesečno/godišnje/jednokratno), lokacija, vreme, obaveštenje, važno
-- Profil: Nalog (podaci + statistika i grafikon, sigurnost i promena lozinke, povezani nalozi, povratne informacije, brisanje naloga), Obaveštenja, Jezik (7 jezika iz originalnih .arb fajlova), Izgled (tamni režim, 22 primarne boje, smanjene animacije), Zasluge
-- Obaveštenja u aplikaciji + sistemska obaveštenja pregledača, zvuk, odlaganje 10 min
-- Uvoz kalendara iz .ics fajla (Google Calendar, Outlook, Apple)
+- Prijava, registracija, zaboravljena lozinka (podaci lokalno u pregledaču za sada)
+- **Dodavanje (+):** prvo biraš **Lista** ili **Task**
+  - zajedničko: naziv, opcioni opis, datum, opciono vreme (ako postoji, stiže obaveštenje), važno
+  - lista: stavke koje se čekiraju; svako ponavljanje kreće sa praznim čekovima
+  - ponavljanje: ne ponavlja se / na svakih N dana, nedelja ili meseci / određenim danima u nedelji / određenog dana u mesecu
+- **Početna:** današnji taskovi i liste jedno ispod drugog (po vremenu, bez vremena na kraju); liste su skupljene, klik ih otvara
+- **Kalendar:** mesečni prikaz; klik na dan otvara isti prikaz kao početna za taj dan
+- **Profil:** podaci i statistika, sigurnost, povezani nalozi, povratne informacije, brisanje naloga, obaveštenja, jezik (7), izgled (tamni režim)
+
+## Model podataka (po korisniku, `tasks[]`)
+```
+{ uid, kind: 'task' | 'list', name, description, date: 'YYYY-MM-DD', time: 'HH:MM' | '',
+  important, repeat: { type: 'none' | 'interval' | 'weekdays' | 'monthday', every, unit: 'day'|'week'|'month', days: [0-6, pon=0], monthDay },
+  items: [{ id, text }],            // samo za listu
+  done:   { 'YYYY-MM-DD': true },   // task urađen tog dana
+  checks: { 'YYYY-MM-DD': [itemId] } // čekirane stavke liste tog dana
+}
+```
 
 ## Podaci
 Za sada se sve čuva lokalno u pregledaču (localStorage). Sav pristup podacima je u objektu `Store` u `src/app.js`

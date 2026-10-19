@@ -15,6 +15,15 @@
   // Strings that the web version adds on top of the original .arb files.
   const EXTRA = {
     en: {
+      whatToAdd: 'What do you want to add?', kindList: 'List', kindListDesc: 'Several items to check off on one day',
+      kindTask: 'Task', kindTaskDesc: 'A single thing to do', newList: 'New list', newTask: 'New task', editList: 'Edit list', editTask: 'Edit task',
+      titleLabel: 'Name', descOptional: 'Description (optional)', itemsLabel: 'Items', addItem: 'Add item', newItemPh: 'New item…', needItem: 'Add at least one item',
+      timeOptional: 'Time (optional)', noTime: 'No time', clearTime: 'Clear time',
+      repNone: 'Does not repeat', repInterval: 'Every few days, weeks or months', repWeekdays: 'On days of the week', repMonthday: 'On a day of the month',
+      everyLabel: 'Every', unitDay: 'days', unitWeek: 'weeks', unitMonth: 'months',
+      everyDay: 'Every day', everyWeek: 'Every week', everyMonth: 'Every month', everyNday: 'Every {n} days', everyNweek: 'Every {n} weeks', everyNmonth: 'Every {n} months',
+      monthDayEvery: 'Monthly on day {n}', pickDays: 'Pick at least one day', statTasks: 'Tasks', statLists: 'Lists', saved: 'Saved', listDone: 'List completed',
+      homeSub: "Here is what's on for today.", nothingToday: 'Nothing planned for today', deleteEntry: 'Delete', deleteEntryConfirm: 'Delete “{name}”?',
       welcomeSubtitleAuth: 'Sign in to your account', fullName: 'Full Name', confirmPassword: 'Confirm Password',
       noAccount: "Don't have an account?", registerNow: 'Register', agreeTerms: 'I agree to the Terms of Service and Privacy Policy',
       fillAllFields: 'Please fill all fields', acceptTerms: 'Please accept terms and conditions', wrongCredentials: 'Wrong email or password',
@@ -38,6 +47,15 @@
       every: 'Every', from: 'from',
     },
     sr: {
+      whatToAdd: 'Šta dodajete?', kindList: 'Lista', kindListDesc: 'Više stavki za čekiranje za jedan dan',
+      kindTask: 'Task', kindTaskDesc: 'Jedna stvar koju treba uraditi', newList: 'Nova lista', newTask: 'Novi task', editList: 'Izmeni listu', editTask: 'Izmeni task',
+      titleLabel: 'Naziv', descOptional: 'Opis (opciono)', itemsLabel: 'Stavke', addItem: 'Dodaj stavku', newItemPh: 'Nova stavka…', needItem: 'Dodajte bar jednu stavku',
+      timeOptional: 'Vreme (opciono)', noTime: 'Bez vremena', clearTime: 'Ukloni vreme',
+      repNone: 'Ne ponavlja se', repInterval: 'Na nekoliko dana, nedelja ili meseci', repWeekdays: 'Određenim danima u nedelji', repMonthday: 'Određenog dana u mesecu',
+      everyLabel: 'Na svakih', unitDay: 'dana', unitWeek: 'nedelja', unitMonth: 'meseci',
+      everyDay: 'Svaki dan', everyWeek: 'Svake nedelje', everyMonth: 'Svakog meseca', everyNday: 'Na svakih {n} dana', everyNweek: 'Na svakih {n} nedelja', everyNmonth: 'Na svakih {n} meseci',
+      monthDayEvery: 'Svakog {n}. u mesecu', pickDays: 'Izaberite bar jedan dan', statTasks: 'Taskovi', statLists: 'Liste', saved: 'Sačuvano', listDone: 'Lista završena',
+      homeSub: 'Evo šta vas čeka danas.', nothingToday: 'Za danas nema ništa', deleteEntry: 'Obriši', deleteEntryConfirm: 'Obrisati „{name}“?',
       welcomeSubtitleAuth: 'Prijavite se na svoj nalog', fullName: 'Ime i prezime', confirmPassword: 'Potvrdite lozinku',
       noAccount: 'Nemate nalog?', registerNow: 'Registrujte se', agreeTerms: 'Prihvatam Uslove korišćenja i Politiku privatnosti',
       fillAllFields: 'Popunite sva polja', acceptTerms: 'Prihvatite uslove korišćenja', wrongCredentials: 'Pogrešan email ili lozinka',
@@ -78,37 +96,12 @@
   const cap = (s) => (s ? s.charAt(0).toUpperCase() + s.slice(1) : s);
   const loc = () => INTL_LOCALE[lang()] || 'en-GB';
 
-  /* ================= Constants (from the Flutter app) ================= */
-  const CATEGORIES = [
-    { key: 'Personal', l10n: 'categoryPersonal', icon: 'person', color: '#8D6E63' },
-    { key: 'Home', l10n: 'categoryHome', icon: 'home', color: '#2196F3' },
-    { key: 'Work', l10n: 'categoryWork', icon: 'work', color: '#FF9800' },
-    { key: 'Family', l10n: 'categoryFamily', icon: 'family_restroom', color: '#E91E63' },
-    { key: 'Health', l10n: 'categoryHealth', icon: 'favorite', color: '#F44336' },
-    { key: 'Travel', l10n: 'categoryTravel', icon: 'flight', color: '#009688' },
-    { key: 'Finance', l10n: 'categoryFinance', icon: 'attach_money', color: '#4CAF50' },
-    { key: 'Shopping', l10n: 'categoryShopping', icon: 'shopping_cart', color: '#9C27B0' },
-    { key: 'Notes', l10n: 'categoryNotes', icon: 'sticky_note_2', color: '#3F51B5' },
-  ];
-  const CAT = Object.fromEntries(CATEGORIES.map((c) => [c.key, c]));
-  const catOf = (k) => CAT[k] || { key: k, l10n: 'categoryUncategorized', icon: 'label', color: '#9E9E9E' };
-  const catLabel = (k) => (CAT[k] ? t(CAT[k].l10n) : k || t('categoryUncategorized'));
-  const PRIORITY_COLORS = { high: '#E53935', medium: '#FB8C00', low: '#43A047' };
-  const REPETITIONS = [
-    { key: 'daily', l10n: 'daily' }, { key: 'weekly', l10n: 'weekly' }, { key: 'monthly', l10n: 'monthly' },
-    { key: 'yearly', l10n: 'yearly' }, { key: 'onetime', l10n: 'oneTime' },
-  ];
-  const WEEKDAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+  /* ================= Constants ================= */
   const DOW_KEYS = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
   const BRAND = '#1E9E6A';
-  const COLORS = [
-    [BRAND, 'Reminder'], ['#FFE4B5', 'colorMoccasin'], ['#FFF8DC', 'colorCornsilk'], ['#FFC0CB', 'colorPink'], ['#F0BAAC', 'colorLightPink'],
-    ['#98FF98', 'colorMint'], ['#AFEEEE', 'colorPaleTurquoise'], ['#FF9800', 'colorOrange'], ['#FFA500', 'colorAmberOrange'],
-    ['#F44336', 'colorRed'], ['#DC143C', 'colorCrimson'], ['#800000', 'colorBurgundy'], ['#9C27B0', 'colorPurple'],
-    ['#8A2BE2', 'colorBlueViolet'], ['#6A5ACD', 'colorSlateBlue'], ['#2196F3', 'colorBlue'], ['#4682B4', 'colorSteelBlue'],
-    ['#00CED1', 'colorDarkTurquoise'], ['#4CAF50', 'colorGreen'], ['#006400', 'colorDarkGreen'], ['#2F4F4F', 'colorCharcoal'],
-    ['#000000', 'colorBlack'],
-  ];
+  const LIST_COLOR = '#4C7BD9';
+  const REPEAT_TYPES = [['none', 'repNone'], ['interval', 'repInterval'], ['weekdays', 'repWeekdays'], ['monthday', 'repMonthday']];
+  const UNITS = [['day', 'unitDay'], ['week', 'unitWeek'], ['month', 'unitMonth']];
 
   /* ================= Utilities ================= */
   const $ = (s, el = document) => el.querySelector(s);
@@ -147,7 +140,7 @@
   const validEmail = (e) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);
 
   /* ================= Store (swap for Firebase later) ================= */
-  const KEY = 'reminder-web-v1';
+  const KEY = 'todays-v2';
   const defaultSettings = () => ({
     lang: (() => { const n = (navigator.language || 'en').slice(0, 2).toLowerCase(); if (['sr', 'hr', 'bs', 'me'].includes(n)) return 'sr'; return LANGS.some((l) => l.code === n) ? n : 'en'; })(),
     dark: null, primary: BRAND, reduceMotion: false,
@@ -162,14 +155,14 @@
   function save() { try { localStorage.setItem(KEY, JSON.stringify(DB)); } catch (e) { /* storage unavailable: keep in memory */ } }
   const me = () => (DB.session && DB.users[DB.session]) || null;
   const settings = () => (me() ? me().settings : DB.guest);
-  const reminders = () => (me() ? me().reminders : []);
+  const entries = () => (me() ? (me().tasks = me().tasks || []) : []);
   const findUserByEmail = (email) => Object.values(DB.users).find((u) => u.email.toLowerCase() === String(email).trim().toLowerCase());
 
   function newUser({ name, email, passHash, provider = 'password' }) {
     const uid = uuid().replace(/-/g, '').slice(0, 28);
     const now = new Date().toISOString();
     const s = { ...defaultSettings(), ...DB.guest, notif: { ...DB.guest.notif } };
-    const u = { uid, name, email, passHash, provider, googleLinked: provider === 'google', createdAt: now, lastLogin: now, settings: s, reminders: [] };
+    const u = { uid, name, email, passHash, provider, googleLinked: provider === 'google', createdAt: now, lastLogin: now, settings: s, tasks: [] };
     DB.users[uid] = u; return u;
   }
 
@@ -179,70 +172,74 @@
     u = newUser({ name: 'Demo', email: 'demo@reminder.app', passHash: null });
     u.demo = true;
     u.createdAt = addDays(new Date(), -42).toISOString();
-    u.reminders = sampleReminders(u.settings.lang);
+    u.tasks = sampleEntries(u.settings.lang);
     return u;
   }
-  function sampleReminders(l) {
+  function sampleEntries(l) {
     const sr = l === 'sr';
-    const T = todayD();
-    const start = dkey(addDays(T, -30));
-    const created = addDays(new Date(), -30).toISOString();
-    const w = (n) => WEEKDAYS[weekdayIdx(addDays(T, n))];
+    const T = todayD(); const k = dkey(T); const wd = weekdayIdx(T);
     const mk = (o) => ({
-      uid: uuid(), description: '', type: 'task', priority: 'medium', repetitionTime: 'onetime', category: 'Personal',
-      dayOfMonth: null, dayOfWeek: null, oneTimeDate: null, notificationTime: '09:00', location: '', hasNotification: true,
-      isImportant: false, status: 'active', completedDates: [], createdAt: created, startDate: start, sample: true, ...o,
+      uid: uuid(), kind: 'task', name: '', description: '', date: k, time: '', important: false,
+      repeat: { type: 'none' }, items: [], done: {}, checks: {}, createdAt: new Date().toISOString(), sample: true, ...o,
     });
-    const list = [
-      mk({ name: sr ? 'Jutarnji trening' : 'Morning workout', description: sr ? '20 min istezanje + 5 km trčanja' : '20 min stretching + 5 km run', repetitionTime: 'daily', category: 'Health', notificationTime: '07:30', completedDates: [dkey(T)] }),
-      mk({ name: sr ? 'Sastanak tima' : 'Team stand-up', type: 'event', priority: 'high', repetitionTime: 'weekly', dayOfWeek: w(1), category: 'Work', notificationTime: '10:00', location: 'Zoom' }),
-      mk({ name: sr ? 'Plati kiriju' : 'Pay the rent', priority: 'high', isImportant: true, repetitionTime: 'monthly', dayOfMonth: addDays(T, 2).getDate(), category: 'Finance', notificationTime: '12:00' }),
-      mk({ name: sr ? 'Mamin rođendan' : "Mom's birthday", type: 'event', isImportant: true, repetitionTime: 'yearly', oneTimeDate: dkey(addDays(T, 5)), category: 'Family', notificationTime: '09:00', description: sr ? 'Naruči tortu kod Mladena' : 'Order the cake' }),
-      mk({ name: sr ? 'Kupi namirnice' : 'Buy groceries', priority: 'low', oneTimeDate: dkey(T), category: 'Shopping', notificationTime: '18:00', description: sr ? 'Mleko, hleb, jaja, paradajz, kafa' : 'Milk, bread, eggs, tomatoes, coffee' }),
-      mk({ name: sr ? 'Zalij biljke' : 'Water the plants', priority: 'low', repetitionTime: 'weekly', dayOfWeek: w(0), category: 'Home', notificationTime: '19:00' }),
-      mk({ name: sr ? 'Zubar' : 'Dentist appointment', type: 'event', oneTimeDate: dkey(addDays(T, 3)), category: 'Health', notificationTime: '14:30', location: sr ? 'Bulevar oslobođenja 12' : 'Main Street 12' }),
-      mk({ name: sr ? 'Let za Rim' : 'Flight to Rome', type: 'event', priority: 'high', isImportant: true, oneTimeDate: dkey(addDays(T, 12)), category: 'Travel', notificationTime: '06:15', location: sr ? 'Aerodrom Nikola Tesla' : 'Airport, Terminal 2' }),
-      mk({ name: sr ? 'Pročitaj 20 strana' : 'Read 20 pages', priority: 'low', repetitionTime: 'daily', category: 'Personal', notificationTime: '21:30' }),
-      mk({ name: sr ? 'Ideje za projekat' : 'Project ideas', oneTimeDate: dkey(addDays(T, 1)), category: 'Notes', notificationTime: '11:00', hasNotification: false, description: sr ? 'Web verzija Reminder aplikacije, deljeni podsetnici, widget' : 'Reminder web version, shared reminders, widget' }),
-      mk({ name: sr ? 'Servis automobila' : 'Car service', priority: 'medium', oneTimeDate: dkey(addDays(T, -4)), category: 'Personal', notificationTime: '08:00', status: 'completed' }),
+    const items = (arr) => arr.map((text) => ({ id: uuid().slice(0, 8), text }));
+    const shop = items(sr ? ['Mleko', 'Hleb', 'Jaja', 'Paradajz', 'Kafa'] : ['Milk', 'Bread', 'Eggs', 'Tomatoes', 'Coffee']);
+    const morning = items(sr ? ['Čaša vode', 'Vitamini', 'Plan dana'] : ['Glass of water', 'Vitamins', 'Plan the day']);
+    const pack = items(sr ? ['Pasoš', 'Punjač', 'Kupaći', 'Sunčane naočare'] : ['Passport', 'Charger', 'Swimsuit', 'Sunglasses']);
+    return [
+      mk({ name: sr ? 'Jutarnji trening' : 'Morning workout', description: sr ? '20 min istezanje + 5 km trčanja' : '20 min stretching + 5 km run', date: dkey(addDays(T, -20)), time: '07:30', repeat: { type: 'interval', every: 1, unit: 'day' }, done: { [k]: true } }),
+      mk({ kind: 'list', name: sr ? 'Jutarnja rutina' : 'Morning routine', date: dkey(addDays(T, -14)), repeat: { type: 'weekdays', days: [...new Set([0, 1, 2, 3, 4, wd])].sort() }, items: morning, checks: { [k]: [morning[0].id] } }),
+      mk({ name: sr ? 'Sastanak tima' : 'Team stand-up', date: dkey(addDays(T, -21)), time: '10:00', repeat: { type: 'weekdays', days: [...new Set([0, 3, wd])].sort() } }),
+      mk({ kind: 'list', name: sr ? 'Kupovina' : 'Groceries', time: '18:00', items: shop, checks: { [k]: [shop[0].id, shop[1].id] } }),
+      mk({ name: sr ? 'Zalij biljke' : 'Water the plants', time: '19:00', repeat: { type: 'interval', every: 3, unit: 'day' } }),
+      mk({ name: sr ? 'Pročitaj 20 strana' : 'Read 20 pages', date: dkey(addDays(T, -10)), repeat: { type: 'interval', every: 1, unit: 'day' } }),
+      mk({ name: sr ? 'Plati kiriju' : 'Pay the rent', important: true, date: dkey(addDays(T, -30)), time: '12:00', repeat: { type: 'monthday', monthDay: addDays(T, 2).getDate() } }),
+      mk({ name: sr ? 'Zubar' : 'Dentist', date: dkey(addDays(T, 3)), time: '14:30', description: sr ? 'Bulevar oslobođenja 12' : 'Main Street 12' }),
+      mk({ kind: 'list', name: sr ? 'Pakovanje za Rim' : 'Packing for Rome', important: true, date: dkey(addDays(T, 11)), time: '20:00', items: pack }),
     ];
-    return list;
   }
 
   /* ================= Recurrence ================= */
-  function occursOn(r, d) {
-    const start = r.startDate ? fromKey(r.startDate) : (r.createdAt ? fromKey(r.createdAt.slice(0, 10)) : null);
-    const after = !start || d >= start;
-    switch (r.repetitionTime) {
-      case 'onetime': return r.oneTimeDate ? sameDay(fromKey(r.oneTimeDate), d) : false;
-      case 'daily': return after;
-      case 'weekly': return after && WEEKDAYS[weekdayIdx(d)] === r.dayOfWeek;
-      case 'monthly': {
-        if (!after || !r.dayOfMonth) return false;
-        const last = new Date(d.getFullYear(), d.getMonth() + 1, 0).getDate();
-        return d.getDate() === Math.min(Number(r.dayOfMonth), last);
+  const lastDay = (d) => new Date(d.getFullYear(), d.getMonth() + 1, 0).getDate();
+  function occursOn(it, d) {
+    const start = fromKey(it.date);
+    if (d < start) return false;
+    const r = it.repeat || { type: 'none' };
+    switch (r.type) {
+      case 'interval': {
+        const n = Math.max(1, Number(r.every) || 1);
+        if (r.unit === 'month') {
+          const md = (d.getFullYear() - start.getFullYear()) * 12 + d.getMonth() - start.getMonth();
+          return md % n === 0 && d.getDate() === Math.min(start.getDate(), lastDay(d));
+        }
+        const diff = Math.round((d - start) / 864e5);
+        return diff % (r.unit === 'week' ? 7 * n : n) === 0;
       }
-      case 'yearly': { if (!r.oneTimeDate) return false; const a = fromKey(r.oneTimeDate); return a.getMonth() === d.getMonth() && a.getDate() === d.getDate(); }
-      case 'custom': return after && Array.isArray(r.customDays) && r.customDays.includes(weekdayIdx(d) + 1);
-      default: return false;
+      case 'weekdays': return (r.days || []).includes(weekdayIdx(d));
+      case 'monthday': return d.getDate() === Math.min(Number(r.monthDay) || 1, lastDay(d));
+      default: return sameDay(d, start);
     }
   }
-  const isDoneOn = (r, d) => (r.repetitionTime === 'onetime' ? r.status === 'completed' : (r.completedDates || []).includes(dkey(d)));
-  function nextOccurrence(r, from = todayD()) {
-    for (let i = 0; i < 400; i++) { const d = addDays(from, i); if (occursOn(r, d)) return d; }
-    return r.oneTimeDate ? fromKey(r.oneTimeDate) : null;
+  const checkedOn = (it, d) => { const ids = new Set((it.items || []).map((x) => x.id)); return ((it.checks || {})[dkey(d)] || []).filter((id) => ids.has(id)); };
+  function isDoneOn(it, d) {
+    if (it.kind === 'list') return (it.items || []).length > 0 && checkedOn(it, d).length === it.items.length;
+    return !!(it.done || {})[dkey(d)];
   }
-  const byTime = (a, b) => timeToMin(a.notificationTime) - timeToMin(b.notificationTime);
-  function remindersOn(d, list = reminders()) { return list.filter((r) => occursOn(r, d)).sort(byTime); }
-  function repetitionText(r) {
-    switch (r.repetitionTime) {
-      case 'daily': return t('daily');
-      case 'weekly': return `${t('weekly')} · ${cap(weekdayName(WEEKDAYS.indexOf(r.dayOfWeek), 'short'))}`;
-      case 'monthly': return `${t('monthly')} · ${r.dayOfMonth}.`;
-      case 'yearly': return r.oneTimeDate ? `${t('yearly')} · ${fmtDate(fromKey(r.oneTimeDate), { day: 'numeric', month: 'short' })}` : t('yearly');
-      case 'onetime': return t('oneTime');
-      default: return t('custom');
+  function nextOccurrence(it, from = todayD()) {
+    for (let i = 0; i < 400; i++) { const d = addDays(from, i); if (occursOn(it, d)) return d; }
+    return null;
+  }
+  const byTime = (a, b) => (a.time ? timeToMin(a.time) : 1e4) - (b.time ? timeToMin(b.time) : 1e4) || a.name.localeCompare(b.name);
+  function entriesOn(d, list = entries()) { return list.filter((it) => occursOn(it, d)).sort(byTime); }
+  function repeatText(it) {
+    const r = it.repeat || { type: 'none' };
+    if (r.type === 'interval') {
+      const n = Math.max(1, Number(r.every) || 1); const u = r.unit || 'day';
+      return n === 1 ? t({ day: 'everyDay', week: 'everyWeek', month: 'everyMonth' }[u]) : t('everyN' + u, { n });
     }
+    if (r.type === 'weekdays') return (r.days || []).slice().sort().map((i) => cap(weekdayName(i, 'short'))).join(', ');
+    if (r.type === 'monthday') return t('monthDayEvery', { n: r.monthDay });
+    return t('oneTime');
   }
 
   /* ================= Theme ================= */
@@ -389,57 +386,59 @@
   }
 
   /* ---------- Home ---------- */
-  function todayCard(r) {
-    const d = todayD(); const done = isDoneOn(r, d); const c = catOf(r.category);
-    return `<div class="today-card ${done ? 'done' : ''}">
-      <button class="icon-btn check-btn ${done ? 'on' : ''}" data-a="toggle-done" data-id="${r.uid}" aria-label="${esc(t('complete'))}">${icon(done ? 'check_circle' : 'radio_button_unchecked', done ? 'fill lg' : 'lg')}</button>
-      <div class="body" data-a="edit" data-id="${r.uid}" style="cursor:pointer">
-        <span class="title">${r.isImportant ? `<span class="star">${icon('star', 'fill xs')}</span> ` : ''}${esc(r.name)}</span>
-        <span class="when tnum">${icon('schedule', 'xs')}${esc(fmtTime(r.notificationTime))}<span class="cat"><span class="dot" style="background:${c.color}"></span>${esc(catLabel(r.category))}</span></span>
+  function entryCard(it, d = todayD()) {
+    const k = dkey(d); const done = isDoneOn(it, d); const isList = it.kind === 'list';
+    const meta = `<span class="when tnum">${icon(it.time ? 'schedule' : 'schedule', 'xs')}${esc(it.time ? fmtTime(it.time) : t('noTime'))}${it.repeat && it.repeat.type !== 'none' ? `<span class="cat">${icon('repeat', 'xs')}${esc(repeatText(it))}</span>` : ''}</span>`;
+    const star = it.important ? `<span class="star">${icon('star', 'fill xs')}</span> ` : '';
+    if (!isList) {
+      return `<div class="entry ${done ? 'done' : ''}">
+        <button class="icon-btn check-btn ${done ? 'on' : ''}" data-a="toggle-done" data-id="${it.uid}" data-d="${k}" aria-pressed="${done}" aria-label="${esc(t('done'))}">${icon(done ? 'check_circle' : 'radio_button_unchecked', done ? 'fill lg' : 'lg')}</button>
+        <button class="body" data-a="edit" data-id="${it.uid}"><span class="title">${star}${esc(it.name)}</span>${meta}</button>
+      </div>`;
+    }
+    const open = ui.expanded.has(it.uid + '|' + k);
+    const checked = new Set(checkedOn(it, d)); const n = it.items.length; const c = checked.size;
+    return `<div class="entry list ${done ? 'done' : ''} ${open ? 'open' : ''}">
+      <div class="entry-head">
+        <span class="list-ic" aria-hidden="true">${icon(done ? 'task_alt' : 'checklist', 'lg')}</span>
+        <button class="body" data-a="expand" data-id="${it.uid}" data-d="${k}" aria-expanded="${open}"><span class="title">${star}${esc(it.name)}</span>${meta}</button>
+        <span class="progress-chip tnum" style="--p:${n ? Math.round((c / n) * 100) : 0}">${c}/${n}</span>
+        <button class="icon-btn" data-a="expand" data-id="${it.uid}" data-d="${k}" aria-label="${esc(it.name)}">${icon(open ? 'expand_less' : 'expand_more')}</button>
       </div>
-      <span class="chip">${esc(t(REPETITIONS.find((x) => x.key === r.repetitionTime)?.l10n || 'custom'))}</span>
+      ${open ? `<div class="entry-items">
+        ${it.description ? `<p class="entry-desc">${esc(it.description)}</p>` : ''}
+        ${it.items.map((x) => `<label class="item-row ${checked.has(x.id) ? 'on' : ''}"><input type="checkbox" data-a="toggle-check" data-id="${it.uid}" data-item="${x.id}" data-d="${k}" ${checked.has(x.id) ? 'checked' : ''}><span>${esc(x.text)}</span></label>`).join('')}
+        <div class="entry-actions"><button class="btn btn-text btn-sm" data-a="edit" data-id="${it.uid}">${icon('edit', 'sm')}${esc(t('edit'))}</button></div>
+      </div>` : ''}
     </div>`;
   }
   function screenHome() {
     const u = me(); const d = todayD();
-    const today = remindersOn(d);
-    const doneN = today.filter((r) => isDoneOn(r, d)).length;
+    const today = entriesOn(d);
+    const doneN = today.filter((it) => isDoneOn(it, d)).length;
     const pct = today.length ? Math.round((doneN / today.length) * 100) : 0;
     const first = (u.name || '').split(' ')[0];
-    const counts = {}; reminders().forEach((r) => { counts[r.category] = (counts[r.category] || 0) + 1; });
-    const hasSamples = reminders().some((r) => r.sample);
+    const hasSamples = entries().some((it) => it.sample);
     const html = `
       <section class="welcome">
-        <div class="txt"><h2>${esc(t('welcomeBack'))}${first ? ', ' + esc(first) : ''}!</h2><p>${esc(t('homeSubtitleLoggedIn'))}</p></div>
+        <div class="txt"><h2>${esc(t('welcomeBack'))}${first ? ', ' + esc(first) : ''}!</h2><p>${esc(t('homeSub'))}</p></div>
         <div class="ring" style="--p:${pct}" role="img" aria-label="${esc(t('ofDone', { a: doneN, b: today.length }))} ${esc(t('doneToday'))}"><div><span><b class="tnum">${doneN}/${today.length}</b><br><small>${esc(t('doneToday'))}</small></span></div></div>
       </section>
       ${hasSamples ? `<div class="banner">${icon('info')}<p>${esc(t('sampleData'))}</p><button class="btn btn-text btn-sm" data-a="clear-samples">${esc(t('clearSamples'))}</button></div>` : ''}
-      <div class="stack">
-        <section class="stack" aria-labelledby="today-h">
-          <div class="section-head"><h2 id="today-h">${esc(t('today'))}</h2><span class="meta">${esc(cap(fmtDate(d, { day: 'numeric', month: 'long', year: 'numeric' })))}</span></div>
-          ${today.length ? today.map(todayCard).join('') : `<div class="empty">${icon('notifications', 'xl')}<span>${esc(t('noRemindersToday'))}</span><button class="btn btn-tonal btn-sm" data-a="add">${icon('add', 'sm')}${esc(t('addReminder'))}</button></div>`}
-        </section>
-      </div>`;
+      <section class="stack" aria-labelledby="today-h">
+        <div class="section-head"><h2 id="today-h">${esc(t('today'))}</h2><span class="meta">${esc(cap(fmtDate(d, { weekday: 'long', day: 'numeric', month: 'long' })))}</span></div>
+        ${today.length ? today.map((it) => entryCard(it, d)).join('') : `<div class="empty">${icon('event_available', 'xl')}<span>${esc(t('nothingToday'))}</span></div>`}
+      </section>`;
     const fabs = `<button class="fab" data-a="add" aria-label="${esc(t('addReminder'))}">${icon('add')}<span class="fab-label">${esc(t('addReminder'))}</span></button>`;
     return { title: t('homeTitle'), html, fabs, actions: avatarAction() };
   }
   const avatarAction = () => `<button class="icon-btn" data-a="tab" data-tab="profile" aria-label="${esc(t('profileTitle'))}">${avatarHtml(me(), 'sm')}</button>`;
 
-  /* ---------- Reminders (calendar + list) ---------- */
-  function filtered() {
-    let list = reminders();
-    if (ui.cat !== 'All') list = list.filter((r) => r.category === ui.cat);
-    return list;
-  }
+  /* ---------- Calendar ---------- */
+  const entryColor = (it) => (it.kind === 'list' ? LIST_COLOR : BRAND);
   function screenReminders() {
-    const chips = ['All', ...CATEGORIES.map((c) => c.key)].map((k) => `<button class="cat-chip" aria-pressed="${ui.cat === k}" data-a="set-cat" data-cat="${k}">${k !== 'All' ? `<span class="dot" style="background:${catOf(k).color}"></span>` : ''}${esc(k === 'All' ? t('all') : catLabel(k))}</button>`).join('');
-    const tabs = `<div class="tabs" role="tablist">
-      <button role="tab" aria-selected="${ui.remTab === 'calendar'}" data-a="rem-tab" data-v="calendar">${icon('calendar_today')}${esc(t('calendarTab'))}</button>
-      <button role="tab" aria-selected="${ui.remTab === 'list'}" data-a="rem-tab" data-v="list">${icon('list')}${esc(t('listTab'))}</button></div>`;
-    const body = ui.remTab === 'calendar' ? renderCalendar(filtered()) : renderList(filtered(), true);
     return {
-      title: t('calendarTab'),
-      html: `${tabs}${body}`,
+      title: t('calendarTab'), html: renderCalendar(entries()),
       fabs: `<button class="fab" data-a="add" aria-label="${esc(t('addReminder'))}">${icon('add')}<span class="fab-label">${esc(t('addReminder'))}</span></button>`,
       actions: avatarAction(),
     };
@@ -452,17 +451,16 @@
     for (let i = 0; i < total; i++) {
       const n = i - startW + 1;
       if (n < 1 || n > days) { cells += '<div class="cal-cell pad" aria-hidden="true"></div>'; continue; }
-      const d = new Date(y, mo, n); const items = remindersOn(d, list); const isT = sameDay(d, T);
+      const d = new Date(y, mo, n); const items = entriesOn(d, list); const isT = sameDay(d, T);
       const label = `${fmtDate(d, { weekday: 'long', day: 'numeric', month: 'long' })}, ${items.length}`;
       cells += `<button class="cal-cell ${isT ? 'today' : ''}" data-a="day" data-d="${dkey(d)}" aria-label="${esc(label)}">
         <span class="n tnum">${n}</span>
-        <span class="items">${items.slice(0, 3).map((r) => `<span class="it ${isDoneOn(r, d) ? 'done' : ''}"><span class="dot" style="background:${catOf(r.category).color}"></span><span>${esc(r.name)}</span></span>`).join('')}</span>
+        <span class="items">${items.slice(0, 3).map((it) => `<span class="it ${isDoneOn(it, d) ? 'done' : ''}"><span class="dot" style="background:${entryColor(it)}"></span><span>${esc(it.name)}</span></span>`).join('')}</span>
         ${items.length > 3 ? `<span class="more">${esc(t('moreN', { n: items.length - 3 }))}</span>` : ''}
-        <span class="dots">${items.slice(0, 4).map((r) => `<span class="dot" style="background:${catOf(r.category).color}"></span>`).join('')}</span>
+        <span class="dots">${items.slice(0, 4).map((it) => `<span class="dot" style="background:${entryColor(it)}"></span>`).join('')}</span>
       </button>`;
     }
     const monthTitle = new Intl.DateTimeFormat(loc(), { month: 'long', year: 'numeric' }).format(m);
-    const used = [...new Set(list.map((r) => r.category))];
     return `<div class="stack">
       <div class="cal-head">
         <button class="icon-btn" data-a="cal-prev" aria-label="Previous month">${icon('chevron_left')}</button>
@@ -472,71 +470,8 @@
       </div>
       <div class="cal-dow">${DOW_KEYS.map((k) => `<span>${esc(t(k))}</span>`).join('')}</div>
       <div class="cal-grid">${cells}</div>
-      ${used.length ? `<div class="legend">${used.map((k) => `<span><span class="dot" style="background:${catOf(k).color}"></span>${esc(catLabel(k))}</span>`).join('')}</div>` : ''}
+      <div class="legend"><span><span class="dot" style="background:${BRAND}"></span>${esc(t('kindTask'))}</span><span><span class="dot" style="background:${LIST_COLOR}"></span>${esc(t('kindList'))}</span></div>
     </div>`;
-  }
-  function renderList(list, withSearch) {
-    const q = ui.q.trim().toLowerCase();
-    let items = list;
-    if (q) items = items.filter((r) => [r.name, r.description, r.location, catLabel(r.category)].join(' ').toLowerCase().includes(q));
-    const T = todayD();
-    items = items.slice().sort((a, b) => {
-      const da = a.repetitionTime === 'onetime' && a.status === 'completed' ? 1 : 0; const db = b.repetitionTime === 'onetime' && b.status === 'completed' ? 1 : 0;
-      if (da !== db) return da - db;
-      const na = nextOccurrence(a, T), nb = nextOccurrence(b, T);
-      return (na ? na.getTime() : 9e15) - (nb ? nb.getTime() : 9e15) || byTime(a, b);
-    });
-    const search = withSearch ? `<div class="toolbar"><div class="field">${icon('search')}<label for="search">${esc(t('search'))}</label><input id="search" type="search" value="${esc(ui.q)}" autocomplete="off"></div></div>` : '';
-    if (!list.length) return `${search}<div class="empty">${icon('notifications_off', 'xl')}<span>${esc(t('addFirst'))}</span></div>`;
-    if (!items.length) return `${search}<div class="empty">${icon('search_off', 'xl')}<span>${esc(t('noResults'))}</span></div>`;
-    return `${search}<div class="stack" id="rlist">${items.map(reminderCard).join('')}</div>`;
-  }
-  function reminderCard(r) {
-    const open = ui.expanded.has(r.uid);
-    const T = todayD(); const next = nextOccurrence(r, T);
-    const done = r.repetitionTime === 'onetime' ? r.status === 'completed' : isDoneOn(r, T) && occursOn(r, T);
-    const c = catOf(r.category);
-    const det = (ic, label, value) => `<div class="detail">${icon(ic)}<div><small>${esc(label)}</small>${esc(value)}</div></div>`;
-    const nextTxt = next ? (sameDay(next, T) ? t('today') : cap(fmtDate(next, { weekday: 'short', day: 'numeric', month: 'short' }))) : '—';
-    const details = [
-      det('category', t('type'), cap(t(r.type === 'event' ? 'event' : 'task'))),
-      det('repeat', t('repetition'), repetitionText(r)),
-      det('event', t('next'), nextTxt),
-      det('schedule', t('time'), fmtTime(r.notificationTime)),
-      det(r.hasNotification ? 'notifications_active' : 'notifications_off', t('notification'), r.hasNotification ? '✓' : '—'),
-      r.location ? det('location_on', t('location'), r.location) : '',
-      r.createdAt ? det('history', t('created'), fmtDate(new Date(r.createdAt))) : '',
-    ].join('');
-    return `<article class="rcard ${done ? 'done' : ''}">
-      <button class="rcard-head" data-a="expand" data-id="${r.uid}" aria-expanded="${open}">
-        <span class="prio-bar" style="background:${r.isImportant ? 'var(--star)' : 'var(--primary)'}"></span>
-        <span class="main-col">
-          <span class="line1">${r.isImportant ? `<span class="star">${icon('star', 'fill')}</span>` : ''}<span class="name">${esc(r.name)}</span><span class="time-chip tnum">${esc(fmtTime(r.notificationTime))}</span></span>
-          <span class="line2"><span class="tag"><span class="dot" style="background:${c.color}"></span>${esc(catLabel(r.category))}</span><span class="tag">${icon('repeat')}${esc(repetitionText(r))}</span>${next ? `<span class="tag">${icon('calendar_today')}${esc(nextTxt)}</span>` : ''}</span>
-        </span>
-        ${icon(open ? 'expand_less' : 'expand_more')}
-      </button>
-      ${open ? `<div class="rcard-body">
-        ${r.description ? `<div class="desc"><small>${esc(t('description'))}</small><p>${esc(r.description)}</p></div>` : ''}
-        <div class="details">${details}</div>
-        <div class="actions3">
-          <button class="btn btn-tonal" data-a="complete" data-id="${r.uid}">${icon(done ? 'undo' : 'check', 'sm')}<span>${esc(done ? t('undo') : t('complete'))}</span></button>
-          <button class="btn btn-outline" data-a="edit" data-id="${r.uid}">${icon('edit', 'sm')}<span>${esc(t('edit'))}</span></button>
-          <button class="btn btn-outline danger" data-a="delete" data-id="${r.uid}">${icon('delete', 'sm')}<span>${esc(t('delete'))}</span></button>
-        </div></div>` : ''}
-    </article>`;
-  }
-
-  /* ---------- Category screen ---------- */
-  function screenCategory({ cat }) {
-    const c = catOf(cat); const list = reminders().filter((r) => r.category === cat);
-    const html = `
-      <section class="welcome" style="background:color-mix(in srgb, ${c.color} 14%, transparent)">
-        <span class="cat-tile" style="--c:${c.color};min-height:0;padding:0;border:0;background:none"><span class="circle">${icon(c.icon, 'fill lg')}</span></span>
-        <div class="txt"><h2>${esc(catLabel(cat))}</h2><p>${esc(t('countReminders', { n: list.length }))}</p></div>
-      </section>
-      ${list.length ? renderList(list, false) : `<div class="empty">${icon('category', 'xl')}<span>${esc(t('noRemindersForCategory'))}</span></div>`}`;
-    return { title: `${catLabel(cat)} — ${t('remindersTitle')}`, html, fabs: `<button class="fab" data-a="add" data-cat="${cat}" aria-label="${esc(t('addReminder'))}">${icon('add')}<span class="fab-label">${esc(t('addReminder'))}</span></button>` };
   }
 
   /* ---------- Profile ---------- */
@@ -569,12 +504,8 @@
     return { title: t('accountCenter'), html, narrow: true };
   }
   function screenProfileData() {
-    const u = me(); const list = reminders();
-    const counts = {}; list.forEach((r) => { counts[r.category] = (counts[r.category] || 0) + 1; });
-    const entries = Object.entries(counts).sort((a, b) => b[1] - a[1]);
-    const top = entries[0];
-    const doneTotal = list.reduce((n, r) => n + (r.repetitionTime === 'onetime' ? (r.status === 'completed' ? 1 : 0) : (r.completedDates || []).length), 0);
-    const important = list.filter((r) => r.isImportant).length;
+    const u = me(); const list = entries();
+    const doneTotal = list.reduce((n, it) => n + (it.kind === 'list' ? Object.values(it.checks || {}).reduce((a, ids) => a + ids.length, 0) : Object.keys(it.done || {}).length), 0);
     const stat = (c, ic, label, val, sub, big) => `<div class="stat" style="--c:${c}"><div class="top">${icon(ic)}${esc(label)}</div><div class="val ${big ? 'big tnum' : ''}">${val}</div>${sub ? `<div class="sub">${esc(sub)}</div>` : ''}</div>`;
     const html = `
       <section class="panel">
@@ -588,40 +519,14 @@
       <section class="panel">
         <h3>${icon('notifications_active')}${esc(t('remindersStatTitle'))}</h3>
         <div class="stat-grid">
-          ${stat('#2196F3', 'format_list_numbered', t('reminderCountLabel'), list.length, t('reminderCountDescription'), true)}
-          ${stat('#673AB7', 'category', t('preferredCategoryLabel'), top ? esc(catLabel(top[0])) : '—', top ? `${t('used')} ${top[1]} ${t('times')}` : t('noPreferredCategory'))}
-          ${stat('#4CAF50', 'task_alt', t('completedLabel'), doneTotal, '', true)}
-          ${stat('#FFB300', 'star', t('importantLabel'), important, '', true)}
+          ${stat(BRAND, 'task_alt', t('statTasks'), list.filter((it) => it.kind !== 'list').length, '', true)}
+          ${stat(LIST_COLOR, 'checklist', t('statLists'), list.filter((it) => it.kind === 'list').length, '', true)}
+          ${stat('#4CAF50', 'done_all', t('completedLabel'), doneTotal, '', true)}
+          ${stat('#FFB300', 'star', t('importantLabel'), list.filter((it) => it.important).length, '', true)}
         </div>
-      </section>
-      <section class="panel">
-        <h3>${icon('bar_chart')}${esc(t('categoryDistribution'))}</h3>
-        ${entries.length ? `<div class="chart-wrap">${barChart(entries)}</div>` : `<p class="muted">${esc(t('noReminderData'))}</p>`}
       </section>
       <button class="btn btn-danger btn-block" data-a="logout">${icon('logout')}${esc(t('logOut'))}</button>`;
     return { title: t('myProfileData'), html, narrow: true };
-  }
-  function barChart(entries) {
-    const W = 560, H = 240, padL = 34, padB = 46, padT = 16, padR = 8;
-    const max = Math.max(...entries.map((e) => e[1]));
-    const step = max <= 5 ? 1 : Math.ceil(max / 5);
-    const top = Math.ceil(max / step) * step;
-    const iw = W - padL - padR, ih = H - padT - padB;
-    const bw = Math.min(46, (iw / entries.length) * 0.6);
-    let g = '';
-    for (let v = 0; v <= top; v += step) {
-      const y = padT + ih - (v / top) * ih;
-      g += `<line x1="${padL}" x2="${W - padR}" y1="${y}" y2="${y}" stroke="var(--divider)" stroke-width="1"/><text x="${padL - 8}" y="${y + 4}" text-anchor="end" font-size="11" fill="var(--muted)">${v}</text>`;
-    }
-    entries.forEach(([k, v], i) => {
-      const cx = padL + (iw / entries.length) * (i + 0.5);
-      const h = (v / top) * ih; const y = padT + ih - h; const c = catOf(k).color;
-      const lbl = catLabel(k); const short = lbl.length > 9 ? lbl.slice(0, 8) + '…' : lbl;
-      g += `<rect x="${cx - bw / 2}" y="${y}" width="${bw}" height="${h}" rx="6" fill="${c}"><title>${esc(lbl)}: ${v}</title></rect>`;
-      g += `<text x="${cx}" y="${y - 6}" text-anchor="middle" font-size="12" font-weight="600" fill="var(--fg)">${v}</text>`;
-      g += `<text x="${cx}" y="${H - padB + 18}" text-anchor="middle" font-size="11" fill="var(--muted)">${esc(short)}</text>`;
-    });
-    return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(t('categoryDistribution'))}">${g}</svg>`;
   }
   function screenSecurity() {
     const html = `<div class="stack">
@@ -710,7 +615,6 @@
       ${switchTile('motion-switch', t('reduceMotion'), t('reduceMotionDesc'), !!s.reduceMotion, 'motion-toggle')}`;
     return { title: t('appearance'), html, narrow: true };
   }
-  function todayCardPreview(r) { return todayCard(r).replace(/data-a="[^"]*"/g, ''); }
   function screenCredits() {
     const html = `
       <div class="credits-card"><img src="assets/scumpy.svg" alt="Scampy"><h2>Scampy Software Solutions</h2><span class="muted">${esc(t('crafted'))}</span><span class="chip">${esc(t('webVersion'))} 2.0</span></div>
@@ -735,7 +639,7 @@
 
   const TABS = { home: screenHome, reminders: screenReminders, profile: screenProfile };
   const SCREENS = {
-    category: screenCategory, accountCenter: screenAccountCenter, profileData: screenProfileData, security: screenSecurity,
+    accountCenter: screenAccountCenter, profileData: screenProfileData, security: screenSecurity,
     changePassword: screenChangePassword, connected: screenConnected, notifications: screenNotifications, language: screenLanguage,
     appearance: screenAppearance, credits: screenCredits, deletion: screenDeletion,
   };
@@ -761,90 +665,139 @@
     $('#cd-ok').addEventListener('click', () => { closeModal(); onOk(); });
   }
 
-  function reminderDialog(existing, preset = {}) {
-    const r = existing ? { ...existing } : {
-      name: '', description: '', type: 'task', priority: 'medium', repetitionTime: 'daily', category: 'Personal',
-      dayOfWeek: WEEKDAYS[weekdayIdx(todayD())], dayOfMonth: todayD().getDate(), oneTimeDate: dkey(todayD()),
-      notificationTime: (() => { const n = new Date(Date.now() + 3600e3); return `${pad(n.getHours())}:00`; })(),
-      location: '', hasNotification: true, isImportant: false, ...preset,
+  function kindChooser(dateK) {
+    openModal(`<div class="dialog sm" role="dialog" aria-modal="true" aria-labelledby="kc-t">
+      <div class="dialog-head plain"><h2 id="kc-t">${esc(t('whatToAdd'))}</h2>
+        <button type="button" class="icon-btn" data-a="modal-close" aria-label="${esc(t('cancel'))}">${icon('close')}</button></div>
+      <div class="dialog-body kind-grid" style="padding-top:8px">
+        <button class="kind-btn" data-a="pick-kind" data-v="list" ${dateK ? `data-d="${dateK}"` : ''} style="--c:${LIST_COLOR}"><span class="kind-ic">${icon('checklist', 'lg')}</span><b>${esc(t('kindList'))}</b><small>${esc(t('kindListDesc'))}</small></button>
+        <button class="kind-btn" data-a="pick-kind" data-v="task" ${dateK ? `data-d="${dateK}"` : ''} style="--c:${BRAND}"><span class="kind-ic">${icon('task_alt', 'lg')}</span><b>${esc(t('kindTask'))}</b><small>${esc(t('kindTaskDesc'))}</small></button>
+      </div></div>`);
+  }
+
+  function entryDialog(kind, existing, dateK) {
+    const T = todayD();
+    const base = existing ? JSON.parse(JSON.stringify(existing)) : {
+      kind, name: '', description: '', date: dateK || dkey(T), time: '', important: false, repeat: { type: 'none' }, items: [],
     };
-    const opt = (v, label, cur) => `<option value="${v}" ${cur === v ? 'selected' : ''}>${esc(label)}</option>`;
-    openModal(`<form class="dialog" id="rem-form" role="dialog" aria-modal="true" aria-labelledby="rd-t" novalidate>
-      <div class="dialog-head">${icon('notifications_active')}<h2 id="rd-t">${esc(existing ? t('editReminder') : t('addReminder'))}</h2>
+    const isList = base.kind === 'list';
+    const st = {
+      items: (base.items || []).map((x) => ({ ...x })),
+      rep: { type: 'none', every: 1, unit: 'day', days: [weekdayIdx(fromKey(base.date))], monthDay: fromKey(base.date).getDate(), ...(base.repeat || {}) },
+    };
+    if (!st.rep.days || !st.rep.days.length) st.rep.days = [weekdayIdx(fromKey(base.date))];
+    const opt = (v, label, cur) => `<option value="${v}" ${String(cur) === String(v) ? 'selected' : ''}>${esc(label)}</option>`;
+    openModal(`<form class="dialog" id="entry-form" role="dialog" aria-modal="true" aria-labelledby="ed-t" novalidate>
+      <div class="dialog-head" style="${isList ? `background:${LIST_COLOR}` : ''}">${icon(isList ? 'checklist' : 'task_alt')}<h2 id="ed-t">${esc(t(existing ? (isList ? 'editList' : 'editTask') : (isList ? 'newList' : 'newTask')))}</h2>
         <button type="button" class="icon-btn" data-a="modal-close" aria-label="${esc(t('cancel'))}">${icon('close')}</button></div>
       <div class="dialog-body">
-        <div class="field">${icon('title')}<label for="rf-name">${esc(t('reminderName'))}</label><input id="rf-name" value="${esc(r.name)}" autocomplete="off" required></div>
-        <div class="field" style="align-items:flex-start">${icon('description').replace('class="ms', 'style="margin-top:14px" class="ms')}<label for="rf-desc">${esc(t('description'))}</label><textarea id="rf-desc" rows="3">${esc(r.description)}</textarea></div>
-        <div class="field-row">
-          <div class="field select"><label for="rf-type">${esc(t('type'))}</label><select id="rf-type">${opt('task', cap(t('task')), r.type)}${opt('event', cap(t('event')), r.type)}</select></div>
-          <div class="field select"><span class="dot" id="rf-cat-dot" style="margin-left:14px;background:${catOf(r.category).color}"></span><label for="rf-cat">${esc(t('category'))}</label><select id="rf-cat">${CATEGORIES.map((c) => opt(c.key, t(c.l10n), r.category)).join('')}</select></div>
+        <div class="field">${icon('title')}<label for="ef-name">${esc(t('titleLabel'))}</label><input id="ef-name" value="${esc(base.name)}" autocomplete="off" required></div>
+        <div class="field" style="align-items:flex-start"><label for="ef-desc">${esc(t('descOptional'))}</label><textarea id="ef-desc" rows="2">${esc(base.description || '')}</textarea></div>
+        ${isList ? `<div class="items-edit"><span class="lbl">${esc(t('itemsLabel'))}</span><div id="ef-items" class="stack" style="gap:8px"></div>
+          <div class="add-item"><input id="ef-new-item" placeholder="${esc(t('newItemPh'))}" autocomplete="off" aria-label="${esc(t('addItem'))}"><button type="button" class="btn btn-tonal btn-sm" id="ef-add-item">${icon('add', 'sm')}${esc(t('addItem'))}</button></div></div>` : ''}
+        <div class="field-row dt-row">
+          <div class="field">${icon('event')}<label for="ef-date">${esc(t('date'))}</label><input id="ef-date" type="date" value="${esc(base.date)}" required></div>
+          <div class="field">${icon('schedule')}<label for="ef-time">${esc(t('timeOptional'))}</label><input id="ef-time" type="time" value="${esc(base.time || '')}">
+            <button type="button" class="icon-btn" id="ef-time-clear" aria-label="${esc(t('clearTime'))}" ${base.time ? '' : 'hidden'}>${icon('close', 'sm')}</button></div>
         </div>
-        <div class="field select"><label for="rf-rep">${esc(t('repetition'))}</label><select id="rf-rep">${REPETITIONS.map((x) => opt(x.key, t(x.l10n), r.repetitionTime)).join('')}</select></div>
-        <div id="rf-dyn"></div>
-        <div class="field">${icon('location_on')}<label for="rf-loc">${esc(t('location'))}</label><input id="rf-loc" value="${esc(r.location || '')}" autocomplete="off"></div>
-        <div class="field-row" style="align-items:center">
-          <div class="field">${icon('schedule')}<label for="rf-time">${esc(t('time'))}</label><input id="rf-time" type="time" value="${esc(r.notificationTime)}" required></div>
-          <label class="inline-switch" for="rf-notif">${icon('notifications', '')}<span class="grow">${esc(t('notification'))}</span><span class="switch"><input type="checkbox" role="switch" id="rf-notif" ${r.hasNotification ? 'checked' : ''}><i></i></span></label>
-        </div>
-        <label class="inline-switch" for="rf-imp"><span class="star" id="rf-star" style="color:${r.isImportant ? 'var(--star)' : 'var(--primary-ink)'}">${icon('star', 'fill')}</span><span class="grow">${esc(t('important'))}<small>${esc(t('importantReminderDescription'))}</small></span><span class="switch"><input type="checkbox" role="switch" id="rf-imp" ${r.isImportant ? 'checked' : ''}><i></i></span></label>
-        <p class="err-text" id="rf-err" hidden></p>
+        <div class="field select"><span style="margin-left:14px;color:var(--primary-ink)">${icon('repeat')}</span><label for="ef-rep">${esc(t('repetition'))}</label><select id="ef-rep">${REPEAT_TYPES.map(([v, k]) => opt(v, t(k), st.rep.type)).join('')}</select></div>
+        <div id="ef-rep-dyn"></div>
+        <label class="inline-switch" for="ef-imp"><span class="star" id="ef-star" style="color:${base.important ? 'var(--star)' : 'var(--muted)'}">${icon('star', 'fill')}</span><span class="grow">${esc(t('important'))}</span><span class="switch"><input type="checkbox" role="switch" id="ef-imp" ${base.important ? 'checked' : ''}><i></i></span></label>
+        <p class="err-text" id="ef-err" hidden></p>
       </div>
       <div class="dialog-foot">
         ${existing ? `<button type="button" class="btn btn-text" style="color:var(--error)" data-a="delete" data-id="${existing.uid}">${icon('delete', 'sm')}${esc(t('delete'))}</button>` : ''}
         <button type="button" class="btn btn-text" style="margin-right:auto" data-a="modal-close">${esc(t('cancel'))}</button>
         <button type="submit" class="btn btn-primary">${esc(t('save'))}</button>
       </div></form>`);
-    const dyn = () => {
-      const rep = $('#rf-rep').value; let h = '';
-      if (rep === 'weekly') h = `<div class="field select">${icon('calendar_view_week')}<label for="rf-dow">${esc(t('dayOfWeek'))}</label><select id="rf-dow">${WEEKDAYS.map((d, i) => opt(d, cap(weekdayName(i)), r.dayOfWeek)).join('')}</select></div>`;
-      else if (rep === 'monthly') h = `<div class="field">${icon('calendar_today')}<label for="rf-dom">${esc(t('dayOfMonth'))}</label><input id="rf-dom" type="number" min="1" max="31" inputmode="numeric" value="${esc(r.dayOfMonth || '')}"></div>`;
-      else if (rep === 'onetime') h = `<div class="field">${icon('event')}<label for="rf-date">${esc(t('date'))}</label><input id="rf-date" type="date" value="${esc((r.oneTimeDate || dkey(todayD())).slice(0, 10))}"></div>`;
-      else if (rep === 'yearly') h = `<div class="field">${icon('event_repeat')}<label for="rf-date">${esc(t('annualDate'))}</label><input id="rf-date" type="date" value="${esc((r.oneTimeDate || dkey(todayD())).slice(0, 10))}"></div>`;
-      $('#rf-dyn').innerHTML = h; $('#rf-dyn').hidden = !h;
-    };
-    dyn();
-    $('#rf-rep').addEventListener('change', () => { captureDyn(); dyn(); });
-    function captureDyn() { if ($('#rf-dow')) r.dayOfWeek = $('#rf-dow').value; if ($('#rf-dom')) r.dayOfMonth = $('#rf-dom').value; if ($('#rf-date')) r.oneTimeDate = $('#rf-date').value; }
-    $('#rf-cat').addEventListener('change', (e) => { $('#rf-cat-dot').style.background = catOf(e.target.value).color; });
-    $('#rf-imp').addEventListener('change', (e) => { $('#rf-star').style.color = e.target.checked ? 'var(--star)' : 'var(--primary-ink)'; });
-    $('#rem-form').addEventListener('submit', (e) => {
-      e.preventDefault(); captureDyn();
-      const err = (m) => { const el = $('#rf-err'); el.textContent = m; el.hidden = false; };
-      const name = $('#rf-name').value.trim();
-      if (!name) { err(t('nameEmptyWarning')); $('#rf-name').focus(); return; }
-      const rep = $('#rf-rep').value;
-      if (rep === 'monthly') { const n = Number(r.dayOfMonth); if (!(n >= 1 && n <= 31)) return err(t('invalidDayOfMonth')); }
-      if ((rep === 'onetime' || rep === 'yearly') && !r.oneTimeDate) return err(t('pickDateFirst'));
+
+    const err = (m) => { const el = $('#ef-err'); el.textContent = m; el.hidden = !m; };
+    function drawItems() {
+      const box = $('#ef-items'); if (!box) return;
+      box.innerHTML = st.items.map((x, i) => `<div class="item-edit"><span class="ms sm" aria-hidden="true">check_box_outline_blank</span>
+        <input data-i="${i}" value="${esc(x.text)}" aria-label="${esc(t('itemsLabel'))} ${i + 1}">
+        <button type="button" class="icon-btn" data-rm="${i}" aria-label="${esc(t('delete'))}">${icon('close', 'sm')}</button></div>`).join('');
+    }
+    function addItem() {
+      const inp = $('#ef-new-item'); const v = inp.value.trim(); if (!v) return;
+      st.items.push({ id: uuid().slice(0, 8), text: v }); inp.value = ''; drawItems(); inp.focus(); err('');
+    }
+    function drawRep() {
+      const r = st.rep; let h = '';
+      if (r.type === 'interval') {
+        h = `<div class="field-row"><div class="field"><label for="ef-every">${esc(t('everyLabel'))}</label><input id="ef-every" type="number" min="1" max="99" inputmode="numeric" value="${esc(r.every || 1)}"></div>
+          <div class="field select"><label for="ef-unit">&nbsp;</label><select id="ef-unit" aria-label="${esc(t('everyLabel'))}">${UNITS.map(([v, k]) => opt(v, t(k), r.unit)).join('')}</select></div></div>`;
+      } else if (r.type === 'weekdays') {
+        h = `<div class="day-pills" role="group" aria-label="${esc(t('repWeekdays'))}">${[0, 1, 2, 3, 4, 5, 6].map((i) => `<button type="button" class="day-pill" data-day="${i}" aria-pressed="${r.days.includes(i)}">${esc(t(DOW_KEYS[i]))}</button>`).join('')}</div>`;
+      } else if (r.type === 'monthday') {
+        h = `<div class="field">${icon('calendar_today')}<label for="ef-mday">${esc(t('dayOfMonth'))}</label><input id="ef-mday" type="number" min="1" max="31" inputmode="numeric" value="${esc(r.monthDay)}"></div>`;
+      }
+      const box = $('#ef-rep-dyn'); box.innerHTML = h; box.hidden = !h;
+    }
+    drawItems(); drawRep();
+    const form = $('#entry-form');
+    form.addEventListener('click', (e) => {
+      const rm = e.target.closest('[data-rm]'); if (rm) { st.items.splice(Number(rm.dataset.rm), 1); drawItems(); return; }
+      const dp = e.target.closest('.day-pill');
+      if (dp) { const i = Number(dp.dataset.day); const s = new Set(st.rep.days); s.has(i) ? s.delete(i) : s.add(i); st.rep.days = [...s].sort(); dp.setAttribute('aria-pressed', s.has(i)); return; }
+      if (e.target.closest('#ef-add-item')) addItem();
+      if (e.target.closest('#ef-time-clear')) { $('#ef-time').value = ''; $('#ef-time-clear').hidden = true; }
+    });
+    form.addEventListener('input', (e) => {
+      if (e.target.dataset.i != null) st.items[Number(e.target.dataset.i)].text = e.target.value;
+      if (e.target.id === 'ef-every') st.rep.every = Number(e.target.value);
+      if (e.target.id === 'ef-mday') st.rep.monthDay = Number(e.target.value);
+      if (e.target.id === 'ef-time') $('#ef-time-clear').hidden = !e.target.value;
+    });
+    form.addEventListener('change', (e) => {
+      if (e.target.id === 'ef-rep') { st.rep.type = e.target.value; drawRep(); }
+      if (e.target.id === 'ef-unit') st.rep.unit = e.target.value;
+      if (e.target.id === 'ef-imp') $('#ef-star').style.color = e.target.checked ? 'var(--star)' : 'var(--muted)';
+      if (e.target.id === 'ef-date' && !existing) { const d = fromKey(e.target.value); st.rep.monthDay = d.getDate(); if (st.rep.days.length <= 1) st.rep.days = [weekdayIdx(d)]; if (st.rep.type === 'monthday' || st.rep.type === 'weekdays') drawRep(); }
+    });
+    const ni = $('#ef-new-item'); if (ni) ni.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); addItem(); } });
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      if (ni && ni.value.trim()) addItem();
+      const name = $('#ef-name').value.trim();
+      if (!name) { err(t('nameEmptyWarning')); $('#ef-name').focus(); return; }
+      const date = $('#ef-date').value; if (!date) return err(t('pickDateFirst'));
+      const items = st.items.map((x) => ({ ...x, text: x.text.trim() })).filter((x) => x.text);
+      if (isList && !items.length) return err(t('needItem'));
+      const r = st.rep; let repeat = { type: 'none' };
+      if (r.type === 'interval') { const n = Math.round(Number(r.every)); if (!(n >= 1 && n <= 99)) return err(t('everyLabel') + ' 1–99'); repeat = { type: 'interval', every: n, unit: r.unit || 'day' }; }
+      if (r.type === 'weekdays') { if (!r.days.length) return err(t('pickDays')); repeat = { type: 'weekdays', days: r.days.slice() }; }
+      if (r.type === 'monthday') { const n = Math.round(Number(r.monthDay)); if (!(n >= 1 && n <= 31)) return err(t('invalidDayOfMonth')); repeat = { type: 'monthday', monthDay: n }; }
       const data = {
-        ...(existing || {}), uid: existing ? existing.uid : uuid(), name, description: $('#rf-desc').value.trim(), type: $('#rf-type').value,
-        priority: existing ? existing.priority || 'medium' : 'medium', category: $('#rf-cat').value, repetitionTime: rep,
-        dayOfWeek: rep === 'weekly' ? r.dayOfWeek : null, dayOfMonth: rep === 'monthly' ? Number(r.dayOfMonth) : null,
-        oneTimeDate: rep === 'onetime' || rep === 'yearly' ? r.oneTimeDate : null,
-        location: $('#rf-loc').value.trim(), notificationTime: $('#rf-time').value || '09:00', hasNotification: $('#rf-notif').checked,
-        isImportant: $('#rf-imp').checked, status: existing ? existing.status || 'active' : 'active', completedDates: existing ? existing.completedDates || [] : [],
-        createdAt: existing ? existing.createdAt : new Date().toISOString(), startDate: existing ? existing.startDate : dkey(todayD()),
-        lastUpdated: new Date().toISOString(),
+        ...(existing || {}), uid: existing ? existing.uid : uuid(), kind: base.kind, name, description: $('#ef-desc').value.trim(),
+        date, time: $('#ef-time').value || '', important: $('#ef-imp').checked, repeat, items: isList ? items : [],
+        done: existing ? existing.done || {} : {}, checks: existing ? existing.checks || {} : {},
+        createdAt: existing ? existing.createdAt : new Date().toISOString(), updatedAt: new Date().toISOString(),
       };
-      if (existing && existing.repetitionTime !== rep) data.completedDates = [];
-      delete data.snoozedUntil;
-      const list = me().reminders; const i = list.findIndex((x) => x.uid === data.uid);
+      delete data.snoozedUntil; delete data.sample;
+      const list = me().tasks; const i = list.findIndex((x) => x.uid === data.uid);
       if (i >= 0) list[i] = data; else list.push(data);
-      save(); closeModal(); render(); toast(t('reminderSaved'));
+      save(); closeModal(); render(); toast(t('saved'));
     });
   }
 
   function dayDialog(dateK) {
-    const d = fromKey(dateK); const items = remindersOn(d, filtered());
-    const rows = items.map((r) => `<button class="day-row ${isDoneOn(r, d) ? 'done' : ''}" data-a="edit" data-id="${r.uid}">
-      <span class="dot" style="background:${catOf(r.category).color};width:10px;height:10px"></span>
-      <span class="grow"><b>${r.isImportant ? `<span class="star">${icon('star', 'fill xs')}</span> ` : ''}${esc(r.name || t('unnamedReminder'))}</b><small class="tnum">${icon('schedule', 'xs')}${esc(fmtTime(r.notificationTime))} · ${esc(catLabel(r.category))}</small></span>
-      ${icon('chevron_right')}</button>`).join('');
+    ui.dayOpen = dateK;
+    const d = fromKey(dateK);
     openModal(`<div class="dialog" role="dialog" aria-modal="true" aria-labelledby="dd-t">
-      <div class="dialog-head">${icon('notifications_active')}<div style="flex:1;min-width:0"><h2 id="dd-t">${esc(t('dailyReminders'))}</h2><p>${esc(cap(fmtDate(d, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })))}</p></div></div>
-      <div style="overflow-y:auto">${items.length ? `<div class="day-list">${rows}</div>` : `<div class="dialog-body" style="align-items:center;text-align:center">${icon('notifications_off', 'xl').replace('class="ms', 'style="opacity:.35" class="ms')}<p class="muted" style="margin:0">${esc(t('noRemindersForThisDay'))}</p><button class="btn btn-text" data-a="add-on" data-d="${dateK}">${esc(t('createReminder'))}</button></div>`}</div>
+      <div class="dialog-head">${icon('event_note')}<div style="flex:1;min-width:0"><h2 id="dd-t">${esc(cap(fmtDate(d, { weekday: 'long' })))}</h2><p>${esc(fmtDate(d, { day: 'numeric', month: 'long', year: 'numeric' }))}</p></div></div>
+      <div class="dialog-body" id="day-body" style="gap:10px"></div>
       <div class="dialog-foot"><button class="btn btn-text" style="margin-right:auto" data-a="modal-close">${esc(t('close'))}</button>
-        <button class="btn btn-primary" data-a="add-on" data-d="${dateK}">${icon('add', 'sm')}${esc(t('newReminder'))}</button></div></div>`);
+        <button class="btn btn-primary" data-a="add-on" data-d="${dateK}">${icon('add', 'sm')}${esc(t('addReminder'))}</button></div></div>`, () => { ui.dayOpen = null; });
+    drawDay();
   }
+  function drawDay() {
+    const box = $('#day-body'); if (!box || !ui.dayOpen) return;
+    const d = fromKey(ui.dayOpen); const items = entriesOn(d);
+    box.innerHTML = items.length ? items.map((it) => entryCard(it, d)).join('')
+      : `<div style="text-align:center;padding:12px 0" class="muted">${icon('event_busy', 'xl')}<p style="margin:6px 0 0">${esc(t('nothingToday'))}</p></div>`;
+  }
+  function refresh() { render(); drawDay(); }
 
   function feedbackDialog() {
     let rating = 0;
@@ -865,20 +818,24 @@
   }
 
   /* ================= Actions ================= */
-  function findR(id) { return reminders().find((r) => r.uid === id); }
-  function toggleDone(r, d = todayD(), silent) {
-    const k = dkey(d); let nowDone;
-    if (r.repetitionTime === 'onetime') { r.status = r.status === 'completed' ? 'active' : 'completed'; nowDone = r.status === 'completed'; }
-    else { r.completedDates = r.completedDates || []; const i = r.completedDates.indexOf(k); if (i >= 0) r.completedDates.splice(i, 1); else r.completedDates.push(k); nowDone = i < 0; }
-    if (nowDone) delete r.snoozedUntil;
-    save(); render();
-    if (!silent) toast(nowDone ? t('markedDone') : t('markedUndone'), { icon: nowDone ? 'task_alt' : 'radio_button_unchecked', action: { label: t('undo'), run: () => toggleDone(r, d, true) } });
+  function findR(id) { return entries().find((r) => r.uid === id); }
+  function toggleDone(it, d = todayD()) {
+    const k = dkey(d); it.done = it.done || {};
+    if (it.done[k]) delete it.done[k]; else { it.done[k] = true; delete it.snoozedUntil; }
+    save(); refresh();
+  }
+  function toggleCheck(it, itemId, d = todayD()) {
+    const k = dkey(d); it.checks = it.checks || {};
+    const s = new Set(it.checks[k] || []); s.has(itemId) ? s.delete(itemId) : s.add(itemId);
+    it.checks[k] = [...s]; if (!it.checks[k].length) delete it.checks[k];
+    save(); refresh();
+    if (isDoneOn(it, d)) toast(t('listDone'), { icon: 'task_alt' });
   }
   function deleteR(id) {
     const r = findR(id); if (!r) return;
-    confirmDialog({ title: t('deleteReminderTitle'), body: `${t('deleteReminderConfirm')}\n„${r.name}"`, ok: t('delete'), danger: true, onOk: () => {
-      const list = me().reminders; const i = list.findIndex((x) => x.uid === id); const [removed] = list.splice(i, 1);
-      ui.expanded.delete(id); save(); render();
+    confirmDialog({ title: t('deleteEntry'), body: t('deleteEntryConfirm', { name: r.name }), ok: t('delete'), danger: true, onOk: () => {
+      const list = me().tasks; const i = list.findIndex((x) => x.uid === id); const [removed] = list.splice(i, 1);
+      save(); render();
       toast(t('reminderDeleted'), { icon: 'delete', action: { label: t('undo'), run: () => { list.splice(i, 0, removed); save(); render(); } } });
     } });
   }
@@ -897,43 +854,6 @@
     startSession(u);
   }
   function logout() { DB.guest = { ...settings(), notif: { ...settings().notif } }; DB.session = null; ui.auth = 'login'; ui.stack = []; save(); render(); }
-
-  /* ---------- ICS import ---------- */
-  function parseICS(text) {
-    const lines = text.replace(/\r\n[ \t]/g, '').replace(/\n[ \t]/g, '').split(/\r?\n/);
-    const events = []; let ev = null;
-    const unesc = (s) => s.replace(/\\n/gi, '\n').replace(/\\,/g, ',').replace(/\\;/g, ';').replace(/\\\\/g, '\\');
-    for (const line of lines) {
-      if (line === 'BEGIN:VEVENT') { ev = {}; continue; }
-      if (line === 'END:VEVENT') { if (ev) events.push(ev); ev = null; continue; }
-      if (!ev) continue;
-      const idx = line.indexOf(':'); if (idx < 0) continue;
-      const left = line.slice(0, idx); const val = line.slice(idx + 1); const [prop, ...params] = left.split(';');
-      ev[prop.toUpperCase()] = { val: unesc(val), params };
-    }
-    const out = [];
-    for (const e of events) {
-      if (!e.SUMMARY || !e.DTSTART) continue;
-      const raw = e.DTSTART.val; const m = raw.match(/^(\d{4})(\d{2})(\d{2})(?:T(\d{2})(\d{2})(\d{2})?(Z)?)?/); if (!m) continue;
-      let dt;
-      if (m[4] != null) dt = m[7] ? new Date(Date.UTC(+m[1], +m[2] - 1, +m[3], +m[4], +m[5])) : new Date(+m[1], +m[2] - 1, +m[3], +m[4], +m[5]);
-      else dt = new Date(+m[1], +m[2] - 1, +m[3], 9, 0);
-      const rr = e.RRULE ? Object.fromEntries(e.RRULE.val.split(';').map((p) => p.split('='))) : {};
-      let rep = 'onetime', dayOfWeek = null, dayOfMonth = null;
-      if (rr.FREQ === 'DAILY') rep = 'daily';
-      else if (rr.FREQ === 'WEEKLY') { rep = 'weekly'; const map = { MO: 0, TU: 1, WE: 2, TH: 3, FR: 4, SA: 5, SU: 6 }; const bd = (rr.BYDAY || '').split(',')[0]; dayOfWeek = WEEKDAYS[bd in map ? map[bd] : weekdayIdx(dt)]; }
-      else if (rr.FREQ === 'MONTHLY') { rep = 'monthly'; dayOfMonth = Number(rr.BYMONTHDAY) || dt.getDate(); }
-      else if (rr.FREQ === 'YEARLY') rep = 'yearly';
-      if (rep === 'onetime' && dt < addDays(todayD(), -60)) continue; // skip old one-off events
-      out.push({
-        uid: uuid(), name: e.SUMMARY.val.trim().slice(0, 140), description: (e.DESCRIPTION ? e.DESCRIPTION.val : '').trim().slice(0, 1000), type: 'event', priority: 'medium',
-        repetitionTime: rep, category: 'Personal', dayOfWeek, dayOfMonth, oneTimeDate: rep === 'onetime' || rep === 'yearly' ? dkey(dt) : null,
-        notificationTime: `${pad(dt.getHours())}:${pad(dt.getMinutes())}`, location: e.LOCATION ? e.LOCATION.val.trim() : '', hasNotification: true, isImportant: false,
-        status: 'active', completedDates: [], createdAt: new Date().toISOString(), startDate: dkey(dt < todayD() ? dt : todayD()), source: 'calendar', eventId: e.UID ? e.UID.val : null,
-      });
-    }
-    return out;
-  }
 
   /* ---------- Notifications engine ---------- */
   let audioCtx = null;
@@ -962,7 +882,7 @@
     if (r) {
       const sn = el.querySelector('[data-snooze]');
       if (sn) sn.addEventListener('click', () => { const x = findR(r.uid); if (x) { x.snoozedUntil = new Date(Date.now() + 10 * 60e3).toISOString(); save(); toast(t('snoozedUntil', { time: new Intl.DateTimeFormat(loc(), { hour: 'numeric', minute: '2-digit' }).format(new Date(x.snoozedUntil)) }), { icon: 'snooze' }); } kill(); });
-      el.querySelector('[data-done]').addEventListener('click', () => { const x = findR(r.uid); if (x && !isDoneOn(x, todayD())) toggleDone(x, todayD(), true); toast(t('markedDone'), { icon: 'task_alt' }); kill(); });
+      el.querySelector('[data-done]').addEventListener('click', () => { const x = findR(r.uid); const T = todayD(); if (x && !isDoneOn(x, T)) { if (x.kind === 'list') { x.checks = x.checks || {}; x.checks[dkey(T)] = x.items.map((i) => i.id); save(); refresh(); } else toggleDone(x, T); } toast(t('markedDone'), { icon: 'task_alt' }); kill(); });
     }
     box.prepend(el);
     while (box.children.length > 3) box.lastChild.remove();
@@ -972,19 +892,13 @@
     const u = me(); if (!u || !u.settings.notif.reminders) return;
     const now = new Date(); const T = todayD(); const nowMin = now.getHours() * 60 + now.getMinutes(); const k = dkey(T);
     let changed = false;
-    for (const r of u.reminders) {
-      if (r.snoozedUntil && new Date(r.snoozedUntil) <= now) {
-        delete r.snoozedUntil; changed = true;
-        headsUp({ title: r.name, body: t('dontForget', { name: r.name }), r }); continue;
-      }
-      if (!r.hasNotification || !occursOn(r, T) || isDoneOn(r, T)) continue;
-      const due = timeToMin(r.notificationTime); const fk = `${r.uid}|${k}`;
-      if (nowMin >= due && nowMin - due <= 2 && !DB.fired[fk]) {
-        DB.fired[fk] = 1; changed = true;
-        headsUp({ title: r.name, body: t('dontForget', { name: r.name }) + (r.location ? ` · ${r.location}` : ''), r });
-      }
+    for (const it of entries()) {
+      const body = () => (it.kind === 'list' ? `${checkedOn(it, T).length}/${it.items.length} · ` : '') + t('dontForget', { name: it.name });
+      if (it.snoozedUntil && new Date(it.snoozedUntil) <= now) { delete it.snoozedUntil; changed = true; headsUp({ title: it.name, body: body(), r: it }); continue; }
+      if (!it.time || !occursOn(it, T) || isDoneOn(it, T)) continue;
+      const due = timeToMin(it.time); const fk = `${it.uid}|${k}`;
+      if (nowMin >= due && nowMin - due <= 2 && !DB.fired[fk]) { DB.fired[fk] = 1; changed = true; headsUp({ title: it.name, body: body(), r: it }); }
     }
-    // prune fired keys older than today
     for (const fk in DB.fired) if (!fk.endsWith(k)) { delete DB.fired[fk]; changed = true; }
     if (changed) save();
   }
@@ -1008,28 +922,25 @@
       case 'demo': await loginDemo(); break;
       case 'google':
         confirmDialog({ title: t('signInWithGoogle'), body: t('googleNeedsFirebase'), ok: t('continueDemo'), onOk: loginDemo }); break;
-      case 'add': closeModal(); reminderDialog(null, el.dataset.cat ? { category: el.dataset.cat } : (ui.tab === 'reminders' && ui.cat !== 'All' && !ui.stack.length ? { category: ui.cat } : {})); break;
-      case 'add-on': closeModal(); reminderDialog(null, { repetitionTime: 'onetime', oneTimeDate: el.dataset.d, ...(ui.cat !== 'All' ? { category: ui.cat } : {}) }); break;
-      case 'edit': { const r = findR(el.dataset.id); if (r) { closeModal(); reminderDialog(r); } break; }
+      case 'add': closeModal(); kindChooser(); break;
+      case 'add-on': closeModal(); kindChooser(el.dataset.d); break;
+      case 'pick-kind': { const d = el.dataset.d; closeModal(); entryDialog(el.dataset.v, null, d); break; }
+      case 'edit': { const r = findR(el.dataset.id); if (r) { closeModal(); entryDialog(r.kind, r); } break; }
       case 'delete': closeModal(); deleteR(el.dataset.id); break;
-      case 'toggle-done': case 'complete': { const r = findR(el.dataset.id); if (r) toggleDone(r); break; }
-      case 'expand': { const id = el.dataset.id; ui.expanded.has(id) ? ui.expanded.delete(id) : ui.expanded.add(id); render(); break; }
-      case 'open-cat': go('category', { cat: el.dataset.cat }); break;
-      case 'set-cat': ui.cat = el.dataset.cat; render(); break;
-      case 'rem-tab': ui.remTab = el.dataset.v; render(); break;
+      case 'toggle-done': { const r = findR(el.dataset.id); if (r) toggleDone(r, el.dataset.d ? fromKey(el.dataset.d) : todayD()); break; }
+      case 'expand': { const key = el.dataset.id + '|' + (el.dataset.d || dkey(todayD())); ui.expanded.has(key) ? ui.expanded.delete(key) : ui.expanded.add(key); refresh(); break; }
       case 'cal-prev': ui.calMonth = new Date(ui.calMonth.getFullYear(), ui.calMonth.getMonth() - 1, 1); render(); break;
       case 'cal-next': ui.calMonth = new Date(ui.calMonth.getFullYear(), ui.calMonth.getMonth() + 1, 1); render(); break;
       case 'cal-today': ui.calMonth = todayD(); render(); break;
       case 'day': dayDialog(el.dataset.d); break;
       case 'modal-close': closeModal(); break;
       case 'clear-samples': {
-        const u = me(); u.reminders = u.reminders.filter((r) => !r.sample); save(); render(); toast(t('samplesRemoved')); break;
+        const u = me(); u.tasks = u.tasks.filter((r) => !r.sample); save(); render(); toast(t('samplesRemoved')); break;
       }
       case 'test-notif':
         toast(t('testNotificationIn'), { icon: 'notification_add' });
         try { audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)(); audioCtx.resume && audioCtx.resume(); } catch (err) { /* ignore */ }
         setTimeout(() => headsUp({ title: t('testNotificationTitle'), body: t('testNotificationBody') }), 5000); break;
-      case 'import-ics': $('#ics-input').click(); break;
       case 'logout': logout(); break;
       case 'feedback': feedbackDialog(); break;
       case 'delete-account':
@@ -1047,24 +958,13 @@
         const code = ui.pendingLang || settings().lang; settings().lang = code; ui.pendingLang = null; save(); render();
         toast(t('languageSetTo', { language: LANGS.find((l) => l.code === code).label })); break;
       }
-      case 'pick-color': settings().primary = el.dataset.v; save(); render(); break;
       case 'restore-defaults': { const s = settings(); s.primary = BRAND; s.dark = null; s.reduceMotion = false; save(); render(); toast(t('defaultsRestored')); break; }
       default: break;
     }
   });
   document.addEventListener('change', (e) => {
     const el = e.target; const a = el.dataset && el.dataset.a;
-    if (el.id === 'ics-input') {
-      const f = el.files && el.files[0]; if (!f) return;
-      const rd = new FileReader();
-      rd.onload = () => {
-        const items = parseICS(String(rd.result || ''));
-        if (!items.length) { toast(t('importNone'), { error: true }); }
-        else { me().reminders.push(...items); save(); render(); toast(t('importedN', { n: items.length }), { icon: 'event_available' }); }
-        el.value = '';
-      };
-      rd.readAsText(f); return;
-    }
+    if (a === 'toggle-check') { const r = findR(el.dataset.id); if (r) toggleCheck(r, el.dataset.item, fromKey(el.dataset.d)); return; }
     if (!a) return;
     const s = settings();
     if (a === 'dark-toggle') { s.dark = el.checked; save(); render(); }
@@ -1074,10 +974,6 @@
     }
   });
   document.addEventListener('input', (e) => {
-    if (e.target.id === 'search') {
-      ui.q = e.target.value; const pos = e.target.selectionStart; render();
-      const s = $('#search'); if (s) { s.focus(); try { s.setSelectionRange(pos, pos); } catch (err) { /* ignore */ } }
-    }
     if (e.target.id === 'np' || e.target.id === 'reg-pass') {
       const m = $('#pw-meter'); if (!m) return; const s = pwStrength(e.target.value);
       m.style.width = (s / 5) * 100 + '%'; m.style.background = s <= 1 ? 'var(--error)' : s <= 3 ? '#FB8C00' : 'var(--success)';
