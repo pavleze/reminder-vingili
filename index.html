@@ -3,11 +3,17 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Reminder">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <title>Reminder</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="description" content="Never miss a thing! Reminder — smart reminders with calendar, categories and notifications.">
 <meta name="theme-color" content="#1E9E6A">
-<link rel="icon" href="assets/icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap">
@@ -485,5 +491,6 @@ hr.div { border: 0; border-top: 1.2px solid var(--divider); margin: 0; width: 10
 <div class="heads" id="heads" aria-live="assertive"></div>
 <script src="i18n.js"></script>
 <script src="app.js"></script>
+<script>if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) window.addEventListener('load', () => navigator.serviceWorker.register('/sw.js').catch(() => {}));</script>
 </body>
 </html>

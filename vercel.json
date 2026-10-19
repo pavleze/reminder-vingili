@@ -4,6 +4,8 @@
     { "source": "/__/firebase/:path*", "destination": "https://reminder-c29a5.firebaseapp.com/__/firebase/:path*" }
   ],
   "headers": [
-    { "source": "/(.*)", "headers": [ { "key": "X-Content-Type-Options", "value": "nosniff" } ] }
+    { "source": "/(.*)", "headers": [ { "key": "X-Content-Type-Options", "value": "nosniff" } ] },
+    { "source": "/sw.js", "headers": [ { "key": "Cache-Control", "value": "no-cache" } ] },
+    { "source": "/manifest.webmanifest", "headers": [ { "key": "Content-Type", "value": "application/manifest+json" } ] }
   ]
 }

@@ -18,7 +18,16 @@ body='''
 <script src="i18n.js"></script>
 <script src="app.js"></script>
 '''
+PWA='''<link rel="manifest" href="/manifest.webmanifest">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Reminder">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+'''
+SW='''<script>if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) window.addEventListener('load', () => navigator.serviceWorker.register('/sw.js').catch(() => {}));</script>
+'''
 open('app.html','w',encoding='utf-8').write(head+body)
-open('index.html','w',encoding='utf-8').write('<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">\n'+head+'\n</head>\n<body>'+body+'</body>\n</html>\n')
+open('index.html','w',encoding='utf-8').write('<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">\n'+PWA+head.replace('<link rel="icon" href="assets/icon.png">','<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">')+'\n</head>\n<body>'+body+SW+'</body>\n</html>\n')
 open('app.js','w',encoding='utf-8').write(js)
 print(len(names), sorted(names))
