@@ -19,6 +19,6 @@ body='''
 <script src="app.js"></script>
 '''
 open('app.html','w',encoding='utf-8').write(head+body)
-open('index.html','w',encoding='utf-8').write('<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">\n'+head+'\n</head>\n<body>'+body+'</body>\n</html>\n')
+open('index.html','w',encoding='utf-8').write('<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">\n'+head+'\n</head>\n<body>'+body+'</body>\n</html>\n')
 open('app.js','w',encoding='utf-8').write(js)
 print(len(names), sorted(names))

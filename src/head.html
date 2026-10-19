@@ -59,6 +59,9 @@ body {
 }
 body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--primary); }
 button, input, select, textarea { font: inherit; color: inherit; }
+html { touch-action: manipulation; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+/* iOS zooms into any field under 16px when it gets focus */
+@media (max-width: 900px) { input, select, textarea, .field input, .field select, .field textarea, .add-item input, .item-edit input { font-size: 16px !important; } }
 button { cursor: pointer; }
 :focus-visible { outline: 2px solid var(--primary-ink); outline-offset: 2px; }
 h1, h2, h3 { text-wrap: balance; margin: 0; }
