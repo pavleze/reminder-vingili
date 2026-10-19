@@ -145,7 +145,7 @@
   const KEY = 'todays-v3';
   const defaultSettings = () => ({
     lang: 'sr',
-    dark: null, primary: BRAND, reduceMotion: false,
+    dark: null, primary: BRAND,
     notif: { reminders: true, snooze: true, sound: true },
   });
   let DB = null;
@@ -278,7 +278,6 @@
   function applyTheme() {
     const s = settings(); const root = document.documentElement; const dark = isDark();
     root.setAttribute('data-app-theme', dark ? 'dark' : 'light');
-    root.setAttribute('data-motion', s.reduceMotion ? 'reduce' : 'full');
     root.lang = s.lang === 'sr' ? 'sr-Latn' : s.lang;
     const p = BRAND; const bg = dark ? '#08110c' : '#f5faf6';
     root.style.setProperty('--primary', p);
@@ -684,8 +683,7 @@
   function screenAppearance() {
     const s = settings(); const dark = isDark();
     const html = `
-      ${switchTile('dark-switch', t('darkMode'), s.dark == null ? `${t('darkModeDesc')} · ${t('themeFollowsSystem')}` : t('darkModeDesc'), dark, 'dark-toggle')}
-      ${switchTile('motion-switch', t('reduceMotion'), t('reduceMotionDesc'), !!s.reduceMotion, 'motion-toggle')}`;
+      ${switchTile('dark-switch', t('darkMode'), s.dark == null ? `${t('darkModeDesc')} · ${t('themeFollowsSystem')}` : t('darkModeDesc'), dark, 'dark-toggle')}`;
     return { title: t('appearance'), html, narrow: true };
   }
   function screenCredits() {
@@ -1060,7 +1058,6 @@
         settings().lang = code; settings().langChosen = true; ui.pendingLang = null; if (changed && me()) refreshSamples(me()); save(); render();
         toast(t('languageSetTo', { language: LANGS.find((l) => l.code === code).label })); break;
       }
-      case 'restore-defaults': { const s = settings(); s.primary = BRAND; s.dark = null; s.reduceMotion = false; save(); render(); toast(t('defaultsRestored')); break; }
       default: break;
     }
   });
@@ -1070,7 +1067,6 @@
     if (!a) return;
     const s = settings();
     if (a === 'dark-toggle') { s.dark = el.checked; save(); render(); }
-    else if (a === 'motion-toggle') { s.reduceMotion = el.checked; save(); render(); }
     else if (a === 'notif-set') {
       const map = { 'n-rem': 'reminders', 'n-snooze': 'snooze', 'n-sound': 'sound' }; s.notif[map[el.id]] = el.checked; save();
     }
@@ -1125,20 +1121,6 @@
   function bindAfterRender() { /* hook for future per-render bindings */ }
 
   /* ================= Boot ================= */
-  function splash() {
-    const root = app();
-    root.innerHTML = `<div class="splash" id="splash"><div class="splash-inner">
-      <img class="splash-logo" src="assets/logo.svg" alt="Reminder">
-      <div class="progress" role="progressbar" aria-label="${esc(t('loading'))}"><i id="splash-bar"></i></div>
-      <div class="splash-dev"><span>Developed by</span><img src="assets/scumpy.svg" alt="Scampy Software Solutions"></div>
-    </div></div>`;
-    const reduce = settings().reduceMotion || (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
-    let p = 0; const bar = $('#splash-bar');
-    const finish = () => { ui.splash = false; render(); };
-    if (reduce) { bar.style.width = '100%'; setTimeout(finish, 300); return; }
-    const tick = () => { p = Math.min(100, p + 7); bar.style.width = p + '%'; if (p < 100) setTimeout(tick, 70); else setTimeout(finish, 180); };
-    setTimeout(tick, 120);
-  }
 
   load();
   if (!DB.seeded) { // first visit: open in a realistic working state with the demo account
