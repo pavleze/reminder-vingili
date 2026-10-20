@@ -84,6 +84,10 @@ async function createOnce(collection, id, data) {
   if (!res.ok) throw new Error(`Firestore create: ${await res.text()}`);
   return true;
 }
+async function patchDoc(collection, id, data) {
+  const mask = Object.keys(data).map((k) => 'updateMask.fieldPaths=' + encodeURIComponent(k)).join('&');
+  await fsFetch(`${docsBase()}/${collection}/${encodeURIComponent(id)}?${mask}`, { method: 'PATCH', body: JSON.stringify({ fields: encodeValue(data).mapValue.fields }) });
+}
 async function deleteDoc(collection, id) {
   await fsFetch(`${docsBase()}/${collection}/${encodeURIComponent(id)}`, { method: 'DELETE' });
 }
@@ -116,18 +120,19 @@ function vapidAuth(endpoint) {
   const pub = fromB64u(VAPID_PUBLIC);
   const key = crypto.createPrivateKey({ key: { kty: 'EC', crv: 'P-256', d: priv, x: b64u(pub.subarray(1, 33)), y: b64u(pub.subarray(33, 65)) }, format: 'jwk' });
   const head = b64u(JSON.stringify({ typ: 'JWT', alg: 'ES256' }));
-  const body = b64u(JSON.stringify({ aud: new URL(endpoint).origin, exp: Math.floor(Date.now() / 1000) + 12 * 3600, sub: 'https://reminder-vingili.vercel.app' }));
+  const body = b64u(JSON.stringify({ aud: new URL(endpoint).origin, exp: Math.floor(Date.now() / 1000) + 3600, sub: 'https://reminder-vingili.vercel.app' }));
   const sig = crypto.sign('sha256', Buffer.from(`${head}.${body}`), { key, dsaEncoding: 'ieee-p1363' });
   return `vapid t=${head}.${body}.${b64u(sig)}, k=${VAPID_PUBLIC}`;
 }
 // → HTTP status from the push service (201 ok; 404/410 = subscription gone)
-async function sendPush(sub, message) {
+async function sendPush(sub, message, detail) {
   const body = encryptPayload(JSON.stringify(message), sub.keys.p256dh, sub.keys.auth);
   const res = await fetch(sub.endpoint, {
     method: 'POST',
     headers: { TTL: '3600', Urgency: 'high', 'Content-Encoding': 'aes128gcm', 'Content-Type': 'application/octet-stream', Authorization: vapidAuth(sub.endpoint) },
     body,
   });
+  if (detail) detail.text = res.status >= 300 ? (await res.text().catch(() => '')).slice(0, 200) : '';
   return res.status;
 }
 
@@ -202,4 +207,4 @@ async function pushToUids(uids, makeMsg) {
   return sent;
 }
 
-module.exports = { verifyIdToken, pushToUids, listAll, getDoc, createOnce, deleteDoc, sendPush, encryptPayload, vapidAuth, occursOn, isDoneOn, checkedOn, isEvent, isFloating, localNow, addDays, dkey, fromKey, timeToMin };
+module.exports = { patchDoc, verifyIdToken, pushToUids, listAll, getDoc, createOnce, deleteDoc, sendPush, encryptPayload, vapidAuth, occursOn, isDoneOn, checkedOn, isEvent, isFloating, localNow, addDays, dkey, fromKey, timeToMin };

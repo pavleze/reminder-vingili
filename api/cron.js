@@ -38,6 +38,7 @@ module.exports = async (req, res) => {
       const mine = items.filter((it) => (Array.isArray(it.members) ? it.members.includes(uid) : it.owner === uid));
       const out = [];
       report.users++;
+      if (debug) debug.push(...(await L.listAll('pushLog')).filter((x) => x.uid === uid && String(x.id).includes(L.dkey(today))).map((x) => ({ log: x.what || x.id.split('_')[1], at: x.at, result: x.result || '(no result saved)' })));
       if (debug) debug.push({ uid: uid.slice(0, 6), devices: byUid[uid].length, tz: u.tz || 'Europe/Belgrade (default)', localNow: `${L.dkey(today)} ${String(Math.floor(nowMin / 60)).padStart(2, '0')}:${String(nowMin % 60).padStart(2, '0')}`, reminders: notif.reminders !== false, items: mine.length });
 
       // 1) items with a time: at the time, or N minutes before (it.remind; -1 = off)
@@ -52,9 +53,10 @@ module.exports = async (req, res) => {
             if (!L.occursOn(it, d) || (!L.isEvent(it) && L.isDoneOn(it, d))) continue;
             const late = nowMin - (off * 1440 + L.timeToMin(it.time) - remind);
             if (late < 0 || late > WINDOW) continue;
-            if (!(await L.createOnce('pushLog', `${uid}_${it.id}_${L.dkey(d)}`, { uid, at: new Date().toISOString() }))) continue;
+            const logId = `${uid}_${it.id}_${L.dkey(d)}`;
+            if (!(await L.createOnce('pushLog', logId, { uid, at: new Date().toISOString(), what: it.name }))) continue;
             const list = it.kind === 'list' ? ` · ${L.checkedOn(it, d).length}/${(it.items || []).length}` : '';
-            out.push({ title: it.name, body: (remind ? tx.before(tx.min(remind), it.time) : tx.now(it.time)) + list, tag: `${it.id}_${L.dkey(d)}`, url: '/' });
+            out.push({ logId, title: it.name, body: (remind ? tx.before(tx.min(remind), it.time) : tx.now(it.time)) + list, tag: `${it.id}_${L.dkey(d)}`, url: '/' });
           }
         }
       }
@@ -65,25 +67,29 @@ module.exports = async (req, res) => {
         const todays = mine.filter((it) => !it.time && L.occursOn(it, today) && !(L.isEvent(it) ? false : L.isDoneOn(it, today)));
         const overdue = mine.filter((it) => it.date && (!it.repeat || it.repeat.type === 'none') && !L.isEvent(it) && L.fromKey(it.date) < today && !L.isDoneOn(it, L.fromKey(it.date)));
         const general = mine.filter((it) => L.isFloating(it) && !L.isDoneOn(it, today));
-        if (todays.length + overdue.length + general.length && (await L.createOnce('pushLog', `${uid}_${L.dkey(today)}_morning`, { uid, at: new Date().toISOString() }))) {
+        const mLog = `${uid}_${L.dkey(today)}_morning`;
+        if (todays.length + overdue.length + general.length && (await L.createOnce('pushLog', mLog, { uid, at: new Date().toISOString(), what: 'morning' }))) {
           const names = todays.map((x) => x.name);
           const parts = [];
           if (names.length) parts.push(`${tx.today}: ${names.slice(0, 4).join(', ')}${names.length > 4 ? ' ' + tx.more(names.length - 4) : ''}`);
           if (overdue.length) parts.push(`${tx.late}: ${overdue.length}`);
           if (general.length) parts.push(`${tx.general}: ${general.length}`);
-          out.push({ title: tx.morningTitle, body: parts.join(' · '), tag: `morning_${L.dkey(today)}`, url: '/' });
+          out.push({ logId: mLog, title: tx.morningTitle, body: parts.join(' · '), tag: `morning_${L.dkey(today)}`, url: '/' });
         }
       }
 
-      for (const msg of out) {
+      for (const { logId, ...msg } of out) {
+        const results = [];
         for (const s of byUid[uid]) {
           try {
-            const code = await L.sendPush(s.sub, msg);
+            const detail = {}; const code = await L.sendPush(s.sub, msg, detail);
+            results.push(`${new URL(s.sub.endpoint).host} ${code}${detail.text ? ' ' + detail.text : ''}`);
             if (code === 404 || code === 410) { await L.deleteDoc('pushSubs', s.id); report.removed++; }
             else if (code >= 200 && code < 300) report.sent++;
             else report.errors.push(`push ${code}`);
-          } catch (e) { report.errors.push(String(e.message || e)); }
+          } catch (e) { report.errors.push(String(e.message || e)); results.push('error ' + String(e.message || e).slice(0, 150)); }
         }
+        await L.patchDoc('pushLog', logId, { result: results.join(' | ') }).catch(() => {});
       }
     }
     res.status(200).json(report);
