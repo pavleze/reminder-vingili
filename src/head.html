@@ -386,6 +386,8 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
 .cal-cell.past > * { opacity: .45; }
 .cal-cell.past:hover > * { opacity: .8; }
 .cal-cell.today { border-color: var(--primary); background: color-mix(in srgb, var(--primary) 6%, var(--card)); }
+.cal-top { display: flex; align-items: center; justify-content: space-between; gap: 2px; min-width: 0; }
+.cal-cell .wx { color: var(--muted); line-height: 0; flex: none; }
 .cal-cell .n { align-self: flex-start; min-width: 24px; height: 24px; border-radius: 12px; display: grid; place-items: center; font-weight: 600; font-size: 12.5px; padding: 0 4px; }
 .cal-cell.today .n { background: var(--primary); color: var(--on-primary); }
 .cal-cell .items { display: flex; flex-direction: column; gap: 2px; min-width: 0; }

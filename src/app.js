@@ -28,7 +28,7 @@
       partnerHelp: 'Your partner needs to sign in with Google once. Then enter their email here.', linkBtn: 'Link', unlinkBtn: 'Remove', partnerSelf: "That's your own email",
       partnerNotFound: "No account with that email yet. Ask them to sign in with Google first.", partnerLinked: 'Linked with {name}', shareWith: 'Share with {name}',
       sharedBy: 'Shared by {name}', sharedWith: 'Shared with {name}', partnerLinkFirst: 'Link a partner in Profile to share items', signInGoogleHint: 'Sign in to sync across devices and share with your partner',
-      repUnits: 'day|days|days;week|weeks|weeks;month|months|months;year|years|years', filterDated: 'With date', remindLabel: 'Reminder', remindAtShort: 'At the time', beforeShort: '{n} before', remindHint: 'tap one or more · none = no reminder', remindAt: 'At the time', remindBefore: '{n} before', remindOff: 'No reminder', min5: '5 min', min15: '15 min', min30: '30 min', hour1: '1 hour', day1: '1 day',
+      repUnits: 'day|days|days;week|weeks|weeks;month|months|months;year|years|years', filterDated: 'With date', remindLabel: 'Reminder', remindAtShort: 'At the time', beforeShort: '{n} before', remindHint: 'tap one or more · none = no reminder', remindAt: 'At the time', remindBefore: '{n} before', remindOff: 'No reminder', min5: '5 min', min15: '15 min', min30: '30 min', hour1: '1 hour', day1: '1 day', weather: 'Weather forecast', weatherDesc: 'Weather icon next to the day in the calendar (next 16 days)', weatherFallback: 'Location not allowed — showing Belgrade',
       pushDevice: 'Notifications on this device', pushDeviceDesc: 'Arrive even when the app is closed', pushOn: 'On', pushTurnOn: 'Turn on', pushTurnOff: 'Turn off', pushIosHint: 'On iPhone: first add Reminder to the Home Screen (Share → Add to Home Screen), open it from there and turn notifications on.',
       pushEnabled: 'Notifications are on for this device', pushDisabled: 'Notifications are off for this device', pushFailed: 'Could not turn on notifications', pushTestSent: 'Test notification sent', pushNeedsOn: 'Turn on notifications on this device first',
       remindersPushDesc: 'At the item time, or earlier too — you choose in each item', partnerNotifyFailed: 'Could not notify your partner', sharedChanges: 'Shared items', sharedChangesDesc: 'When your partner adds or edits an item shared with you', morningSummary: 'Morning summary', morningSummaryDesc: 'Today\'s items without a time, overdue and General', morningTime: 'Time', sendTest: 'Send a test notification', filterAll: 'All', filterTasks: 'Tasks', filterEvents: 'Events', lateDay: '{n} day late', lateDays: '{n} days late', allDoneToday: 'All done for today', nothingToday: 'Nothing planned for today', deleteEntry: 'Delete', deleteEntryConfirm: 'Delete “{name}”?',
@@ -68,7 +68,7 @@
       partnerHelp: 'Partner treba jednom da se prijavi preko Google-a. Zatim ovde unesite njegov email.', linkBtn: 'Poveži', unlinkBtn: 'Ukloni', partnerSelf: 'To je vaš email',
       partnerNotFound: 'Nema naloga sa tim emailom. Neka se partner prvo prijavi preko Google-a.', partnerLinked: 'Povezani ste sa: {name}', shareWith: 'Podeli sa: {name}',
       sharedBy: 'Podelio/la: {name}', sharedWith: 'Podeljeno sa: {name}', partnerLinkFirst: 'Povežite partnera u Profilu da biste delili stavke', signInGoogleHint: 'Prijavite se da biste imali iste podatke na svim uređajima i delili sa partnerom',
-      repUnits: 'dan|dana|dana;nedelja|nedelje|nedelja;mesec|meseca|meseci;godina|godine|godina', filterDated: 'Sa datumom', remindLabel: 'Podsetnik', remindAtShort: 'U vreme', beforeShort: '{n} pre', remindHint: 'možeš više · nijedan = bez podsetnika', remindAt: 'U vreme stavke', remindBefore: '{n} ranije', remindOff: 'Bez podsetnika', min5: '5 min', min15: '15 min', min30: '30 min', hour1: '1 sat', day1: '1 dan',
+      repUnits: 'dan|dana|dana;nedelja|nedelje|nedelja;mesec|meseca|meseci;godina|godine|godina', filterDated: 'Sa datumom', remindLabel: 'Podsetnik', remindAtShort: 'U vreme', beforeShort: '{n} pre', remindHint: 'možeš više · nijedan = bez podsetnika', remindAt: 'U vreme stavke', remindBefore: '{n} ranije', remindOff: 'Bez podsetnika', min5: '5 min', min15: '15 min', min30: '30 min', hour1: '1 sat', day1: '1 dan', weather: 'Vremenska prognoza', weatherDesc: 'Ikonica vremena pored dana u kalendaru (narednih 16 dana)', weatherFallback: 'Lokacija nije dozvoljena — prikazujem Beograd',
       pushDevice: 'Obaveštenja na ovom uređaju', pushDeviceDesc: 'Stižu i kad je aplikacija zatvorena', pushOn: 'Uključeno', pushTurnOn: 'Uključi', pushTurnOff: 'Isključi', pushIosHint: 'Na iPhone-u: prvo dodaj Reminder na početni ekran (Share → Add to Home Screen), otvori ga odatle i uključi obaveštenja.',
       pushEnabled: 'Obaveštenja su uključena na ovom uređaju', pushDisabled: 'Obaveštenja su isključena na ovom uređaju', pushFailed: 'Nije uspelo uključivanje obaveštenja', pushTestSent: 'Probno obaveštenje je poslato', pushNeedsOn: 'Prvo uključi obaveštenja na ovom uređaju',
       remindersPushDesc: 'U vreme stavke, i ranije ako izabereš — biraš u svakoj stavci', partnerNotifyFailed: 'Partner nije obavešten', sharedChanges: 'Podeljene stavke', sharedChangesDesc: 'Kad partner doda ili izmeni stavku koju deli sa tobom', morningSummary: 'Jutarnji pregled', morningSummaryDesc: 'Današnje stavke bez vremena, one koje kasne i Opšte', morningTime: 'Vreme', sendTest: 'Pošalji probno obaveštenje', filterAll: 'Sve', filterTasks: 'Zadaci', filterEvents: 'Događaji', lateDay: 'kasni {n} dan', lateDays: 'kasni {n} dana', allDoneToday: 'Sve za danas je urađeno', nothingToday: 'Za danas nema ništa', deleteEntry: 'Obriši', deleteEntryConfirm: 'Obrisati „{name}“?',
@@ -606,7 +606,43 @@
       ${hasMore ? `<button class="btn btn-outline btn-sm more-btn" data-a="agenda-more">${icon('expand_more', 'sm')}${esc(t('showMore'))}</button>` : ''}` : undated.length ? '' : `<p class="quiet">${esc(t('nothingToday'))}</p>`}
     </div>`;
   }
+  /* Weather (Open-Meteo, free, no key): an icon next to each day in the calendar, when turned on in Appearance.
+     The location stays on this device only (localStorage), never in the shared profile. */
+  const WX_KEY = 'todays-weather';
+  let WX = null; try { WX = JSON.parse(localStorage.getItem(WX_KEY) || 'null'); } catch (e) { WX = null; }
+  const weatherWanted = () => !!settings().weather;
+  const weatherOn = (d) => (weatherWanted() && WX && WX.days && WX.days[dkey(d)]) || null;
+  // WMO weather code → Material Symbols icon
+  const wxName = (c) => (c <= 0 ? 'sunny' : c <= 2 ? 'partly_cloudy_day' : c === 3 ? 'cloud' : c <= 48 ? 'foggy' : c >= 95 ? 'thunderstorm' : (c >= 71 && c <= 77) || c === 85 || c === 86 ? 'weather_snowy' : 'rainy');
+  function wxIcon(d) {
+    const w = weatherOn(d); if (!w) return '';
+    return `<span class="wx" title="${w.max}° / ${w.min}°">${icon(wxName(w.code), 'xs')}</span>`;
+  }
+  let wxBusy = false;
+  function refreshWeather(force) {
+    if (!weatherWanted() || wxBusy || !WX || WX.lat == null) return;
+    if (!force && WX.at && Date.now() - WX.at < 3 * 3600e3) return;
+    wxBusy = true;
+    fetch(`https://api.open-meteo.com/v1/forecast?latitude=${WX.lat}&longitude=${WX.lon}&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=auto&forecast_days=16`)
+      .then((r) => r.json()).then((j) => {
+        const dl = j.daily || {}; const days = {};
+        (dl.time || []).forEach((k, i) => { days[k] = { code: dl.weather_code[i], max: Math.round(dl.temperature_2m_max[i]), min: Math.round(dl.temperature_2m_min[i]) }; });
+        WX = { ...WX, at: Date.now(), days }; try { localStorage.setItem(WX_KEY, JSON.stringify(WX)); } catch (e) { /* ignore */ }
+        render();
+      }).catch(() => {}).finally(() => { wxBusy = false; });
+  }
+  // asks for the location once (falls back to Belgrade), then loads the forecast
+  let wxLocating = false;
+  const ensureWeather = () => (WX && WX.lat != null ? refreshWeather() : wxLocating ? null : locateWeather());
+  function locateWeather() {
+    wxLocating = true;
+    const use = (lat, lon) => { wxLocating = false; WX = { lat: +lat.toFixed(2), lon: +lon.toFixed(2) }; refreshWeather(true); };
+    const fallback = () => { toast(t('weatherFallback'), { icon: 'location_off' }); use(44.82, 20.46); };
+    if (!navigator.geolocation) return fallback();
+    navigator.geolocation.getCurrentPosition((p) => use(p.coords.latitude, p.coords.longitude), fallback, { timeout: 10000, maximumAge: 6 * 3600e3 });
+  }
   function renderCalendar(list) {
+    if (weatherWanted()) setTimeout(ensureWeather);
     const m = ui.calMonth; const y = m.getFullYear(), mo = m.getMonth();
     const first = new Date(y, mo, 1); const days = new Date(y, mo + 1, 0).getDate();
     const startW = weekdayIdx(first); const total = Math.ceil((startW + days) / 7) * 7;
@@ -615,9 +651,9 @@
       const n = i - startW + 1;
       if (n < 1 || n > days) { cells += '<div class="cal-cell pad" aria-hidden="true"></div>'; continue; }
       const d = new Date(y, mo, n); const items = entriesOn(d, list); const isT = sameDay(d, T);
-      const label = `${fmtDate(d, { weekday: 'long', day: 'numeric', month: 'long' })}, ${items.length}`;
+      const wx = weatherOn(d); const label = `${fmtDate(d, { weekday: 'long', day: 'numeric', month: 'long' })}, ${items.length}${wx ? `, ${wx.max}° / ${wx.min}°` : ''}`;
       cells += `<button class="cal-cell ${isT ? 'today' : ''} ${d < T ? 'past' : ''}" data-a="day" data-d="${dkey(d)}" aria-label="${esc(label)}">
-        <span class="n tnum">${n}</span>
+        <span class="cal-top"><span class="n tnum">${n}</span>${wxIcon(d)}</span>
         <span class="items">${items.slice(0, 4).map((it) => `<span class="it ${isDoneOn(it, d) ? 'done' : ''}" style="--c:${entryColor(it)}">${esc(it.name)}</span>`).join('')}</span>
         ${items.length > 4 ? `<span class="more">${esc(t('moreN', { n: items.length - 4 }))}</span>` : ''}
       </button>`;
@@ -805,7 +841,8 @@
   function screenAppearance() {
     const s = settings(); const dark = isDark();
     const html = `
-      ${switchTile('dark-switch', t('darkMode'), s.dark == null ? `${t('darkModeDesc')} · ${t('themeFollowsSystem')}` : t('darkModeDesc'), dark, 'dark-toggle')}`;
+      ${switchTile('dark-switch', t('darkMode'), s.dark == null ? `${t('darkModeDesc')} · ${t('themeFollowsSystem')}` : t('darkModeDesc'), dark, 'dark-toggle')}
+      ${switchTile('weather-switch', t('weather'), t('weatherDesc'), !!s.weather, 'weather-toggle')}`;
     return { title: t('appearance'), html, narrow: true };
   }
   function screenCredits() {
@@ -1479,6 +1516,7 @@
     if (!a) return;
     const s = settings();
     if (a === 'dark-toggle') { s.dark = el.checked; save(); render(); }
+    else if (a === 'weather-toggle') { s.weather = el.checked; save(); if (el.checked) locateWeather(); }
     else if (a === 'notif-set') {
       const map = { 'n-rem': 'reminders', 'n-snooze': 'snooze', 'n-sound': 'sound', 'n-morning': 'morning', 'n-shared': 'shared' }; s.notif[map[el.id]] = el.checked; save();
       if (el.id === 'n-morning') render();
