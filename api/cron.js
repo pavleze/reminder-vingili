@@ -53,7 +53,7 @@ module.exports = async (req, res) => {
             if (!L.occursOn(it, d) || (!L.isEvent(it) && L.isDoneOn(it, d))) continue;
             const late = nowMin - (off * 1440 + L.timeToMin(it.time) - remind);
             if (late < 0 || late > WINDOW) continue;
-            const logId = `${uid}_${it.id}_${L.dkey(d)}`;
+            const logId = `${uid}_${it.id}_${L.dkey(d)}_${String(it.time).replace(':', '')}_${remind}`; // a changed time or reminder fires again
             if (!(await L.createOnce('pushLog', logId, { uid, at: new Date().toISOString(), what: it.name }))) continue;
             const list = it.kind === 'list' ? ` · ${L.checkedOn(it, d).length}/${(it.items || []).length}` : '';
             out.push({ logId, title: it.name, body: (remind ? tx.before(tx.min(remind), it.time) : tx.now(it.time)) + list, tag: `${it.id}_${L.dkey(d)}`, url: '/' });
