@@ -631,15 +631,25 @@
         render();
       }).catch(() => {}).finally(() => { wxBusy = false; });
   }
-  // asks for the location once (falls back to Belgrade), then loads the forecast
+  // follows the device's current location: checked again every 30 min (no prompt once allowed); a new place reloads the forecast.
+  // No location at all → Belgrade; a failed check later keeps the last known place.
   let wxLocating = false;
-  const ensureWeather = () => (WX && WX.lat != null ? refreshWeather() : wxLocating ? null : locateWeather());
-  function locateWeather() {
+  function ensureWeather() {
+    if (wxLocating) return;
+    if (WX && WX.lat != null && WX.locAt && Date.now() - WX.locAt < 30 * 60e3) return refreshWeather();
     wxLocating = true;
-    const use = (lat, lon) => { wxLocating = false; WX = { lat: +lat.toFixed(2), lon: +lon.toFixed(2) }; refreshWeather(true); };
-    const fallback = () => { toast(t('weatherFallback'), { icon: 'location_off' }); use(44.82, 20.46); };
-    if (!navigator.geolocation) return fallback();
-    navigator.geolocation.getCurrentPosition((p) => use(p.coords.latitude, p.coords.longitude), fallback, { timeout: 10000, maximumAge: 6 * 3600e3 });
+    const use = (lat, lon, fromDevice) => {
+      wxLocating = false; lat = +lat.toFixed(2); lon = +lon.toFixed(2);
+      const moved = !WX || WX.lat == null || Math.abs(WX.lat - lat) > 0.05 || Math.abs(WX.lon - lon) > 0.05;
+      WX = { ...(WX || {}), lat, lon, locAt: Date.now(), fromDevice };
+      refreshWeather(moved);
+    };
+    const failed = () => {
+      if (WX && WX.lat != null) return use(WX.lat, WX.lon, WX.fromDevice);
+      toast(t('weatherFallback'), { icon: 'location_off' }); use(44.82, 20.46, false);
+    };
+    if (!navigator.geolocation) return failed();
+    navigator.geolocation.getCurrentPosition((p) => use(p.coords.latitude, p.coords.longitude, true), failed, { timeout: 10000, maximumAge: 30 * 60e3 });
   }
   function renderCalendar(list) {
     if (weatherWanted()) setTimeout(ensureWeather);
@@ -1516,7 +1526,7 @@
     if (!a) return;
     const s = settings();
     if (a === 'dark-toggle') { s.dark = el.checked; save(); render(); }
-    else if (a === 'weather-toggle') { s.weather = el.checked; save(); if (el.checked) locateWeather(); }
+    else if (a === 'weather-toggle') { s.weather = el.checked; save(); if (el.checked) { if (WX) WX.locAt = 0; ensureWeather(); } }
     else if (a === 'notif-set') {
       const map = { 'n-rem': 'reminders', 'n-snooze': 'snooze', 'n-sound': 'sound', 'n-morning': 'morning', 'n-shared': 'shared' }; s.notif[map[el.id]] = el.checked; save();
       if (el.id === 'n-morning') render();
