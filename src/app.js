@@ -944,8 +944,12 @@
       const show = (st.hasDate || st.rep.type !== 'none') && st.time;
       const pre = (k) => t('beforeShort', { n: t(k) });
       const opts = [[0, t('remindAtShort')], [5, pre('min5')], [15, pre('min15')], [30, pre('min30')], [60, pre('hour1')], [1440, pre('day1')]];
-      box.innerHTML = show ? `<div class="remind-pick"><span class="lbl">${icon('notifications', 'sm')}${esc(t('remindLabel'))}<small>${esc(t('remindHint'))}</small></span>
-        <div class="day-pills remind-pills" role="group" aria-label="${esc(t('remindLabel'))}">${opts.map(([v, l]) => `<button type="button" class="day-pill" data-remind="${v}" aria-pressed="${st.remind.includes(v)}">${esc(l)}</button>`).join('')}</div></div>` : '';
+      const summary = () => (st.remind.length ? opts.filter(([v]) => st.remind.includes(v)).map(([, l]) => l).join(', ') : t('remindOff'));
+      // looks like a dropdown; the list inside has checkboxes, so several can be on
+      box.innerHTML = show ? `<div class="field select multi-select" style="margin-top:12px"><span style="margin-left:14px;color:var(--primary-ink)">${icon('notifications')}</span><label>${esc(t('remindLabel'))}</label>
+          <button type="button" class="ms-btn" id="ef-remind-btn" aria-haspopup="listbox" aria-expanded="false">${esc(summary())}</button>
+          <div class="ms-menu" id="ef-remind-menu" role="listbox" aria-multiselectable="true" hidden>${opts.map(([v, l]) => `<label class="ms-opt"><input type="checkbox" data-remind="${v}" ${st.remind.includes(v) ? 'checked' : ''}><span>${esc(l)}</span></label>`).join('')}</div></div>` : '';
+      box.__summary = summary;
     }
     function prettyDate(k) { return k ? fmtDate(fromKey(k), { day: 'numeric', month: 'short', year: 'numeric' }) : ''; }
     function openPicker(id) {
@@ -964,8 +968,9 @@
     const form = $('#entry-form');
     form.addEventListener('click', (e) => {
       const rm = e.target.closest('[data-rm]'); if (rm) { st.items.splice(Number(rm.dataset.rm), 1); drawItems(); return; }
-      const rp = e.target.closest('[data-remind]');
-      if (rp) { const v = Number(rp.dataset.remind); const set = new Set(st.remind); set.has(v) ? set.delete(v) : set.add(v); st.remind = [...set].sort((a, b) => a - b); rp.setAttribute('aria-pressed', set.has(v)); return; }
+      const rb = e.target.closest('#ef-remind-btn');
+      if (rb) { const m = $('#ef-remind-menu'); m.hidden = !m.hidden; rb.setAttribute('aria-expanded', !m.hidden); return; }
+      if (!e.target.closest('#ef-remind-menu')) { const m = $('#ef-remind-menu'); if (m && !m.hidden) { m.hidden = true; $('#ef-remind-btn').setAttribute('aria-expanded', 'false'); } }
       const dp = e.target.closest('.day-pill');
       if (dp) { const i = Number(dp.dataset.day); const s = new Set(st.rep.days); s.has(i) ? s.delete(i) : s.add(i); st.rep.days = [...s].sort(); dp.setAttribute('aria-pressed', s.has(i)); return; }
       if (e.target.closest('#ef-add-item')) addItem();
@@ -987,6 +992,10 @@
     form.addEventListener('change', (e) => {
       if (e.target.id === 'ef-rep') { st.rep.type = e.target.value; drawRep(); drawWhen(); }
       if (e.target.id === 'ef-unit') st.rep.unit = e.target.value;
+      if (e.target.dataset.remind != null) {
+        const v = Number(e.target.dataset.remind); const set = new Set(st.remind); e.target.checked ? set.add(v) : set.delete(v);
+        st.remind = [...set].sort((a, b) => a - b); $('#ef-remind-btn').textContent = $('#ef-remind-wrap').__summary();
+      }
       if (e.target.id === 'ef-imp') $('#ef-star').style.color = e.target.checked ? 'var(--star)' : 'var(--muted)';
     });
     const ni = $('#ef-new-item'); if (ni) ni.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); addItem(); } });
