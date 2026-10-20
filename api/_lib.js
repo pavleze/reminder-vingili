@@ -170,10 +170,11 @@ function isDoneOn(it, d) {
   if (it.kind === 'list') return (it.items || []).length > 0 && checkedOn(it, d).length === it.items.length;
   return !!(it.done || {})[okey(it, d)];
 }
-// minutes-before list: [0, 15] = at the time and 15 min before. 0 (at the time) always fires; the rest are extra. Older items keep a single number.
+// minutes-before list: [0, 15] = at the time and 15 min before; [] = none. Any earlier one brings 'at the time' with it.
+// Older items keep a single number (-1 = none).
 function remindList(it) {
-  const extra = (Array.isArray(it.remind) ? it.remind : [it.remind]).map(Number).filter((n) => n > 0);
-  return [...new Set([0, ...extra])].sort((a, b) => a - b);
+  const l = (Array.isArray(it.remind) ? it.remind : [it.remind == null ? 0 : it.remind]).map(Number).filter((n) => n >= 0);
+  return l.length ? [...new Set([0, ...l])].sort((a, b) => a - b) : [];
 }
 // wall-clock date and minute of day in a time zone
 function localNow(tz, now = new Date()) {
