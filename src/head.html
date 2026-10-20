@@ -279,6 +279,7 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
 .rep-tag { display: inline-flex; align-items: center; gap: 3px; font-size: 12px; white-space: nowrap; }
 .rep-tag .ms { font-size: 14px; }
 .entry.done .title { text-decoration: line-through; color: var(--muted); }
+.done-sec { opacity: .5; filter: grayscale(.7); transition: opacity .2s; }
 .tick { flex: none; width: 24px; height: 24px; border-radius: 50%; border: 1.5px solid color-mix(in srgb, var(--fg) 35%, transparent); background: transparent; display: grid; place-items: center; padding: 0; color: var(--on-primary); transition: background .15s, border-color .15s; }
 .tick:hover { border-color: var(--primary-ink); }
 .tick.on { background: var(--primary); border-color: var(--primary); }
