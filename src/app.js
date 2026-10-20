@@ -936,7 +936,7 @@
         : `<button type="button" class="btn btn-outline add-date" id="ef-add-date">${icon('event')}${esc(t('addDate'))}</button>`;
       const timeHtml = showTime ? `<div class="field picker-field"><span class="pick-ic" aria-hidden="true">${icon('schedule')}</span><label for="ef-time">${esc(t('timeOptional'))}</label><input id="ef-time" type="time" value="${esc(st.time)}">
             <button type="button" class="icon-btn" id="ef-time-clear" aria-label="${esc(t('clearTime'))}" ${st.time ? '' : 'hidden'}>${icon('close', 'sm')}</button></div>` : '';
-      $('#ef-when').innerHTML = `<div class="field-row dt-row ${showTime ? '' : 'one'}">${dateHtml}${timeHtml}</div><div id="ef-remind-wrap"></div>`;
+      $('#ef-when').innerHTML = `<div class="field-row dt-row ${showTime ? '' : 'one'}" id="ef-dt">${dateHtml}${timeHtml}<div id="ef-remind-wrap"></div></div>`;
       drawRemind();
     }
     function drawRemind() {
@@ -946,7 +946,8 @@
       const opts = [[0, t('remindAtShort')], [5, pre('min5')], [15, pre('min15')], [30, pre('min30')], [60, pre('hour1')], [1440, pre('day1')]];
       const summary = () => (st.remind.length ? opts.filter(([v]) => st.remind.includes(v)).map(([, l]) => l).join(', ') : t('remindOff'));
       // looks like a dropdown; the list inside has checkboxes, so several can be on
-      box.innerHTML = show ? `<div class="field select multi-select" style="margin-top:12px"><span style="margin-left:14px;color:var(--primary-ink)">${icon('notifications')}</span><label>${esc(t('remindLabel'))}</label>
+      $('#ef-dt').classList.toggle('with-remind', !!show); box.hidden = !show;
+      box.innerHTML = show ? `<div class="field select multi-select"><span style="margin-left:14px;color:var(--primary-ink)">${icon('notifications')}</span><label>${esc(t('remindLabel'))}</label>
           <button type="button" class="ms-btn" id="ef-remind-btn" aria-haspopup="listbox" aria-expanded="false">${esc(summary())}</button>
           <div class="ms-menu" id="ef-remind-menu" role="listbox" aria-multiselectable="true" hidden>${opts.map(([v, l]) => `<label class="ms-opt"><input type="checkbox" data-remind="${v}" ${st.remind.includes(v) ? 'checked' : ''}><span>${esc(l)}</span></label>`).join('')}</div></div>` : '';
       box.__summary = summary;
@@ -969,7 +970,7 @@
     form.addEventListener('click', (e) => {
       const rm = e.target.closest('[data-rm]'); if (rm) { st.items.splice(Number(rm.dataset.rm), 1); drawItems(); return; }
       const rb = e.target.closest('#ef-remind-btn');
-      if (rb) { const m = $('#ef-remind-menu'); m.hidden = !m.hidden; rb.setAttribute('aria-expanded', !m.hidden); return; }
+      if (rb) { const m = $('#ef-remind-menu'); m.hidden = !m.hidden; rb.setAttribute('aria-expanded', !m.hidden); if (!m.hidden) m.scrollIntoView({ block: 'nearest', inline: 'nearest' }); return; }
       if (!e.target.closest('#ef-remind-menu')) { const m = $('#ef-remind-menu'); if (m && !m.hidden) { m.hidden = true; $('#ef-remind-btn').setAttribute('aria-expanded', 'false'); } }
       const dp = e.target.closest('.day-pill');
       if (dp) { const i = Number(dp.dataset.day); const s = new Set(st.rep.days); s.has(i) ? s.delete(i) : s.add(i); st.rep.days = [...s].sort(); dp.setAttribute('aria-pressed', s.has(i)); return; }
