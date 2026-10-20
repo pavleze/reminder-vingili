@@ -73,3 +73,15 @@ Firestore (deli bazu sa starom aplikacijom):
 
 ## Saradnja sa korisnicom
 - Komunikacija na srpskom; voli male, česte izmene i kratke potvrde. Posle svake izmene: commit + push na `main` (Vercel), ažurirati Claude artifact i lokalni folder.
+
+## Push notifications (live since 2026-10-20)
+- PWA: `manifest.webmanifest`, `sw.js` (offline cache + `push` / `notificationclick`), icons in `assets/` (green R + bell).
+- Devices: Profile → Obaveštenja → Uključi saves a Web Push subscription to Firestore `pushSubs/{sha1(endpoint)}` ({uid, sub, tz}).
+- Server (no npm deps, Firestore REST + VAPID/aes128gcm with Node crypto, verified against RFC 8291):
+  - `api/cron.js?key=CRON_SECRET`, called every minute by cron-job.org. It sends item reminders (`it.remind` = minutes before; -1 = off) and the morning summary (`settings.notif.morning`, `morningTime`). Each notification is sent once, deduplicated by `pushLog/{key}`.
+  - `api/notify-share.js`: when a shared item is added or edited, the partner gets "<Ime>: nova/izmenjena stavka". It checks the Firebase ID token and membership. The partner can turn this off with `settings.notif.shared`.
+  - `api/push-test.js`: the "Pošalji probno obaveštenje" button.
+- Vercel env (Production): `FIREBASE_SERVICE_ACCOUNT` (service-account JSON), `VAPID_PRIVATE_KEY`, `CRON_SECRET`. VAPID public key is hard-coded in `src/app.js` and `api/_lib.js`.
+- Firestore rules: `pushSubs` added (see `firestore.rules`).
+- iPhone: push only works when the app is opened from the Home Screen (iOS 16.4+).
+- Health check: open `/api/cron?key=…` and expect `{"users":N,"sent":…,"errors":[]}`. A 401 response lists which env vars are present.
