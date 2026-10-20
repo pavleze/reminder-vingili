@@ -1,5 +1,5 @@
 /* Reminder service worker: the app opens offline, updates arrive on the next open. */
-const CACHE = 'reminder-v2';
+const CACHE = 'reminder-v3';
 const CORE = ['/', '/index.html', '/app.js', '/i18n.js', '/manifest.webmanifest', '/assets/icon-192.png', '/assets/icon-512.png', '/assets/apple-touch-icon.png'];
 
 self.addEventListener('install', (e) => {
