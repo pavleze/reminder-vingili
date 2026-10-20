@@ -28,7 +28,7 @@
       partnerHelp: 'Your partner needs to sign in with Google once. Then enter their email here.', linkBtn: 'Link', unlinkBtn: 'Remove', partnerSelf: "That's your own email",
       partnerNotFound: "No account with that email yet. Ask them to sign in with Google first.", partnerLinked: 'Linked with {name}', shareWith: 'Share with {name}',
       sharedBy: 'Shared by {name}', sharedWith: 'Shared with {name}', partnerLinkFirst: 'Link a partner in Profile to share items', signInGoogleHint: 'Sign in to sync across devices and share with your partner',
-      repUnits: 'day|days|days;week|weeks|weeks;month|months|months;year|years|years', filterDated: 'With date', remindLabel: 'Reminder', remindAtShort: 'At the time', beforeShort: '{n} before', remindHint: 'tap one or more · none = no reminder', remindAt: 'At the time', remindBefore: '{n} before', remindOff: 'No reminder', min5: '5 min', min15: '15 min', min30: '30 min', hour1: '1 hour', day1: '1 day', weather: 'Weather forecast', weatherDesc: 'Weather icon next to the day in the calendar (next 16 days)', weatherFallback: 'Location not allowed — showing Belgrade',
+      repUnits: 'day|days|days;week|weeks|weeks;month|months|months;year|years|years', filterDated: 'With date', remindLabel: 'Reminder', remindAtShort: 'At the time', beforeShort: '{n} before', remindHint: 'tap one or more · none = no reminder', remindAt: 'At the time', remindBefore: '{n} before', remindOff: 'No reminder', min5: '5 min', min15: '15 min', min30: '30 min', hour1: '1 hour', day1: '1 day', weather: 'Weather forecast', weatherDesc: 'Weather icon next to the day in the calendar (next 16 days)', weatherFallback: 'Location not allowed — showing Belgrade', wx_sunny: 'Sunny', wx_partly_cloudy_day: 'Partly cloudy', wx_cloud: 'Cloudy', wx_foggy: 'Fog', wx_rainy: 'Rain', wx_weather_snowy: 'Snow', wx_thunderstorm: 'Thunderstorm', wxHighLow: 'High {max}°, low {min}°',
       pushDevice: 'Notifications on this device', pushDeviceDesc: 'Arrive even when the app is closed', pushOn: 'On', pushTurnOn: 'Turn on', pushTurnOff: 'Turn off', pushIosHint: 'On iPhone: first add Reminder to the Home Screen (Share → Add to Home Screen), open it from there and turn notifications on.',
       pushEnabled: 'Notifications are on for this device', pushDisabled: 'Notifications are off for this device', pushFailed: 'Could not turn on notifications', pushTestSent: 'Test notification sent', pushNeedsOn: 'Turn on notifications on this device first',
       remindersPushDesc: 'At the item time, or earlier too — you choose in each item', partnerNotifyFailed: 'Could not notify your partner', sharedChanges: 'Shared items', sharedChangesDesc: 'When your partner adds or edits an item shared with you', morningSummary: 'Morning summary', morningSummaryDesc: 'Today\'s items without a time, overdue and General', morningTime: 'Time', sendTest: 'Send a test notification', filterAll: 'All', filterTasks: 'Tasks', filterEvents: 'Events', lateDay: '{n} day late', lateDays: '{n} days late', allDoneToday: 'All done for today', nothingToday: 'Nothing planned for today', deleteEntry: 'Delete', deleteEntryConfirm: 'Delete “{name}”?',
@@ -68,7 +68,7 @@
       partnerHelp: 'Partner treba jednom da se prijavi preko Google-a. Zatim ovde unesite njegov email.', linkBtn: 'Poveži', unlinkBtn: 'Ukloni', partnerSelf: 'To je vaš email',
       partnerNotFound: 'Nema naloga sa tim emailom. Neka se partner prvo prijavi preko Google-a.', partnerLinked: 'Povezani ste sa: {name}', shareWith: 'Podeli sa: {name}',
       sharedBy: 'Podelio/la: {name}', sharedWith: 'Podeljeno sa: {name}', partnerLinkFirst: 'Povežite partnera u Profilu da biste delili stavke', signInGoogleHint: 'Prijavite se da biste imali iste podatke na svim uređajima i delili sa partnerom',
-      repUnits: 'dan|dana|dana;nedelja|nedelje|nedelja;mesec|meseca|meseci;godina|godine|godina', filterDated: 'Sa datumom', remindLabel: 'Podsetnik', remindAtShort: 'U vreme', beforeShort: '{n} pre', remindHint: 'možeš više · nijedan = bez podsetnika', remindAt: 'U vreme stavke', remindBefore: '{n} ranije', remindOff: 'Bez podsetnika', min5: '5 min', min15: '15 min', min30: '30 min', hour1: '1 sat', day1: '1 dan', weather: 'Vremenska prognoza', weatherDesc: 'Ikonica vremena pored dana u kalendaru (narednih 16 dana)', weatherFallback: 'Lokacija nije dozvoljena — prikazujem Beograd',
+      repUnits: 'dan|dana|dana;nedelja|nedelje|nedelja;mesec|meseca|meseci;godina|godine|godina', filterDated: 'Sa datumom', remindLabel: 'Podsetnik', remindAtShort: 'U vreme', beforeShort: '{n} pre', remindHint: 'možeš više · nijedan = bez podsetnika', remindAt: 'U vreme stavke', remindBefore: '{n} ranije', remindOff: 'Bez podsetnika', min5: '5 min', min15: '15 min', min30: '30 min', hour1: '1 sat', day1: '1 dan', weather: 'Vremenska prognoza', weatherDesc: 'Ikonica vremena pored dana u kalendaru (narednih 16 dana)', weatherFallback: 'Lokacija nije dozvoljena — prikazujem Beograd', wx_sunny: 'Sunčano', wx_partly_cloudy_day: 'Delimično oblačno', wx_cloud: 'Oblačno', wx_foggy: 'Magla', wx_rainy: 'Kiša', wx_weather_snowy: 'Sneg', wx_thunderstorm: 'Grmljavina', wxHighLow: 'Najviša {max}°, najniža {min}°',
       pushDevice: 'Obaveštenja na ovom uređaju', pushDeviceDesc: 'Stižu i kad je aplikacija zatvorena', pushOn: 'Uključeno', pushTurnOn: 'Uključi', pushTurnOff: 'Isključi', pushIosHint: 'Na iPhone-u: prvo dodaj Reminder na početni ekran (Share → Add to Home Screen), otvori ga odatle i uključi obaveštenja.',
       pushEnabled: 'Obaveštenja su uključena na ovom uređaju', pushDisabled: 'Obaveštenja su isključena na ovom uređaju', pushFailed: 'Nije uspelo uključivanje obaveštenja', pushTestSent: 'Probno obaveštenje je poslato', pushNeedsOn: 'Prvo uključi obaveštenja na ovom uređaju',
       remindersPushDesc: 'U vreme stavke, i ranije ako izabereš — biraš u svakoj stavci', partnerNotifyFailed: 'Partner nije obavešten', sharedChanges: 'Podeljene stavke', sharedChangesDesc: 'Kad partner doda ili izmeni stavku koju deli sa tobom', morningSummary: 'Jutarnji pregled', morningSummaryDesc: 'Današnje stavke bez vremena, one koje kasne i Opšte', morningTime: 'Vreme', sendTest: 'Pošalji probno obaveštenje', filterAll: 'Sve', filterTasks: 'Zadaci', filterEvents: 'Događaji', lateDay: 'kasni {n} dan', lateDays: 'kasni {n} dana', allDoneToday: 'Sve za danas je urađeno', nothingToday: 'Za danas nema ništa', deleteEntry: 'Obriši', deleteEntryConfirm: 'Obrisati „{name}“?',
@@ -510,6 +510,7 @@
   }
   function screenHome() {
     const d = todayD();
+    if (weatherWanted()) setTimeout(ensureWeather);
     const today = entriesOn(d);
     const floating = entries().filter((it) => isFloating(it) && floatingVisible(it))
       .sort((a, b) => isDoneOn(a, d) - isDoneOn(b, d) || (b.important ? 1 : 0) - (a.important ? 1 : 0) || a.name.localeCompare(b.name));
@@ -536,6 +537,7 @@
         <div class="day-head-txt">
           <span class="greet">${esc(t('welcomeBack'))}${first ? ', ' + esc(first) : ''}!</span>
           <h2 id="today-h">${esc(t('today'))}</h2>
+          ${wxLine(d)}
         </div>
         ${totalN ? `<div class="ring ring-min" style="--p:${pct}" role="img" aria-label="${esc(t('ofDone', { a: doneN, b: totalN }))} ${esc(t('doneToday'))}"><div><b class="tnum">${doneN}/${totalN}</b><small>${esc(t('doneToday'))}</small></div></div>` : ''}
       </header>
@@ -617,6 +619,12 @@
   function wxIcon(d) {
     const w = weatherOn(d); if (!w) return '';
     return `<span class="wx" title="${w.max}° / ${w.min}°">${icon(wxName(w.code), 'xs')}</span>`;
+  }
+  // one line for a single day: icon, description, ↑ high ↓ low (home header and the day dialog)
+  function wxLine(d) {
+    const w = weatherOn(d); if (!w) return '';
+    const n = wxName(w.code);
+    return `<div class="wx-line" role="img" aria-label="${esc(t('wx_' + n))}, ${esc(t('wxHighLow', { max: w.max, min: w.min }))}">${icon(n)}<span>${esc(t('wx_' + n))}</span><span class="wx-t tnum" aria-hidden="true">↑${w.max}° <i>↓${w.min}°</i></span></div>`;
   }
   let wxBusy = false;
   function refreshWeather(force) {
@@ -1093,7 +1101,7 @@
     ui.dayOpen = dateK;
     const d = fromKey(dateK);
     openModal(`<div class="dialog" role="dialog" aria-modal="true" aria-labelledby="dd-t">
-      <div class="dialog-head">${icon('event_note')}<div style="flex:1;min-width:0"><h2 id="dd-t">${esc(cap(fmtDate(d, { weekday: 'long' })))}</h2><p>${esc(fmtDate(d, { day: 'numeric', month: 'long', year: 'numeric' }))}</p></div></div>
+      <div class="dialog-head">${icon('event_note')}<div style="flex:1;min-width:0"><h2 id="dd-t">${esc(cap(fmtDate(d, { weekday: 'long' })))}</h2><p>${esc(fmtDate(d, { day: 'numeric', month: 'long', year: 'numeric' }))}</p>${wxLine(d)}</div></div>
       <div class="dialog-body" id="day-body" style="gap:10px"></div>
       <div class="dialog-foot"><button class="btn btn-text" style="margin-right:auto" data-a="modal-close">${esc(t('close'))}</button>
         <button class="btn btn-primary" data-a="add-on" data-d="${dateK}">${icon('add', 'sm')}${esc(t('addReminder'))}</button></div></div>`, () => { ui.dayOpen = null; });

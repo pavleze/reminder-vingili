@@ -259,6 +259,17 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
 .day-hero .ring-min > div { background: transparent !important; position: relative; color: #fff; }
 .day-hero .ring-min small { color: rgba(255,255,255,.8); }
 .day-head-txt { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.wx-line { display: flex; align-items: center; gap: 6px; font-size: 14px; color: var(--muted); margin-top: 4px; min-width: 0; white-space: nowrap; }
+.wx-line > span:not(.ms) { overflow: hidden; text-overflow: ellipsis; }
+.wx-line .ms { font-size: 20px; color: var(--primary-ink); }
+.wx-line .wx-t { font-weight: 600; color: var(--fg); }
+.wx-line .wx-t i { font-style: normal; font-weight: 500; color: var(--muted); }
+.wx-line .wx-t::before { content: "·"; margin-right: 6px; font-weight: 400; color: var(--muted); }
+.day-hero .wx-line { font-size: 15px; margin-top: 2px; }
+.day-hero .wx-line .ms { font-size: 22px; }
+.day-hero .wx-line, .dialog-head:not(.plain) .wx-line { color: rgba(255,255,255,.85); }
+.day-hero .wx-line .ms, .day-hero .wx-line .wx-t, .dialog-head:not(.plain) .wx-line .ms, .dialog-head:not(.plain) .wx-line .wx-t { color: #fff; }
+.day-hero .wx-line .wx-t i, .day-hero .wx-line .wx-t::before, .dialog-head:not(.plain) .wx-line .wx-t i, .dialog-head:not(.plain) .wx-line .wx-t::before { color: rgba(255,255,255,.8); }
 .day-hero .greet { font-size: 16px; font-weight: 500; color: rgba(255,255,255,.88); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .day-hero .eyebrow { font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
 .day-hero h2 { font-size: 34px; font-weight: 700; letter-spacing: -.02em; line-height: 1.1; }
