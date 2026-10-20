@@ -29,6 +29,7 @@ module.exports = async (req, res) => {
     const byUid = {}; for (const s of subs) if (s.uid && s.sub && s.sub.endpoint) (byUid[s.uid] = byUid[s.uid] || []).push(s);
     const userById = Object.fromEntries(users.map((u) => [u.id, u]));
     const report = { users: 0, sent: 0, removed: 0, errors: [] };
+    const debug = req.query && req.query.debug ? (report.debug = []) : null; // ?debug=1: why each timed item did / didn't fire
 
     for (const uid of Object.keys(byUid)) {
       const u = userById[uid] || {}; const st = u.settings || {}; const notif = st.notif || {};
@@ -37,12 +38,14 @@ module.exports = async (req, res) => {
       const mine = items.filter((it) => (Array.isArray(it.members) ? it.members.includes(uid) : it.owner === uid));
       const out = [];
       report.users++;
+      if (debug) debug.push({ uid: uid.slice(0, 6), devices: byUid[uid].length, tz: u.tz || 'Europe/Belgrade (default)', localNow: `${L.dkey(today)} ${String(Math.floor(nowMin / 60)).padStart(2, '0')}:${String(nowMin % 60).padStart(2, '0')}`, reminders: notif.reminders !== false, items: mine.length });
 
       // 1) items with a time: at the time, or N minutes before (it.remind; -1 = off)
       if (notif.reminders !== false) {
         for (const it of mine) {
           if (!it.time) continue;
           const remind = it.remind == null ? 0 : Number(it.remind);
+          if (debug) debug.push({ item: it.name, date: it.date || null, time: it.time, remind, repeat: (it.repeat || {}).type || 'none', occursToday: L.occursOn(it, today), doneToday: L.isDoneOn(it, today), minutesLate: nowMin - (L.timeToMin(it.time) - remind) });
           if (remind < 0) continue;
           for (const off of [0, 1, 2]) { // a reminder set a day early fires today for tomorrow's item
             const d = L.addDays(today, off);
