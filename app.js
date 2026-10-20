@@ -31,7 +31,7 @@
       repUnits: 'day|days|days;week|weeks|weeks;month|months|months;year|years|years', filterDated: 'With date', remindLabel: 'Reminder', remindAtShort: 'At the time', beforeShort: '{n} before', remindHint: 'tap one or more · none = no reminder', remindAt: 'At the time', remindBefore: '{n} before', remindOff: 'No reminder', min5: '5 min', min15: '15 min', min30: '30 min', hour1: '1 hour', day1: '1 day',
       pushDevice: 'Notifications on this device', pushDeviceDesc: 'Arrive even when the app is closed', pushOn: 'On', pushTurnOn: 'Turn on', pushTurnOff: 'Turn off', pushIosHint: 'On iPhone: first add Reminder to the Home Screen (Share → Add to Home Screen), open it from there and turn notifications on.',
       pushEnabled: 'Notifications are on for this device', pushDisabled: 'Notifications are off for this device', pushFailed: 'Could not turn on notifications', pushTestSent: 'Test notification sent', pushNeedsOn: 'Turn on notifications on this device first',
-      remindersPushDesc: 'At the item time, or earlier — you choose in each item', partnerNotifyFailed: 'Could not notify your partner', sharedChanges: 'Shared items', sharedChangesDesc: 'When your partner adds or edits an item shared with you', morningSummary: 'Morning summary', morningSummaryDesc: 'Today\'s items without a time, overdue and General', morningTime: 'Time', sendTest: 'Send a test notification', filterAll: 'All', filterTasks: 'Tasks', filterEvents: 'Events', lateDay: '{n} day late', lateDays: '{n} days late', allDoneToday: 'All done for today', nothingToday: 'Nothing planned for today', deleteEntry: 'Delete', deleteEntryConfirm: 'Delete “{name}”?',
+      remindersPushDesc: 'Always at the item time; earlier ones too if you pick them in the item', partnerNotifyFailed: 'Could not notify your partner', sharedChanges: 'Shared items', sharedChangesDesc: 'When your partner adds or edits an item shared with you', morningSummary: 'Morning summary', morningSummaryDesc: 'Today\'s items without a time, overdue and General', morningTime: 'Time', sendTest: 'Send a test notification', filterAll: 'All', filterTasks: 'Tasks', filterEvents: 'Events', lateDay: '{n} day late', lateDays: '{n} days late', allDoneToday: 'All done for today', nothingToday: 'Nothing planned for today', deleteEntry: 'Delete', deleteEntryConfirm: 'Delete “{name}”?',
       welcomeSubtitleAuth: 'Sign in to your account', fullName: 'Full Name', confirmPassword: 'Confirm Password',
       noAccount: "Don't have an account?", registerNow: 'Register', agreeTerms: 'I agree to the Terms of Service and Privacy Policy',
       fillAllFields: 'Please fill all fields', acceptTerms: 'Please accept terms and conditions', wrongCredentials: 'Wrong email or password',
@@ -71,7 +71,7 @@
       repUnits: 'dan|dana|dana;nedelja|nedelje|nedelja;mesec|meseca|meseci;godina|godine|godina', filterDated: 'Sa datumom', remindLabel: 'Podsetnik', remindAtShort: 'U vreme', beforeShort: '{n} pre', remindHint: 'možeš više · nijedan = bez podsetnika', remindAt: 'U vreme stavke', remindBefore: '{n} ranije', remindOff: 'Bez podsetnika', min5: '5 min', min15: '15 min', min30: '30 min', hour1: '1 sat', day1: '1 dan',
       pushDevice: 'Obaveštenja na ovom uređaju', pushDeviceDesc: 'Stižu i kad je aplikacija zatvorena', pushOn: 'Uključeno', pushTurnOn: 'Uključi', pushTurnOff: 'Isključi', pushIosHint: 'Na iPhone-u: prvo dodaj Reminder na početni ekran (Share → Add to Home Screen), otvori ga odatle i uključi obaveštenja.',
       pushEnabled: 'Obaveštenja su uključena na ovom uređaju', pushDisabled: 'Obaveštenja su isključena na ovom uređaju', pushFailed: 'Nije uspelo uključivanje obaveštenja', pushTestSent: 'Probno obaveštenje je poslato', pushNeedsOn: 'Prvo uključi obaveštenja na ovom uređaju',
-      remindersPushDesc: 'U vreme stavke ili ranije — biraš u svakoj stavci', partnerNotifyFailed: 'Partner nije obavešten', sharedChanges: 'Podeljene stavke', sharedChangesDesc: 'Kad partner doda ili izmeni stavku koju deli sa tobom', morningSummary: 'Jutarnji pregled', morningSummaryDesc: 'Današnje stavke bez vremena, one koje kasne i Opšte', morningTime: 'Vreme', sendTest: 'Pošalji probno obaveštenje', filterAll: 'Sve', filterTasks: 'Zadaci', filterEvents: 'Događaji', lateDay: 'kasni {n} dan', lateDays: 'kasni {n} dana', allDoneToday: 'Sve za danas je urađeno', nothingToday: 'Za danas nema ništa', deleteEntry: 'Obriši', deleteEntryConfirm: 'Obrisati „{name}“?',
+      remindersPushDesc: 'Uvek u vreme stavke; ranije još i ako izabereš u stavci', partnerNotifyFailed: 'Partner nije obavešten', sharedChanges: 'Podeljene stavke', sharedChangesDesc: 'Kad partner doda ili izmeni stavku koju deli sa tobom', morningSummary: 'Jutarnji pregled', morningSummaryDesc: 'Današnje stavke bez vremena, one koje kasne i Opšte', morningTime: 'Vreme', sendTest: 'Pošalji probno obaveštenje', filterAll: 'Sve', filterTasks: 'Zadaci', filterEvents: 'Događaji', lateDay: 'kasni {n} dan', lateDays: 'kasni {n} dana', allDoneToday: 'Sve za danas je urađeno', nothingToday: 'Za danas nema ništa', deleteEntry: 'Obriši', deleteEntryConfirm: 'Obrisati „{name}“?',
       welcomeSubtitleAuth: 'Prijavite se na svoj nalog', fullName: 'Ime i prezime', confirmPassword: 'Potvrdite lozinku',
       noAccount: 'Nemate nalog?', registerNow: 'Registrujte se', agreeTerms: 'Prihvatam Uslove korišćenja i Politiku privatnosti',
       fillAllFields: 'Popunite sva polja', acceptTerms: 'Prihvatite uslove korišćenja', wrongCredentials: 'Pogrešan email ili lozinka',
@@ -230,8 +230,8 @@
   /* ================= Recurrence ================= */
   const lastDay = (d) => new Date(d.getFullYear(), d.getMonth() + 1, 0).getDate();
   const isFloating = (it) => !it.date && (!it.repeat || it.repeat.type === 'none');
-  // minutes before the item time: [0, 15] = at the time and 15 min before; [] = no reminder (old items: one number, -1 = none)
-  const remindList = (it) => (Array.isArray(it.remind) ? [...new Set(it.remind.map(Number).filter((n) => n >= 0))] : (it.remind == null ? [0] : Number(it.remind) >= 0 ? [Number(it.remind)] : []));
+  // minutes before the item time: [0, 15] = at the time and 15 min before. 0 (at the time) is always on; the rest are extra (old items: one number)
+  const remindList = (it) => [...new Set([0, ...(Array.isArray(it.remind) ? it.remind : [it.remind]).map(Number).filter((n) => n > 0)])].sort((a, b) => a - b);
   const okey = (it, d) => (isFloating(it) ? 'any' : dkey(d));
   function occursOn(it, d) {
     if (isFloating(it)) return false;
@@ -944,12 +944,12 @@
       const show = (st.hasDate || st.rep.type !== 'none') && st.time;
       const pre = (k) => t('beforeShort', { n: t(k) });
       const opts = [[0, t('remindAtShort')], [5, pre('min5')], [15, pre('min15')], [30, pre('min30')], [60, pre('hour1')], [1440, pre('day1')]];
-      const summary = () => (st.remind.length ? opts.filter(([v]) => st.remind.includes(v)).map(([, l]) => l).join(', ') : t('remindOff'));
+      const summary = () => opts.filter(([v]) => st.remind.includes(v)).map(([, l]) => l).join(', ');
       // looks like a dropdown; the list inside has checkboxes, so several can be on
       $('#ef-dt').classList.toggle('with-remind', !!show); box.hidden = !show;
       box.innerHTML = show ? `<div class="field select multi-select"><span style="margin-left:14px;color:var(--primary-ink)">${icon('notifications')}</span><label>${esc(t('remindLabel'))}</label>
           <button type="button" class="ms-btn" id="ef-remind-btn" aria-haspopup="listbox" aria-expanded="false">${esc(summary())}</button>
-          <div class="ms-menu" id="ef-remind-menu" role="listbox" aria-multiselectable="true" hidden>${opts.map(([v, l]) => `<label class="ms-opt"><input type="checkbox" data-remind="${v}" ${st.remind.includes(v) ? 'checked' : ''}><span>${esc(l)}</span></label>`).join('')}</div></div>` : '';
+          <div class="ms-menu" id="ef-remind-menu" role="listbox" aria-multiselectable="true" hidden>${opts.map(([v, l]) => `<label class="ms-opt"><input type="checkbox" data-remind="${v}" ${st.remind.includes(v) ? 'checked' : ''} ${v === 0 ? 'disabled' : ''}><span>${esc(l)}</span></label>`).join('')}</div></div>` : '';
       box.__summary = summary;
     }
     function prettyDate(k) { return k ? fmtDate(fromKey(k), { day: 'numeric', month: 'short', year: 'numeric' }) : ''; }
@@ -994,7 +994,7 @@
       if (e.target.id === 'ef-rep') { st.rep.type = e.target.value; drawRep(); drawWhen(); }
       if (e.target.id === 'ef-unit') st.rep.unit = e.target.value;
       if (e.target.dataset.remind != null) {
-        const v = Number(e.target.dataset.remind); const set = new Set(st.remind); e.target.checked ? set.add(v) : set.delete(v);
+        const v = Number(e.target.dataset.remind); const set = new Set([0, ...st.remind]); if (v) e.target.checked ? set.add(v) : set.delete(v);
         st.remind = [...set].sort((a, b) => a - b); $('#ef-remind-btn').textContent = $('#ef-remind-wrap').__summary();
       }
       if (e.target.id === 'ef-imp') $('#ef-star').style.color = e.target.checked ? 'var(--star)' : 'var(--muted)';
