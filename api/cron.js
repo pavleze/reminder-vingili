@@ -45,10 +45,9 @@ module.exports = async (req, res) => {
       if (notif.reminders !== false) {
         for (const it of mine) {
           if (!it.time) continue;
-          const remind = it.remind == null ? 0 : Number(it.remind);
-          if (debug) debug.push({ item: it.name, date: it.date || null, time: it.time, remind, repeat: (it.repeat || {}).type || 'none', occursToday: L.occursOn(it, today), doneToday: L.isDoneOn(it, today), minutesLate: nowMin - (L.timeToMin(it.time) - remind) });
-          if (remind < 0) continue;
-          for (const off of [0, 1, 2]) { // a reminder set a day early fires today for tomorrow's item
+          const reminds = L.remindList(it);
+          if (debug) debug.push({ item: it.name, date: it.date || null, time: it.time, reminds, repeat: (it.repeat || {}).type || 'none', occursToday: L.occursOn(it, today), doneToday: L.isDoneOn(it, today), minutesLateVsTime: nowMin - L.timeToMin(it.time) });
+          for (const remind of reminds) for (const off of [0, 1, 2]) { // a reminder set a day early fires today for tomorrow's item
             const d = L.addDays(today, off);
             if (!L.occursOn(it, d) || (!L.isEvent(it) && L.isDoneOn(it, d))) continue;
             const late = nowMin - (off * 1440 + L.timeToMin(it.time) - remind);
@@ -56,7 +55,7 @@ module.exports = async (req, res) => {
             const logId = `${uid}_${it.id}_${L.dkey(d)}_${String(it.time).replace(':', '')}_${remind}`; // a changed time or reminder fires again
             if (!(await L.createOnce('pushLog', logId, { uid, at: new Date().toISOString(), what: it.name }))) continue;
             const list = it.kind === 'list' ? ` · ${L.checkedOn(it, d).length}/${(it.items || []).length}` : '';
-            out.push({ logId, title: it.name, body: (remind ? tx.before(tx.min(remind), it.time) : tx.now(it.time)) + list, tag: `${it.id}_${L.dkey(d)}`, url: '/' });
+            out.push({ logId, title: it.name, body: (remind ? tx.before(tx.min(remind), it.time) : tx.now(it.time)) + list, tag: `${it.id}_${L.dkey(d)}_${remind}`, url: '/' });
           }
         }
       }

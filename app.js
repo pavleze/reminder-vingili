@@ -28,7 +28,7 @@
       partnerHelp: 'Your partner needs to sign in with Google once. Then enter their email here.', linkBtn: 'Link', unlinkBtn: 'Remove', partnerSelf: "That's your own email",
       partnerNotFound: "No account with that email yet. Ask them to sign in with Google first.", partnerLinked: 'Linked with {name}', shareWith: 'Share with {name}',
       sharedBy: 'Shared by {name}', sharedWith: 'Shared with {name}', partnerLinkFirst: 'Link a partner in Profile to share items', signInGoogleHint: 'Sign in to sync across devices and share with your partner',
-      repUnits: 'day|days|days;week|weeks|weeks;month|months|months;year|years|years', filterDated: 'With date', remindLabel: 'Reminder', remindAt: 'At the time', remindBefore: '{n} before', remindOff: 'No reminder', min5: '5 min', min15: '15 min', min30: '30 min', hour1: '1 hour', day1: '1 day',
+      repUnits: 'day|days|days;week|weeks|weeks;month|months|months;year|years|years', filterDated: 'With date', remindLabel: 'Reminder', remindAtShort: 'At the time', beforeShort: '{n} before', remindHint: 'tap one or more · none = no reminder', remindAt: 'At the time', remindBefore: '{n} before', remindOff: 'No reminder', min5: '5 min', min15: '15 min', min30: '30 min', hour1: '1 hour', day1: '1 day',
       pushDevice: 'Notifications on this device', pushDeviceDesc: 'Arrive even when the app is closed', pushOn: 'On', pushTurnOn: 'Turn on', pushTurnOff: 'Turn off', pushIosHint: 'On iPhone: first add Reminder to the Home Screen (Share → Add to Home Screen), open it from there and turn notifications on.',
       pushEnabled: 'Notifications are on for this device', pushDisabled: 'Notifications are off for this device', pushFailed: 'Could not turn on notifications', pushTestSent: 'Test notification sent', pushNeedsOn: 'Turn on notifications on this device first',
       remindersPushDesc: 'At the item time, or earlier — you choose in each item', sharedChanges: 'Shared items', sharedChangesDesc: 'When your partner adds or edits an item shared with you', morningSummary: 'Morning summary', morningSummaryDesc: 'Today\'s items without a time, overdue and General', morningTime: 'Time', sendTest: 'Send a test notification', filterAll: 'All', filterTasks: 'Tasks', filterEvents: 'Events', lateDay: '{n} day late', lateDays: '{n} days late', allDoneToday: 'All done for today', nothingToday: 'Nothing planned for today', deleteEntry: 'Delete', deleteEntryConfirm: 'Delete “{name}”?',
@@ -68,7 +68,7 @@
       partnerHelp: 'Partner treba jednom da se prijavi preko Google-a. Zatim ovde unesite njegov email.', linkBtn: 'Poveži', unlinkBtn: 'Ukloni', partnerSelf: 'To je vaš email',
       partnerNotFound: 'Nema naloga sa tim emailom. Neka se partner prvo prijavi preko Google-a.', partnerLinked: 'Povezani ste sa: {name}', shareWith: 'Podeli sa: {name}',
       sharedBy: 'Podelio/la: {name}', sharedWith: 'Podeljeno sa: {name}', partnerLinkFirst: 'Povežite partnera u Profilu da biste delili stavke', signInGoogleHint: 'Prijavite se da biste imali iste podatke na svim uređajima i delili sa partnerom',
-      repUnits: 'dan|dana|dana;nedelja|nedelje|nedelja;mesec|meseca|meseci;godina|godine|godina', filterDated: 'Sa datumom', remindLabel: 'Podsetnik', remindAt: 'U vreme stavke', remindBefore: '{n} ranije', remindOff: 'Bez podsetnika', min5: '5 min', min15: '15 min', min30: '30 min', hour1: '1 sat', day1: '1 dan',
+      repUnits: 'dan|dana|dana;nedelja|nedelje|nedelja;mesec|meseca|meseci;godina|godine|godina', filterDated: 'Sa datumom', remindLabel: 'Podsetnik', remindAtShort: 'U vreme', beforeShort: '{n} pre', remindHint: 'možeš više · nijedan = bez podsetnika', remindAt: 'U vreme stavke', remindBefore: '{n} ranije', remindOff: 'Bez podsetnika', min5: '5 min', min15: '15 min', min30: '30 min', hour1: '1 sat', day1: '1 dan',
       pushDevice: 'Obaveštenja na ovom uređaju', pushDeviceDesc: 'Stižu i kad je aplikacija zatvorena', pushOn: 'Uključeno', pushTurnOn: 'Uključi', pushTurnOff: 'Isključi', pushIosHint: 'Na iPhone-u: prvo dodaj Reminder na početni ekran (Share → Add to Home Screen), otvori ga odatle i uključi obaveštenja.',
       pushEnabled: 'Obaveštenja su uključena na ovom uređaju', pushDisabled: 'Obaveštenja su isključena na ovom uređaju', pushFailed: 'Nije uspelo uključivanje obaveštenja', pushTestSent: 'Probno obaveštenje je poslato', pushNeedsOn: 'Prvo uključi obaveštenja na ovom uređaju',
       remindersPushDesc: 'U vreme stavke ili ranije — biraš u svakoj stavci', sharedChanges: 'Podeljene stavke', sharedChangesDesc: 'Kad partner doda ili izmeni stavku koju deli sa tobom', morningSummary: 'Jutarnji pregled', morningSummaryDesc: 'Današnje stavke bez vremena, one koje kasne i Opšte', morningTime: 'Vreme', sendTest: 'Pošalji probno obaveštenje', filterAll: 'Sve', filterTasks: 'Zadaci', filterEvents: 'Događaji', lateDay: 'kasni {n} dan', lateDays: 'kasni {n} dana', allDoneToday: 'Sve za danas je urađeno', nothingToday: 'Za danas nema ništa', deleteEntry: 'Obriši', deleteEntryConfirm: 'Obrisati „{name}“?',
@@ -230,6 +230,8 @@
   /* ================= Recurrence ================= */
   const lastDay = (d) => new Date(d.getFullYear(), d.getMonth() + 1, 0).getDate();
   const isFloating = (it) => !it.date && (!it.repeat || it.repeat.type === 'none');
+  // minutes before the item time: [0, 15] = at the time and 15 min before; [] = no reminder (old items: one number, -1 = none)
+  const remindList = (it) => (Array.isArray(it.remind) ? [...new Set(it.remind.map(Number).filter((n) => n >= 0))] : (it.remind == null ? [0] : Number(it.remind) >= 0 ? [Number(it.remind)] : []));
   const okey = (it, d) => (isFloating(it) ? 'any' : dkey(d));
   function occursOn(it, d) {
     if (isFloating(it)) return false;
@@ -863,7 +865,7 @@
     };
     const st = {
       items: (base.items || []).map((x) => ({ ...x })),
-      date: base.date || '', time: base.time || '', hasDate: !!base.date, remind: base.remind == null ? 0 : Number(base.remind),
+      date: base.date || '', time: base.time || '', hasDate: !!base.date, remind: remindList(base),
     };
     const ref = fromKey(base.date || dkey(T));
     st.rep = { type: 'none', every: 1, unit: 'day', days: [weekdayIdx(ref)], monthDay: ref.getDate(), ...(base.repeat || {}) };
@@ -940,8 +942,10 @@
     function drawRemind() {
       const box = $('#ef-remind-wrap'); if (!box) return;
       const show = (st.hasDate || st.rep.type !== 'none') && st.time;
-      const opts = [[0, t('remindAt')], [5, t('remindBefore', { n: t('min5') })], [15, t('remindBefore', { n: t('min15') })], [30, t('remindBefore', { n: t('min30') })], [60, t('remindBefore', { n: t('hour1') })], [1440, t('remindBefore', { n: t('day1') })], [-1, t('remindOff')]];
-      box.innerHTML = show ? `<div class="field select" style="margin-top:12px"><span style="margin-left:14px;color:var(--primary-ink)">${icon('notifications')}</span><label for="ef-remind">${esc(t('remindLabel'))}</label><select id="ef-remind">${opts.map(([v, l]) => opt(v, l, st.remind)).join('')}</select></div>` : '';
+      const pre = (k) => t('beforeShort', { n: t(k) });
+      const opts = [[0, t('remindAtShort')], [5, pre('min5')], [15, pre('min15')], [30, pre('min30')], [60, pre('hour1')], [1440, pre('day1')]];
+      box.innerHTML = show ? `<div class="remind-pick"><span class="lbl">${icon('notifications', 'sm')}${esc(t('remindLabel'))}<small>${esc(t('remindHint'))}</small></span>
+        <div class="day-pills remind-pills" role="group" aria-label="${esc(t('remindLabel'))}">${opts.map(([v, l]) => `<button type="button" class="day-pill" data-remind="${v}" aria-pressed="${st.remind.includes(v)}">${esc(l)}</button>`).join('')}</div></div>` : '';
     }
     function prettyDate(k) { return k ? fmtDate(fromKey(k), { day: 'numeric', month: 'short', year: 'numeric' }) : ''; }
     function openPicker(id) {
@@ -960,6 +964,8 @@
     const form = $('#entry-form');
     form.addEventListener('click', (e) => {
       const rm = e.target.closest('[data-rm]'); if (rm) { st.items.splice(Number(rm.dataset.rm), 1); drawItems(); return; }
+      const rp = e.target.closest('[data-remind]');
+      if (rp) { const v = Number(rp.dataset.remind); const set = new Set(st.remind); set.has(v) ? set.delete(v) : set.add(v); st.remind = [...set].sort((a, b) => a - b); rp.setAttribute('aria-pressed', set.has(v)); return; }
       const dp = e.target.closest('.day-pill');
       if (dp) { const i = Number(dp.dataset.day); const s = new Set(st.rep.days); s.has(i) ? s.delete(i) : s.add(i); st.rep.days = [...s].sort(); dp.setAttribute('aria-pressed', s.has(i)); return; }
       if (e.target.closest('#ef-add-item')) addItem();
@@ -981,7 +987,6 @@
     form.addEventListener('change', (e) => {
       if (e.target.id === 'ef-rep') { st.rep.type = e.target.value; drawRep(); drawWhen(); }
       if (e.target.id === 'ef-unit') st.rep.unit = e.target.value;
-      if (e.target.id === 'ef-remind') st.remind = Number(e.target.value);
       if (e.target.id === 'ef-imp') $('#ef-star').style.color = e.target.checked ? 'var(--star)' : 'var(--muted)';
     });
     const ni = $('#ef-new-item'); if (ni) ni.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); addItem(); } });
@@ -1142,9 +1147,11 @@
     for (const it of entries()) {
       const body = () => (it.kind === 'list' ? `${checkedOn(it, T).length}/${it.items.length} · ` : '') + t('dontForget', { name: it.name });
       if (it.snoozedUntil && new Date(it.snoozedUntil) <= now) { delete it.snoozedUntil; changed = true; headsUp({ title: it.name, body: body(), r: it }); continue; }
-      if (!it.time || !occursOn(it, T) || isDoneOn(it, T) || Number(it.remind) < 0) continue;
-      const due = timeToMin(it.time) - (Number(it.remind) || 0); const fk = `${it.uid}|${k}`;
-      if (nowMin >= due && nowMin - due <= 2 && !DB.fired[fk]) { DB.fired[fk] = 1; changed = true; headsUp({ title: it.name, body: body(), r: it }); }
+      if (!it.time || !occursOn(it, T) || isDoneOn(it, T)) continue;
+      for (const m of remindList(it)) {
+        const due = timeToMin(it.time) - m; const fk = `${it.uid}|${m}|${k}`;
+        if (nowMin >= due && nowMin - due <= 2 && !DB.fired[fk]) { DB.fired[fk] = 1; changed = true; headsUp({ title: it.name, body: body(), r: it }); }
+      }
     }
     for (const fk in DB.fired) if (!fk.endsWith(k)) { delete DB.fired[fk]; changed = true; }
     if (changed) save();

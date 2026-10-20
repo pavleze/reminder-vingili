@@ -170,6 +170,12 @@ function isDoneOn(it, d) {
   if (it.kind === 'list') return (it.items || []).length > 0 && checkedOn(it, d).length === it.items.length;
   return !!(it.done || {})[okey(it, d)];
 }
+// minutes-before list: [0, 15] = at the time and 15 min before; [] = none. Older items keep a single number (-1 = none).
+function remindList(it) {
+  if (Array.isArray(it.remind)) return [...new Set(it.remind.map(Number).filter((n) => n >= 0))];
+  const n = it.remind == null ? 0 : Number(it.remind);
+  return n >= 0 ? [n] : [];
+}
 // wall-clock date and minute of day in a time zone
 function localNow(tz, now = new Date()) {
   const p = Object.fromEntries(new Intl.DateTimeFormat('en-CA', { timeZone: tz, year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }).formatToParts(now).map((x) => [x.type, x.value]));
@@ -207,4 +213,4 @@ async function pushToUids(uids, makeMsg) {
   return sent;
 }
 
-module.exports = { patchDoc, verifyIdToken, pushToUids, listAll, getDoc, createOnce, deleteDoc, sendPush, encryptPayload, vapidAuth, occursOn, isDoneOn, checkedOn, isEvent, isFloating, localNow, addDays, dkey, fromKey, timeToMin };
+module.exports = { remindList, patchDoc, verifyIdToken, pushToUids, listAll, getDoc, createOnce, deleteDoc, sendPush, encryptPayload, vapidAuth, occursOn, isDoneOn, checkedOn, isEvent, isFloating, localNow, addDays, dkey, fromKey, timeToMin };
