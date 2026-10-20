@@ -17,7 +17,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,400,0..1,0&amp;icon_names=account_balance,account_circle,add,alarm,arrow_back,calendar_month,calendar_today,check,check_box_outline_blank,check_circle,checklist,chevron_left,chevron_right,close,cloud,cloud_done,cloud_upload,dark_mode,delete,delete_forever,desktop_windows,done_all,error,event,event_busy,event_note,expand_less,expand_more,favorite,feedback,fingerprint,foggy,format_list_numbered,group,group_add,history,home,info,kind,language,light_mode,link,location_off,lock,lock_open,lock_outline,lock_reset,login,logout,mail,month,notification_add,notifications,notifications_active,notifications_off,palette,partly_cloudy_day,person,phonelink_lock,play_circle,priority_high,profile,radio_button_checked,radio_button_unchecked,rainy,remove_circle,repeat,save,schedule,security,snooze,star,sunny,task_alt,thunderstorm,title,undo,view_agenda,visibility,visibility_off,weather_snowy&amp;display=block">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,400,0..1,0&amp;icon_names=account_balance,account_circle,add,alarm,arrow_back,calendar_month,calendar_today,check,check_box_outline_blank,check_circle,checklist,chevron_left,chevron_right,close,cloud,cloud_done,cloud_upload,dark_mode,delete,delete_forever,desktop_windows,done_all,error,event,event_busy,event_note,expand_less,expand_more,favorite,feedback,fingerprint,foggy,format_list_numbered,group,group_add,history,home,info,kind,language,light_mode,link,location_off,lock,lock_open,lock_outline,lock_reset,login,logout,mail,month,notification_add,notifications,notifications_active,notifications_off,palette,partly_cloudy_day,person,phonelink_lock,play_circle,priority_high,profile,radio_button_checked,radio_button_unchecked,rainy,remove_circle,repeat,save,schedule,security,snooze,star,sunny,task,task_alt,thunderstorm,title,undo,view_agenda,visibility,visibility_off,weather_snowy&amp;display=block">
 <style>
 /* Layout: app shell — side rail on desktop, top bar + bottom nav on phones; content column max 1120px.
    Ported 1:1 from the Flutter "Reminder" app: Material surfaces, user-chosen primary color, dark/light. */
@@ -312,8 +312,13 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
     conic-gradient(var(--primary) calc(var(--p) * 1%), transparent 0); }
 .tick.pie.on { background: var(--primary); }
 .entry-row:hover .tick.pie { border-color: var(--primary-ink); }
-.name-row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 150px); gap: 10px; }
+.name-row { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 1fr); gap: 10px; }
 .name-row:has(#ef-type-wrap[hidden]) { grid-template-columns: minmax(0, 1fr); }
+/* narrow type field: an icon stands for the choice (✓ task, calendar event); the select stays on top to open the list */
+#ef-type-wrap::after { display: none; }
+#ef-type-wrap .type-ic { position: absolute; inset: 0; display: grid; place-items: center; color: var(--primary-ink); pointer-events: none; }
+#ef-type-wrap select { position: relative; z-index: 1; width: 100%; padding-left: 0; padding-right: 0; color: transparent; }
+#ef-type-wrap select option { color: var(--fg); }
 .ev-ic { flex: none; width: 24px; height: 24px; display: grid; place-items: center; color: #9B6BD6; }
 .entry.event.past .title, .entry.event.past .time { color: var(--muted); }
 .chev { color: var(--muted); display: grid; place-items: center; flex: none; }

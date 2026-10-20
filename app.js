@@ -936,7 +936,7 @@
         </div>
         <div class="name-row">
           <div class="field">${icon('title')}<label for="ef-name">${esc(t('titleLabel'))}</label><input id="ef-name" value="${esc(base.name)}" autocomplete="off" required></div>
-          <div class="field select" id="ef-type-wrap"><label for="ef-type">${esc(t('type'))}</label><select id="ef-type">${opt('task', cap(t('task')), base.type || 'task')}${opt('event', cap(t('event')), base.type || 'task')}</select></div>
+          <div class="field select" id="ef-type-wrap"><label for="ef-type">${esc(t('type'))}</label><span class="type-ic" id="ef-type-ic">${icon((base.type || 'task') === 'event' ? 'event' : 'check_circle')}</span><select id="ef-type">${opt('task', cap(t('task')), base.type || 'task')}${opt('event', cap(t('event')), base.type || 'task')}</select></div>
         </div>
         <div class="items-edit" id="ef-items-wrap"><span class="lbl">${esc(t('itemsLabel'))}</span><div id="ef-items" class="stack" style="gap:8px"></div>
           <div class="add-item"><input id="ef-new-item" placeholder="${esc(t('newItemPh'))}" autocomplete="off" aria-label="${esc(t('addItem'))}"><button type="button" class="btn btn-tonal btn-sm" id="ef-add-item">${icon('add', 'sm')}${esc(t('addItem'))}</button></div></div>
@@ -1046,6 +1046,7 @@
       }
     });
     form.addEventListener('change', (e) => {
+      if (e.target.id === 'ef-type') $('#ef-type-ic').innerHTML = icon(e.target.value === 'event' ? 'event' : 'check_circle');
       if (e.target.id === 'ef-rep') { st.rep.type = e.target.value; drawRep(); drawWhen(); }
       if (e.target.id === 'ef-unit') st.rep.unit = e.target.value;
       if (e.target.dataset.remind != null) {

@@ -301,8 +301,13 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
     conic-gradient(var(--primary) calc(var(--p) * 1%), transparent 0); }
 .tick.pie.on { background: var(--primary); }
 .entry-row:hover .tick.pie { border-color: var(--primary-ink); }
-.name-row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 150px); gap: 10px; }
+.name-row { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 1fr); gap: 10px; }
 .name-row:has(#ef-type-wrap[hidden]) { grid-template-columns: minmax(0, 1fr); }
+/* narrow type field: an icon stands for the choice (✓ task, calendar event); the select stays on top to open the list */
+#ef-type-wrap::after { display: none; }
+#ef-type-wrap .type-ic { position: absolute; inset: 0; display: grid; place-items: center; color: var(--primary-ink); pointer-events: none; }
+#ef-type-wrap select { position: relative; z-index: 1; width: 100%; padding-left: 0; padding-right: 0; color: transparent; }
+#ef-type-wrap select option { color: var(--fg); }
 .ev-ic { flex: none; width: 24px; height: 24px; display: grid; place-items: center; color: #9B6BD6; }
 .entry.event.past .title, .entry.event.past .time { color: var(--muted); }
 .chev { color: var(--muted); display: grid; place-items: center; flex: none; }
