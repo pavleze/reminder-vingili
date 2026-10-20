@@ -39,7 +39,7 @@ module.exports = async (req, res) => {
       const out = [];
       report.users++;
       if (debug) debug.push(...(await L.listAll('pushLog')).filter((x) => x.uid === uid && String(x.id).includes(L.dkey(today))).map((x) => ({ log: x.what || x.id.split('_')[1], at: x.at, result: x.result || '(no result saved)' })));
-      if (debug) debug.push({ uid: uid.slice(0, 6), devices: byUid[uid].length, tz: u.tz || 'Europe/Belgrade (default)', localNow: `${L.dkey(today)} ${String(Math.floor(nowMin / 60)).padStart(2, '0')}:${String(nowMin % 60).padStart(2, '0')}`, reminders: notif.reminders !== false, items: mine.length });
+      if (debug) debug.push({ uid: uid.slice(0, 6), deviceList: byUid[uid].map((d) => ({ since: d.updatedAt || null, device: /iPhone/.test(d.ua || '') ? 'iPhone' : /iPad/.test(d.ua || '') ? 'iPad' : /Mac/.test(d.ua || '') ? 'Mac' : /Android/.test(d.ua || '') ? 'Android' : /Windows/.test(d.ua || '') ? 'Windows' : 'other', os: ((d.ua || '').match(/OS (\d+[_\d]*)/) || [])[1] || null })), devices: byUid[uid].length, tz: u.tz || 'Europe/Belgrade (default)', localNow: `${L.dkey(today)} ${String(Math.floor(nowMin / 60)).padStart(2, '0')}:${String(nowMin % 60).padStart(2, '0')}`, reminders: notif.reminders !== false, items: mine.length });
 
       // 1) items with a time: at the time, or N minutes before (it.remind; -1 = off)
       if (notif.reminders !== false) {
