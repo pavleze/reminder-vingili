@@ -200,15 +200,23 @@ async function verifyIdToken(token) {
   return pl.sub;
 }
 // send one message to every device of each uid; drops dead subscriptions
-async function pushToUids(uids, makeMsg) {
+async function pushToUids(uids, makeMsg, logWhat) {
   const subs = await listAll('pushSubs'); let sent = 0;
   for (const uid of uids) {
     const user = await getDoc('users', uid).catch(() => null);
-    const msg = makeMsg(user || {}); if (!msg) continue;
-    for (const s of subs.filter((x) => x.uid === uid && x.sub && x.sub.endpoint)) {
-      const code = await sendPush(s.sub, msg).catch(() => 0);
+    const msg = makeMsg(user || {});
+    const mine = subs.filter((x) => x.uid === uid && x.sub && x.sub.endpoint);
+    const results = [];
+    if (!msg) results.push('turned off in settings');
+    else if (!mine.length) results.push('no devices with notifications on');
+    else for (const s of mine) {
+      const detail = {};
+      const code = await sendPush(s.sub, msg, detail).catch((e) => { detail.text = String(e.message || e).slice(0, 150); return 0; });
+      results.push(`${new URL(s.sub.endpoint).host} ${code}${detail.text ? ' ' + detail.text : ''}`);
       if (code === 404 || code === 410) await deleteDoc('pushSubs', s.id); else if (code >= 200 && code < 300) sent++;
     }
+    // visible in /api/cron?debug=1 for that person
+    if (logWhat) await createOnce('pushLog', `${uid}_${new Date().toISOString().slice(0, 10)}_share_${Date.now()}`, { uid, at: new Date().toISOString(), what: logWhat, result: results.join(' | ') }).catch(() => {});
   }
   return sent;
 }

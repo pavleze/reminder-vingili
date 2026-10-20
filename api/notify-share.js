@@ -30,7 +30,7 @@ module.exports = async (req, res) => {
       if ((st.notif || {}).shared === false) return null;
       const tx = TEXT[st.lang === 'en' ? 'en' : 'sr'];
       return { title: tx[action](first || tx.someone), body: item.name + (when ? ` · ${when}` : ''), tag: `share_${item.id}`, url: '/' };
-    });
+    }, `podeljeno (${action}): ${item.name}`);
     res.status(200).json({ sent });
   } catch (e) {
     res.status(500).json({ error: String(e.message || e) });
