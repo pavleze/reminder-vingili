@@ -17,8 +17,13 @@ const TEXT = {
 const WINDOW = 20; // minutes: a late scheduler run still sends, each notification goes out once
 
 module.exports = async (req, res) => {
-  const key = (req.query && req.query.key) || req.headers['x-cron-key'];
-  if (!process.env.CRON_SECRET || key !== process.env.CRON_SECRET) return res.status(401).json({ error: 'unauthorized' });
+  const key = String((req.query && req.query.key) || req.headers['x-cron-key'] || '').trim();
+  const secret = String(process.env.CRON_SECRET || '').trim().replace(/^["']|["']$/g, '');
+  if (!secret || key !== secret) {
+    // names only, never values: helps spot a missing or misnamed variable
+    const has = (n) => !!String(process.env[n] || '').trim();
+    return res.status(401).json({ error: 'unauthorized', env: { CRON_SECRET: has('CRON_SECRET'), VAPID_PRIVATE_KEY: has('VAPID_PRIVATE_KEY'), FIREBASE_SERVICE_ACCOUNT: has('FIREBASE_SERVICE_ACCOUNT') }, vercelEnv: process.env.VERCEL_ENV || null });
+  }
   try {
     const [subs, users, items] = await Promise.all([L.listAll('pushSubs'), L.listAll('users'), L.listAll('reminders')]);
     const byUid = {}; for (const s of subs) if (s.uid && s.sub && s.sub.endpoint) (byUid[s.uid] = byUid[s.uid] || []).push(s);

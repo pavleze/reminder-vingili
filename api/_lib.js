@@ -8,7 +8,7 @@ const fromB64u = (s) => Buffer.from(String(s).replace(/=+$/, ''), 'base64url');
 /* ---------------- Google auth (service account → OAuth token) ---------------- */
 let tokenCache = null;
 function serviceAccount() {
-  const raw = process.env.FIREBASE_SERVICE_ACCOUNT;
+  const raw = String(process.env.FIREBASE_SERVICE_ACCOUNT || '').trim();
   if (!raw) throw new Error('FIREBASE_SERVICE_ACCOUNT is not set');
   const sa = JSON.parse(raw);
   sa.private_key = String(sa.private_key).replace(/\\n/g, '\n');
@@ -111,7 +111,7 @@ function encryptPayload(payload, p256dh, authSecret, opts = {}) {
   return Buffer.concat([salt, rs, Buffer.from([asPublic.length]), asPublic, ct]);
 }
 function vapidAuth(endpoint) {
-  const priv = process.env.VAPID_PRIVATE_KEY;
+  const priv = String(process.env.VAPID_PRIVATE_KEY || '').trim().replace(/^["']|["']$/g, '');
   if (!priv) throw new Error('VAPID_PRIVATE_KEY is not set');
   const pub = fromB64u(VAPID_PUBLIC);
   const key = crypto.createPrivateKey({ key: { kty: 'EC', crv: 'P-256', d: priv, x: b64u(pub.subarray(1, 33)), y: b64u(pub.subarray(33, 65)) }, format: 'jwk' });
