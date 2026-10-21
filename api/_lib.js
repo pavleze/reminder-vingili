@@ -184,7 +184,7 @@ function localNow(tz, now = new Date()) {
 
 /* ---------------- Firebase ID token check (who is calling) ---------------- */
 let certCache = null;
-async function verifyIdToken(token) {
+async function verifyIdTokenClaims(token) {
   const [h, p, s] = String(token || '').split('.');
   if (!s) throw new Error('no token');
   const head = JSON.parse(fromB64u(h)); const pl = JSON.parse(fromB64u(p));
@@ -197,8 +197,9 @@ async function verifyIdToken(token) {
   if (!crypto.verify('RSA-SHA256', Buffer.from(`${h}.${p}`), cert, fromB64u(s))) throw new Error('bad signature');
   const pid = projectId(); const now = Date.now() / 1000;
   if (pl.aud !== pid || pl.iss !== `https://securetoken.google.com/${pid}` || pl.exp < now || !pl.sub) throw new Error('token not valid');
-  return pl.sub;
+  return pl;
 }
+const verifyIdToken = async (token) => (await verifyIdTokenClaims(token)).sub;
 // send one message to every device of each uid; drops dead subscriptions
 async function pushToUids(uids, makeMsg, logWhat) {
   const subs = await listAll('pushSubs'); let sent = 0;
@@ -221,4 +222,4 @@ async function pushToUids(uids, makeMsg, logWhat) {
   return sent;
 }
 
-module.exports = { remindList, patchDoc, verifyIdToken, pushToUids, listAll, getDoc, createOnce, deleteDoc, sendPush, encryptPayload, vapidAuth, occursOn, isDoneOn, checkedOn, isEvent, isFloating, localNow, addDays, dkey, fromKey, timeToMin };
+module.exports = { remindList, patchDoc, verifyIdToken, verifyIdTokenClaims, pushToUids, listAll, getDoc, createOnce, deleteDoc, sendPush, encryptPayload, vapidAuth, occursOn, isDoneOn, checkedOn, isEvent, isFloating, localNow, addDays, dkey, fromKey, timeToMin };

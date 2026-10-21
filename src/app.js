@@ -28,7 +28,7 @@
       partnerHelp: 'Your partner needs to sign in with Google once. Then enter their email here.', linkBtn: 'Link', unlinkBtn: 'Remove', partnerSelf: "That's your own email",
       partnerNotFound: "No account with that email yet. Ask them to sign in with Google first.", partnerLinked: 'Linked with {name}', shareWith: 'Share with {name}',
       sharedBy: 'Shared by {name}', sharedWith: 'Shared with {name}', partnerLinkFirst: 'Link a partner in Profile to share items', signInGoogleHint: 'Sign in to sync across devices and share with your partner',
-      repUnits: 'day|days|days;week|weeks|weeks;month|months|months;year|years|years', filterDated: 'With date', remindLabel: 'Reminder', remindAtShort: 'At the time', beforeShort: '{n} before', remindHint: 'tap one or more · none = no reminder', remindAt: 'At the time', remindBefore: '{n} before', remindOff: 'No reminder', min5: '5 min', min15: '15 min', min30: '30 min', hour1: '1 hour', day1: '1 day', weather: 'Weather forecast', weatherDesc: 'Weather icon next to the day in the calendar (next 16 days)', weatherFallback: 'Location not allowed — showing Belgrade', wx_sunny: 'Sunny', wx_partly_cloudy_day: 'Partly cloudy', wx_cloud: 'Cloudy', wx_foggy: 'Fog', wx_rainy: 'Rain', wx_weather_snowy: 'Snow', wx_thunderstorm: 'Thunderstorm', wxHighLow: 'High {max}°, low {min}°',
+      repUnits: 'day|days|days;week|weeks|weeks;month|months|months;year|years|years', filterDated: 'With date', remindLabel: 'Reminder', remindAtShort: 'At the time', beforeShort: '{n} before', remindHint: 'tap one or more · none = no reminder', remindAt: 'At the time', remindBefore: '{n} before', remindOff: 'No reminder', min5: '5 min', min15: '15 min', min30: '30 min', hour1: '1 hour', day1: '1 day', usersTitle: 'Users', usersSearch: 'Search by name or email', usersWeb: 'New app', usersOldOnly: 'Old app only', usersItems: '{n} items', usersDevices: '{n} devices', usersLast: 'Last seen {d}', usersNever: 'never', usersCount: '{n} accounts · {w} use the new app', weather: 'Weather forecast', weatherDesc: 'Weather icon next to the day in the calendar (next 16 days)', weatherFallback: 'Location not allowed — showing Belgrade', wx_sunny: 'Sunny', wx_partly_cloudy_day: 'Partly cloudy', wx_cloud: 'Cloudy', wx_foggy: 'Fog', wx_rainy: 'Rain', wx_weather_snowy: 'Snow', wx_thunderstorm: 'Thunderstorm', wxHighLow: 'High {max}°, low {min}°',
       pushDevice: 'Notifications on this device', pushDeviceDesc: 'Arrive even when the app is closed', pushOn: 'On', pushTurnOn: 'Turn on', pushTurnOff: 'Turn off', pushIosHint: 'On iPhone: first add Reminder to the Home Screen (Share → Add to Home Screen), open it from there and turn notifications on.',
       pushEnabled: 'Notifications are on for this device', pushDisabled: 'Notifications are off for this device', pushFailed: 'Could not turn on notifications', pushTestSent: 'Test notification sent', pushNeedsOn: 'Turn on notifications on this device first',
       remindersPushDesc: 'At the item time, or earlier too — you choose in each item', partnerNotifyFailed: 'Could not notify your partner', sharedChanges: 'Shared items', sharedChangesDesc: 'When your partner adds or edits an item shared with you', morningSummary: 'Morning summary', morningSummaryDesc: 'Today\'s items without a time, overdue and General', morningTime: 'Time', sendTest: 'Send a test notification', filterAll: 'All', filterTasks: 'Tasks', filterEvents: 'Events', lateDay: '{n} day late', lateDays: '{n} days late', allDoneToday: 'All done for today', nothingToday: 'Nothing planned for today', deleteEntry: 'Delete', deleteEntryConfirm: 'Delete “{name}”?',
@@ -68,7 +68,7 @@
       partnerHelp: 'Partner treba jednom da se prijavi preko Google-a. Zatim ovde unesite njegov email.', linkBtn: 'Poveži', unlinkBtn: 'Ukloni', partnerSelf: 'To je vaš email',
       partnerNotFound: 'Nema naloga sa tim emailom. Neka se partner prvo prijavi preko Google-a.', partnerLinked: 'Povezani ste sa: {name}', shareWith: 'Podeli sa: {name}',
       sharedBy: 'Podelio/la: {name}', sharedWith: 'Podeljeno sa: {name}', partnerLinkFirst: 'Povežite partnera u Profilu da biste delili stavke', signInGoogleHint: 'Prijavite se da biste imali iste podatke na svim uređajima i delili sa partnerom',
-      repUnits: 'dan|dana|dana;nedelja|nedelje|nedelja;mesec|meseca|meseci;godina|godine|godina', filterDated: 'Sa datumom', remindLabel: 'Podsetnik', remindAtShort: 'U vreme', beforeShort: '{n} pre', remindHint: 'možeš više · nijedan = bez podsetnika', remindAt: 'U vreme stavke', remindBefore: '{n} ranije', remindOff: 'Bez podsetnika', min5: '5 min', min15: '15 min', min30: '30 min', hour1: '1 sat', day1: '1 dan', weather: 'Vremenska prognoza', weatherDesc: 'Ikonica vremena pored dana u kalendaru (narednih 16 dana)', weatherFallback: 'Lokacija nije dozvoljena — prikazujem Beograd', wx_sunny: 'Sunčano', wx_partly_cloudy_day: 'Delimično oblačno', wx_cloud: 'Oblačno', wx_foggy: 'Magla', wx_rainy: 'Kiša', wx_weather_snowy: 'Sneg', wx_thunderstorm: 'Grmljavina', wxHighLow: 'Najviša {max}°, najniža {min}°',
+      repUnits: 'dan|dana|dana;nedelja|nedelje|nedelja;mesec|meseca|meseci;godina|godine|godina', filterDated: 'Sa datumom', remindLabel: 'Podsetnik', remindAtShort: 'U vreme', beforeShort: '{n} pre', remindHint: 'možeš više · nijedan = bez podsetnika', remindAt: 'U vreme stavke', remindBefore: '{n} ranije', remindOff: 'Bez podsetnika', min5: '5 min', min15: '15 min', min30: '30 min', hour1: '1 sat', day1: '1 dan', usersTitle: 'Korisnici', usersSearch: 'Traži po imenu ili emailu', usersWeb: 'Nova app', usersOldOnly: 'Samo stara app', usersItems: 'stavki: {n}', usersDevices: 'uređaja: {n}', usersLast: 'Poslednji put {d}', usersNever: 'nikad', usersCount: 'naloga: {n} · novu app koristi: {w}', weather: 'Vremenska prognoza', weatherDesc: 'Ikonica vremena pored dana u kalendaru (narednih 16 dana)', weatherFallback: 'Lokacija nije dozvoljena — prikazujem Beograd', wx_sunny: 'Sunčano', wx_partly_cloudy_day: 'Delimično oblačno', wx_cloud: 'Oblačno', wx_foggy: 'Magla', wx_rainy: 'Kiša', wx_weather_snowy: 'Sneg', wx_thunderstorm: 'Grmljavina', wxHighLow: 'Najviša {max}°, najniža {min}°',
       pushDevice: 'Obaveštenja na ovom uređaju', pushDeviceDesc: 'Stižu i kad je aplikacija zatvorena', pushOn: 'Uključeno', pushTurnOn: 'Uključi', pushTurnOff: 'Isključi', pushIosHint: 'Na iPhone-u: prvo dodaj Reminder na početni ekran (Share → Add to Home Screen), otvori ga odatle i uključi obaveštenja.',
       pushEnabled: 'Obaveštenja su uključena na ovom uređaju', pushDisabled: 'Obaveštenja su isključena na ovom uređaju', pushFailed: 'Nije uspelo uključivanje obaveštenja', pushTestSent: 'Probno obaveštenje je poslato', pushNeedsOn: 'Prvo uključi obaveštenja na ovom uređaju',
       remindersPushDesc: 'U vreme stavke, i ranije ako izabereš — biraš u svakoj stavci', partnerNotifyFailed: 'Partner nije obavešten', sharedChanges: 'Podeljene stavke', sharedChangesDesc: 'Kad partner doda ili izmeni stavku koju deli sa tobom', morningSummary: 'Jutarnji pregled', morningSummaryDesc: 'Današnje stavke bez vremena, one koje kasne i Opšte', morningTime: 'Vreme', sendTest: 'Pošalji probno obaveštenje', filterAll: 'Sve', filterTasks: 'Zadaci', filterEvents: 'Događaji', lateDay: 'kasni {n} dan', lateDays: 'kasni {n} dana', allDoneToday: 'Sve za danas je urađeno', nothingToday: 'Za danas nema ništa', deleteEntry: 'Obriši', deleteEntryConfirm: 'Obrisati „{name}“?',
@@ -704,9 +704,39 @@
         ${opt('language', 'language', t('language'))}
         ${opt('appearance', 'palette', t('appearance'))}
         ${opt('credits', 'info', t('credits'))}
+        ${isAdmin() ? opt('users', 'group', t('usersTitle')) : ''}
       </div>
       <button class="btn btn-primary btn-block" data-a="logout">${icon('logout')}${esc(t('logOut'))}</button>`;
     return { title: t('profileTitle'), html, narrow: true };
+  }
+  // owner-only list of who uses the app (api/admin-users checks the signed-in email again)
+  const ADMIN_EMAILS = ['kristinatodorovic2403@gmail.com'];
+  const isAdmin = () => isCloud() && ADMIN_EMAILS.includes(String((me() || {}).email || '').toLowerCase());
+  let adminUsers = null;
+  function screenUsers() {
+    if (!adminUsers || adminUsers.error) {
+      adminUsers = { loading: true };
+      window.firebase.auth().currentUser.getIdToken()
+        .then((tok) => fetch('/api/admin-users', { headers: { authorization: `Bearer ${tok}` } }))
+        .then(async (r) => { const j = await r.json().catch(() => ({})); adminUsers = r.ok ? j : { error: j.error || r.status }; })
+        .catch((e) => { adminUsers = { error: (e && e.message) || e }; })
+        .then(() => render());
+    }
+    const day = (v) => (v ? fmtDate(new Date(v), { day: 'numeric', month: 'short', year: 'numeric' }) : t('usersNever'));
+    let body;
+    if (adminUsers.loading) body = `<p class="quiet">…</p>`;
+    else if (adminUsers.error) body = `<p class="quiet">${esc(String(adminUsers.error))}</p>`;
+    else {
+      const list = adminUsers.users || [];
+      body = `<p class="muted" style="margin:0;font-size:13.5px">${esc(t('usersCount', { n: list.length, w: list.filter((u) => u.web).length }))}</p>
+        <div class="field">${icon('search')}<input id="users-q" type="search" placeholder="${esc(t('usersSearch'))}" autocomplete="off"></div>
+        <div class="stack" id="users-list" style="gap:8px">${list.map((u) => `<div class="tile user-row" style="cursor:default" data-q="${esc((u.name + ' ' + u.email).toLowerCase())}">
+          <span class="grow"><b>${esc(u.name || '—')}</b><small>${esc(u.email)}</small>
+          <small>${esc(t('usersLast', { d: day(u.lastLogin) }))}</small>
+          <span style="display:flex;flex-wrap:wrap;gap:6px;margin-top:6px">${u.web ? `<span class="chip">${esc(t('usersWeb'))}</span>` : `<span class="chip neutral">${esc(t('usersOldOnly'))}</span>`}
+            ${u.items ? `<span class="chip neutral">${esc(t('usersItems', { n: u.items }))}</span>` : ''}${u.devices ? `<span class="chip neutral">${esc(t('usersDevices', { n: u.devices }))}</span>` : ''}${u.partner ? `<span class="chip neutral">${icon('group', 'xs')}</span>` : ''}</span></span></div>`).join('')}</div>`;
+    }
+    return { title: t('usersTitle'), html: `<div class="stack">${body}</div>`, narrow: true };
   }
   function tile(a, ic, title, sub, danger) {
     return `<button class="tile ${danger ? 'danger' : ''}" data-a="${a.startsWith('!') ? a.slice(1) : 'go'}" data-v="${a}">${icon(ic, 'lg')}<span class="grow"><b>${esc(title)}</b><small>${esc(sub)}</small></span>${icon('chevron_right')}</button>`;
@@ -891,7 +921,7 @@
   const SCREENS = {
     partner: screenPartner, accountCenter: screenAccountCenter, profileData: screenProfileData, security: screenSecurity,
     changePassword: screenChangePassword, connected: screenConnected, notifications: screenNotifications, language: screenLanguage,
-    appearance: screenAppearance, credits: screenCredits, deletion: screenDeletion,
+    appearance: screenAppearance, credits: screenCredits, deletion: screenDeletion, users: screenUsers,
   };
 
   /* ================= Modals ================= */
@@ -1558,6 +1588,7 @@
     const g = $('.cal-grid'); if (g) g.classList.add(step > 0 ? 'slide-l' : 'slide-r');
   }, { passive: true });
   document.addEventListener('input', (e) => {
+    if (e.target.id === 'users-q') { const q = e.target.value.trim().toLowerCase(); document.querySelectorAll('#users-list .user-row').forEach((r) => { r.hidden = !!q && !r.dataset.q.includes(q); }); return; }
     if (e.target.id === 'np' || e.target.id === 'reg-pass') {
       const m = $('#pw-meter'); if (!m) return; const s = pwStrength(e.target.value);
       m.style.width = (s / 5) * 100 + '%'; m.style.background = s <= 1 ? 'var(--error)' : s <= 3 ? '#FB8C00' : 'var(--success)';
