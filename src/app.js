@@ -327,15 +327,17 @@
     showPw: {}, splash: false,
   };
   // remember where the user was, so a reload (or a new version) reopens the same screen
+  // screen and scroll survive a reload, but not closing the app: a fresh start always opens on Home
   const UI_KEY = 'todays-ui';
+  try { localStorage.removeItem(UI_KEY); } catch (e) { /* old copy from when this lived in localStorage */ }
   function saveUi() {
     try {
-      localStorage.setItem(UI_KEY, JSON.stringify({ tab: ui.tab, stack: ui.stack, remTab: ui.remTab, calMonth: dkey(ui.calMonth), homeFilter: ui.homeFilter, agendaFilter: ui.agendaFilter, agendaDays: ui.agendaDays, expanded: [...ui.expanded], scroll: ($('.scroller') || {}).scrollTop || 0 }));
+      sessionStorage.setItem(UI_KEY, JSON.stringify({ tab: ui.tab, stack: ui.stack, remTab: ui.remTab, calMonth: dkey(ui.calMonth), homeFilter: ui.homeFilter, agendaFilter: ui.agendaFilter, agendaDays: ui.agendaDays, expanded: [...ui.expanded], scroll: ($('.scroller') || {}).scrollTop || 0 }));
     } catch (e) { /* storage unavailable */ }
   }
   function restoreUi() {
     let v = null;
-    try { v = (window.claude && window.claude.hot && window.claude.hot.data && window.claude.hot.data.ui) || JSON.parse(localStorage.getItem(UI_KEY) || 'null'); } catch (e) { v = null; }
+    try { v = (window.claude && window.claude.hot && window.claude.hot.data && window.claude.hot.data.ui) || JSON.parse(sessionStorage.getItem(UI_KEY) || 'null'); } catch (e) { v = null; }
     if (!v) return 0;
     if (['home', 'reminders', 'profile'].includes(v.tab)) ui.tab = v.tab;
     if (Array.isArray(v.stack)) ui.stack = v.stack.filter((x) => x && SCREENS[x.name]);
@@ -1622,7 +1624,7 @@
   if (startScroll) { const sc = $('.scroller'); if (sc) sc.scrollTop = startScroll; }
   let scrollT = null;
   document.addEventListener('scroll', () => { clearTimeout(scrollT); scrollT = setTimeout(saveUi, 200); }, true);
-  try { if (window.claude && window.claude.hot && window.claude.hot.snapshot) window.claude.hot.snapshot(() => { saveUi(); return { ui: JSON.parse(localStorage.getItem(UI_KEY) || 'null') }; }); } catch (e) { /* not in a viewer */ }
+  try { if (window.claude && window.claude.hot && window.claude.hot.snapshot) window.claude.hot.snapshot(() => { saveUi(); return { ui: JSON.parse(sessionStorage.getItem(UI_KEY) || 'null') }; }); } catch (e) { /* not in a viewer */ }
   initCloud();
   setInterval(checkDue, 15000);
   setTimeout(checkDue, 4000);
