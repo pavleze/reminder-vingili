@@ -303,6 +303,14 @@ button.wx-line { border: 0; background: none; padding: 0; font: inherit; text-al
 .tick.pie.on { background: var(--primary); }
 .entry-row:hover .tick.pie { border-color: var(--primary-ink); }
 .watch-add { display: flex; gap: 8px; align-items: stretch; }
+.watch-opts { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; font-size: 13.5px; margin-top: -4px; }
+.watch-opts.sm { margin-top: 0; gap: 4px; }
+.watch-opts.sm .w-opt { padding: 3px 8px; font-size: 12px; gap: 3px; }
+.watch-opts.sm .w-opt .ms { font-size: 14px; }
+.w-opt { display: inline-flex; align-items: center; gap: 5px; border: 1.5px solid var(--divider); background: none; color: var(--muted); border-radius: 99px; padding: 5px 11px; font: inherit; font-size: 12.5px; font-weight: 500; }
+.w-opt.on { border-color: transparent; background: color-mix(in srgb, var(--primary) 14%, transparent); color: var(--primary-ink); }
+.w-opt .ms { font-size: 16px; }
+.watch-card .w-price s { color: var(--muted); margin-left: 6px; }
 .watch-add .field { flex: 1 1 auto; min-width: 0; width: auto; margin: 0; }
 .watch-add .btn { flex: none; }
 .watch-card { display: flex; gap: 12px; padding: 12px; border-radius: var(--r-sm); background: var(--card); border: 1px solid var(--divider); }

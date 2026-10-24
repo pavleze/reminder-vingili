@@ -20,10 +20,18 @@ async function get(url, headers) {
 }
 const unesc = (s) => String(s || '').replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&lt;/g, '<').replace(/&gt;/g, '>');
 const meta = (html, prop) => { const m = html.match(new RegExp(`<meta[^>]+(?:property|name)=["']${prop}["'][^>]*content=["']([^"']*)["']`, 'i')) || html.match(new RegExp(`<meta[^>]+content=["']([^"']*)["'][^>]*(?:property|name)=["']${prop}["']`, 'i')); return m ? unesc(m[1]) : ''; };
+// '2999', 2999, '2.999,00', '2,999.00' → 2999
+function toNum(v) {
+  if (typeof v === 'number') return v;
+  let s = String(v).replace(/[^\d.,]/g, '');
+  if (/,\d{1,2}$/.test(s)) s = s.replace(/\./g, '').replace(',', '.'); else s = s.replace(/,/g, '');
+  const n = parseFloat(s); return Number.isFinite(n) ? n : null;
+}
+const fmtPrice = (n, cur) => `${Math.round(n).toLocaleString('sr-RS')} ${cur === 'RSD' || !cur ? 'RSD' : cur}`;
 const SCHEMA_IN = /InStock|LimitedAvailability|OnlineOnly|InStoreOnly|PreOrder/i, SCHEMA_OUT = /OutOfStock|SoldOut|Discontinued/i;
 
 function readPage(html) {
-  const out = { title: meta(html, 'og:title'), image: meta(html, 'og:image'), price: '', online: 'unknown' };
+  const out = { title: meta(html, 'og:title'), image: meta(html, 'og:image'), price: '', priceNum: null, online: 'unknown' };
   for (const m of html.matchAll(/<script[^>]+application\/ld\+json[^>]*>([\s\S]*?)<\/script>/gi)) {
     let j; try { j = JSON.parse(m[1]); } catch (e) { continue; }
     for (const p of [].concat(j['@graph'] || j)) {
@@ -32,12 +40,14 @@ function readPage(html) {
       out.image = [].concat(p.image || [])[0] || out.image;
       const offer = [].concat(p.offers || [])[0] || {};
       const o = [].concat(offer.offers || offer)[0] || {};
-      if (o.price != null) out.price = `${o.price} ${o.priceCurrency || ''}`.trim();
+      const pr = o.price != null ? o.price : o.lowPrice;
+      if (pr != null) { out.priceNum = toNum(pr); out.currency = o.priceCurrency || ''; }
       const av = String(o.availability || '');
       if (SCHEMA_IN.test(av)) out.online = 'in'; else if (SCHEMA_OUT.test(av)) out.online = 'out';
     }
   }
-  if (!out.price) { const a = meta(html, 'product:price:amount'); if (a) out.price = `${a} ${meta(html, 'product:price:currency')}`.trim(); }
+  if (out.priceNum == null) { const a = meta(html, 'product:price:amount'); if (a) { out.priceNum = toNum(a); out.currency = meta(html, 'product:price:currency'); } }
+  if (out.priceNum != null) out.price = fmtPrice(out.priceNum, out.currency);
   return out;
 }
 
@@ -70,7 +80,7 @@ function readAvailability(j) {
 async function checkIkea(url) {
   const p = parseIkeaUrl(url);
   if (!p) return { online: 'unknown', store: 'unknown', error: 'not an IKEA product link' };
-  const res = { title: '', image: '', price: '', online: 'unknown', store: 'unknown', storeQty: null, restock: null, error: '', sources: {} };
+  const res = { title: '', image: '', price: '', priceNum: null, online: 'unknown', store: 'unknown', storeQty: null, restock: null, error: '', sources: {} };
   const [page, api] = await Promise.allSettled([
     get(p.url, { 'accept-language': `${p.lang}-${p.country.toUpperCase()},${p.lang};q=0.9` }),
     get(`https://api.ingka.ikea.com/cia/availabilities/ru/${p.country}?itemNos=${p.itemNo.replace(/^s/, '')}&expand=StoresList,Restocks`, { 'x-client-id': IKEA_CLIENT_ID, accept: 'application/json;version=2' }),
@@ -93,8 +103,8 @@ async function checkIkea(url) {
 }
 
 const TEXT = {
-  sr: { back: 'Ponovo na stanju 🎉', online: 'dostava na kuću', store: 'IKEA robna kuća', pcs: (n) => `${n} kom` },
-  en: { back: 'Back in stock 🎉', online: 'home delivery', store: 'IKEA store', pcs: (n) => `${n} pcs` },
+  sr: { back: 'Ponovo na stanju 🎉', online: 'dostava na kuću', store: 'IKEA robna kuća', pcs: (n) => `${n} kom`, cheaper: 'Cena je pala 💸' },
+  en: { back: 'Back in stock 🎉', online: 'home delivery', store: 'IKEA store', pcs: (n) => `${n} pcs`, cheaper: 'Price dropped 💸' },
 };
 
 // checks one watch doc, saves the result, and tells its members when something went from "out" to "in"
@@ -102,22 +112,30 @@ async function runWatch(w) {
   const r = await checkIkea(w.url);
   // last known state ignores failed checks, so "in → unknown → in" doesn't notify again
   const known = { online: r.online !== 'unknown' ? r.online : w.knownOnline || null, store: r.store !== 'unknown' ? r.store : w.knownStore || null };
-  const backOnline = w.knownOnline === 'out' && known.online === 'in';
-  const backStore = w.knownStore === 'out' && known.store === 'in';
+  // what to watch is chosen per product: stock (default on) and/or a price drop
+  const wantStock = w.notifyStock !== false, wantPrice = !!w.notifyPrice;
+  const backOnline = wantStock && w.knownOnline === 'out' && known.online === 'in';
+  const backStore = wantStock && w.knownStore === 'out' && known.store === 'in';
+  const price = r.priceNum != null ? r.priceNum : w.knownPrice != null ? w.knownPrice : null;
+  const cheaper = wantPrice && w.knownPrice != null && r.priceNum != null && r.priceNum < w.knownPrice - 0.5;
   await L.patchDoc('watches', w.id, {
     title: r.title || w.title || '', image: r.image || w.image || '', price: r.price || w.price || '',
     online: r.online, store: r.store, storeQty: r.storeQty, restock: r.restock, error: r.error || '',
-    knownOnline: known.online, knownStore: known.store, checkedAt: new Date().toISOString(),
+    knownOnline: known.online, knownStore: known.store, knownPrice: price, checkedAt: new Date().toISOString(),
+    // "was …" stays on the card only while the price is still below it
+    ...(cheaper ? { priceWas: fmtPrice(w.knownPrice, r.currency), priceWasNum: w.knownPrice, priceDropAt: new Date().toISOString() }
+      : r.priceNum != null && w.priceWasNum != null && r.priceNum >= w.priceWasNum ? { priceWas: '', priceWasNum: null } : {}),
   });
   let sent = 0;
-  if ((backOnline || backStore) && Array.isArray(w.members)) {
+  if ((backOnline || backStore || cheaper) && Array.isArray(w.members)) {
     sent = await L.pushToUids(w.members, (u) => {
       const tx = TEXT[((u.settings || {}).lang) === 'en' ? 'en' : 'sr'];
       const where = [backOnline ? tx.online : '', backStore ? tx.store + (r.storeQty ? ` (${tx.pcs(r.storeQty)})` : '') : ''].filter(Boolean).join(' · ');
-      return { title: tx.back, body: `${r.title || w.title} · ${where}`, tag: `watch_${w.id}`, url: w.url };
+      const drop = cheaper ? `${fmtPrice(w.knownPrice, r.currency)} → ${fmtPrice(r.priceNum, r.currency)}` : '';
+      return { title: backOnline || backStore ? tx.back : tx.cheaper, body: [r.title || w.title, where, drop].filter(Boolean).join(' · '), tag: `watch_${w.id}`, url: w.url };
     }, `praćenje: ${r.title || w.title}`);
   }
-  return { ...r, backOnline, backStore, sent };
+  return { ...r, backOnline, backStore, cheaper, sent };
 }
 
 // from the minute cron: a couple of the stalest watches per run, so each one is checked about every 2.5 h
