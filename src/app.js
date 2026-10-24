@@ -719,16 +719,15 @@
       const share = mine ? (Cloud.partner ? `<button class="btn btn-sm w-share ${shared ? 'on' : ''}" data-a="watch-share" data-id="${esc(w.id)}" aria-pressed="${shared}">${icon(shared ? 'group' : 'person', 'xs')}${esc(shared ? t('watchSharedWith', { name: pName }) : t('watchShareWith', { name: pName }))}</button>` : '')
         : `<span class="chip neutral">${icon('group', 'xs')}${esc(t('watchFrom', { name: pName || t('partnerTitle') }))}</span>`;
       return `<div class="watch-card">
-        ${w.image ? `<img src="${esc(w.image)}" alt="" loading="lazy" referrerpolicy="no-referrer">` : `<span class="ph">${icon('shopping_bag')}</span>`}
+        <a class="w-pic" href="${esc(w.url)}" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">${w.image ? `<img src="${esc(w.image)}" alt="" loading="lazy" referrerpolicy="no-referrer">` : `<span class="ph">${icon('shopping_bag')}</span>`}</a>
         <div class="grow">
-          <span class="w-title">${esc(w.title || w.url)}</span>
+          <a class="w-title" href="${esc(w.url)}" target="_blank" rel="noopener">${esc(w.title || w.url)}</a>
           ${w.price ? `<span class="w-meta w-price">${esc(w.price)}${w.priceWas ? ` <s>${esc(t('watchPriceWas', { p: w.priceWas }))}</s>` : ''}</span>` : ''}
           <span class="w-chips">${chip(t('watchOnline'), 'local_shipping', w.online)}${chip(t('watchStore'), 'storefront', w.store, w.store === 'in' && w.storeQty ? `(${w.storeQty})` : '')}</span>
           ${w.store === 'out' && w.restock ? `<span class="w-meta">${esc(t('watchRestock', { d: fmtDate(new Date(w.restock), { day: 'numeric', month: 'short' }) }))}</span>` : ''}
           <span class="w-meta">${esc(meta)}</span>
           <span class="watch-opts sm">${watchOpt('stock', 'inventory_2', t('watchOptStockShort'), w.notifyStock !== false, w.id)}${watchOpt('price', 'trending_down', t('watchOptPriceShort'), !!w.notifyPrice, w.id)}</span>
           <span class="w-actions">
-            <a class="icon-btn" href="${esc(w.url)}" target="_blank" rel="noopener" aria-label="${esc(t('watchOpen'))}" title="${esc(t('watchOpen'))}">${icon('open_in_new', 'sm')}</a>
             <button class="icon-btn" data-a="watch-check" data-id="${esc(w.id)}" aria-label="${esc(t('watchCheckNow'))}" title="${esc(t('watchCheckNow'))}" ${busy ? 'disabled' : ''}>${icon('refresh', 'sm')}</button>
             <button class="icon-btn" data-a="watch-del" data-id="${esc(w.id)}" aria-label="${esc(t('deleteEntry'))}" title="${esc(t('deleteEntry'))}">${icon('delete', 'sm')}</button>
           </span>
