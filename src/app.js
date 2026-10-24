@@ -28,7 +28,7 @@
       partnerHelp: 'Your partner needs to sign in with Google once. Then enter their email here.', linkBtn: 'Link', unlinkBtn: 'Remove', partnerSelf: "That's your own email",
       partnerNotFound: "No account with that email yet. Ask them to sign in with Google first.", partnerLinked: 'Linked with {name}', shareWith: 'Share with {name}',
       sharedBy: 'Shared by {name}', sharedWith: 'Shared with {name}', partnerLinkFirst: 'Link a partner in Profile to share items', signInGoogleHint: 'Sign in to sync across devices and share with your partner',
-      repUnits: 'day|days|days;week|weeks|weeks;month|months|months;year|years|years', filterDated: 'With date', remindLabel: 'Reminder', remindAtShort: 'At the time', beforeShort: '{n} before', remindHint: 'tap one or more · none = no reminder', remindAt: 'At the time', remindBefore: '{n} before', remindOff: 'No reminder', min5: '5 min', min15: '15 min', min30: '30 min', hour1: '1 hour', day1: '1 day', watchTab: 'Watch', watchAddPh: 'Paste an IKEA product link', watchAdd: 'Watch', watchOnlyIkea: 'For now this works only for IKEA product links (ikea.com/…/p/…)', watchOnline: 'Delivery', watchStore: 'IKEA store', wIn: 'in stock', wOut: 'out of stock', wUnknown: '?', watchChecked: 'Checked {d}', watchNever: 'Not checked yet', watchCheckNow: 'Check now', watchOpen: 'Open', watchEmpty: 'Add products you are waiting for. You get a notification when they are back in stock (checked every 2–3 hours).', watchCloudOnly: 'Watching products works when you are signed in.', watchRestock: 'Expected {d}', watchCantCheck: 'Could not check', watchShareWith: 'Share with {name}', watchAdded: 'Watching — first check is running', watchDeleteConfirm: 'Stop watching “{name}”?', watchDup: 'You already watch this product', watchChecking: 'Checking…', usersTitle: 'Users', usersSearch: 'Search by name or email', usersWeb: 'New app', usersOldOnly: 'Old app only', usersItems: '{n} items', usersDevices: '{n} devices', usersLast: 'Last seen {d}', usersNever: 'never', usersCount: '{n} accounts · {w} use the new app', weather: 'Weather forecast', weatherDesc: 'Weather icon next to the day in the calendar (next 16 days)', weatherFallback: 'Location not allowed — showing Belgrade', wx_sunny: 'Sunny', wx_partly_cloudy_day: 'Partly cloudy', wx_cloud: 'Cloudy', wx_foggy: 'Fog', wx_rainy: 'Rain', wx_weather_snowy: 'Snow', wx_thunderstorm: 'Thunderstorm', wxHighLow: 'High {max}°, low {min}°',
+      repUnits: 'day|days|days;week|weeks|weeks;month|months|months;year|years|years', filterDated: 'With date', remindLabel: 'Reminder', remindAtShort: 'At the time', beforeShort: '{n} before', remindHint: 'tap one or more · none = no reminder', remindAt: 'At the time', remindBefore: '{n} before', remindOff: 'No reminder', min5: '5 min', min15: '15 min', min30: '30 min', hour1: '1 hour', day1: '1 day', watchTab: 'Watch', watchAddPh: 'Paste an IKEA product link', watchAdd: 'Watch', watchOnlyIkea: 'For now this works only for IKEA product links (ikea.com/…/p/…)', watchOnline: 'Delivery', watchStore: 'IKEA store', wIn: 'in stock', wOut: 'out of stock', wUnknown: '?', watchChecked: 'Checked {d}', watchNever: 'Not checked yet', watchCheckNow: 'Check now', watchOpen: 'Open', watchEmpty: 'Add products you are waiting for. You get a notification when they are back in stock (checked every 2–3 hours).', watchCloudOnly: 'Watching products works when you are signed in.', watchRestock: 'Expected {d}', watchCantCheck: 'Could not check', watchShareWith: 'Share with {name}', watchAdded: 'Watching — first check is running', watchDeleteConfirm: 'Stop watching “{name}”?', watchDup: 'You already watch this product', watchChecking: 'Checking…', usersTitle: 'Users', usersSearch: 'Search by name or email', usersWeb: 'New app', usersOldOnly: 'Old app only', usersItems: '{n} items', usersDevices: '{n} devices', usersLast: 'Last seen {d}', usersNever: 'never', usersCount: '{n} accounts · {w} use the new app', weather: 'Weather forecast', weatherDesc: 'Weather icon next to the day in the calendar (next 16 days)', weatherFallback: 'Location not allowed — showing Belgrade', weatherRefresh: 'Tap to update the location', wx_sunny: 'Sunny', wx_partly_cloudy_day: 'Partly cloudy', wx_cloud: 'Cloudy', wx_foggy: 'Fog', wx_rainy: 'Rain', wx_weather_snowy: 'Snow', wx_thunderstorm: 'Thunderstorm', wxHighLow: 'High {max}°, low {min}°',
       pushDevice: 'Notifications on this device', pushDeviceDesc: 'Arrive even when the app is closed', pushOn: 'On', pushTurnOn: 'Turn on', pushTurnOff: 'Turn off', pushIosHint: 'On iPhone: first add Reminder to the Home Screen (Share → Add to Home Screen), open it from there and turn notifications on.',
       pushEnabled: 'Notifications are on for this device', pushDisabled: 'Notifications are off for this device', pushFailed: 'Could not turn on notifications', pushTestSent: 'Test notification sent', pushNeedsOn: 'Turn on notifications on this device first',
       remindersPushDesc: 'At the item time, or earlier too — you choose in each item', partnerNotifyFailed: 'Could not notify your partner', sharedChanges: 'Shared items', sharedChangesDesc: 'When your partner adds or edits an item shared with you', morningSummary: 'Morning summary', morningSummaryDesc: 'Today\'s items without a time, overdue and General', morningTime: 'Time', sendTest: 'Send a test notification', filterAll: 'All', filterTasks: 'Tasks', filterEvents: 'Events', lateDay: '{n} day late', lateDays: '{n} days late', allDoneToday: 'All done for today', nothingToday: 'Nothing planned for today', deleteEntry: 'Delete', deleteEntryConfirm: 'Delete “{name}”?',
@@ -68,7 +68,7 @@
       partnerHelp: 'Partner treba jednom da se prijavi preko Google-a. Zatim ovde unesite njegov email.', linkBtn: 'Poveži', unlinkBtn: 'Ukloni', partnerSelf: 'To je vaš email',
       partnerNotFound: 'Nema naloga sa tim emailom. Neka se partner prvo prijavi preko Google-a.', partnerLinked: 'Povezani ste sa: {name}', shareWith: 'Podeli sa: {name}',
       sharedBy: 'Podelio/la: {name}', sharedWith: 'Podeljeno sa: {name}', partnerLinkFirst: 'Povežite partnera u Profilu da biste delili stavke', signInGoogleHint: 'Prijavite se da biste imali iste podatke na svim uređajima i delili sa partnerom',
-      repUnits: 'dan|dana|dana;nedelja|nedelje|nedelja;mesec|meseca|meseci;godina|godine|godina', filterDated: 'Sa datumom', remindLabel: 'Podsetnik', remindAtShort: 'U vreme', beforeShort: '{n} pre', remindHint: 'možeš više · nijedan = bez podsetnika', remindAt: 'U vreme stavke', remindBefore: '{n} ranije', remindOff: 'Bez podsetnika', min5: '5 min', min15: '15 min', min30: '30 min', hour1: '1 sat', day1: '1 dan', watchTab: 'Praćenje', watchAddPh: 'Nalepi IKEA link proizvoda', watchAdd: 'Prati', watchOnlyIkea: 'Za sada radi samo za IKEA linkove proizvoda (ikea.com/…/p/…)', watchOnline: 'Dostava', watchStore: 'IKEA robna kuća', wIn: 'ima', wOut: 'nema', wUnknown: '?', watchChecked: 'Provereno {d}', watchNever: 'Još nije provereno', watchCheckNow: 'Proveri sad', watchOpen: 'Otvori', watchEmpty: 'Dodaj proizvode koje čekaš. Stiže obaveštenje kad ponovo budu na stanju (provera na 2–3 sata).', watchCloudOnly: 'Praćenje radi kad si prijavljena.', watchRestock: 'Očekuje se {d}', watchCantCheck: 'Ne može da se proveri', watchShareWith: 'Podeli sa {name}', watchAdded: 'Pratim — prva provera je u toku', watchDeleteConfirm: 'Prestati da pratiš „{name}“?', watchDup: 'Ovaj proizvod već pratiš', watchChecking: 'Proveravam…', usersTitle: 'Korisnici', usersSearch: 'Traži po imenu ili emailu', usersWeb: 'Nova app', usersOldOnly: 'Samo stara app', usersItems: 'stavki: {n}', usersDevices: 'uređaja: {n}', usersLast: 'Poslednji put {d}', usersNever: 'nikad', usersCount: 'naloga: {n} · novu app koristi: {w}', weather: 'Vremenska prognoza', weatherDesc: 'Ikonica vremena pored dana u kalendaru (narednih 16 dana)', weatherFallback: 'Lokacija nije dozvoljena — prikazujem Beograd', wx_sunny: 'Sunčano', wx_partly_cloudy_day: 'Delimično oblačno', wx_cloud: 'Oblačno', wx_foggy: 'Magla', wx_rainy: 'Kiša', wx_weather_snowy: 'Sneg', wx_thunderstorm: 'Grmljavina', wxHighLow: 'Najviša {max}°, najniža {min}°',
+      repUnits: 'dan|dana|dana;nedelja|nedelje|nedelja;mesec|meseca|meseci;godina|godine|godina', filterDated: 'Sa datumom', remindLabel: 'Podsetnik', remindAtShort: 'U vreme', beforeShort: '{n} pre', remindHint: 'možeš više · nijedan = bez podsetnika', remindAt: 'U vreme stavke', remindBefore: '{n} ranije', remindOff: 'Bez podsetnika', min5: '5 min', min15: '15 min', min30: '30 min', hour1: '1 sat', day1: '1 dan', watchTab: 'Praćenje', watchAddPh: 'Nalepi IKEA link proizvoda', watchAdd: 'Prati', watchOnlyIkea: 'Za sada radi samo za IKEA linkove proizvoda (ikea.com/…/p/…)', watchOnline: 'Dostava', watchStore: 'IKEA robna kuća', wIn: 'ima', wOut: 'nema', wUnknown: '?', watchChecked: 'Provereno {d}', watchNever: 'Još nije provereno', watchCheckNow: 'Proveri sad', watchOpen: 'Otvori', watchEmpty: 'Dodaj proizvode koje čekaš. Stiže obaveštenje kad ponovo budu na stanju (provera na 2–3 sata).', watchCloudOnly: 'Praćenje radi kad si prijavljena.', watchRestock: 'Očekuje se {d}', watchCantCheck: 'Ne može da se proveri', watchShareWith: 'Podeli sa {name}', watchAdded: 'Pratim — prva provera je u toku', watchDeleteConfirm: 'Prestati da pratiš „{name}“?', watchDup: 'Ovaj proizvod već pratiš', watchChecking: 'Proveravam…', usersTitle: 'Korisnici', usersSearch: 'Traži po imenu ili emailu', usersWeb: 'Nova app', usersOldOnly: 'Samo stara app', usersItems: 'stavki: {n}', usersDevices: 'uređaja: {n}', usersLast: 'Poslednji put {d}', usersNever: 'nikad', usersCount: 'naloga: {n} · novu app koristi: {w}', weather: 'Vremenska prognoza', weatherDesc: 'Ikonica vremena pored dana u kalendaru (narednih 16 dana)', weatherFallback: 'Lokacija nije dozvoljena — prikazujem Beograd', weatherRefresh: 'Dodirni da osvežiš lokaciju', wx_sunny: 'Sunčano', wx_partly_cloudy_day: 'Delimično oblačno', wx_cloud: 'Oblačno', wx_foggy: 'Magla', wx_rainy: 'Kiša', wx_weather_snowy: 'Sneg', wx_thunderstorm: 'Grmljavina', wxHighLow: 'Najviša {max}°, najniža {min}°',
       pushDevice: 'Obaveštenja na ovom uređaju', pushDeviceDesc: 'Stižu i kad je aplikacija zatvorena', pushOn: 'Uključeno', pushTurnOn: 'Uključi', pushTurnOff: 'Isključi', pushIosHint: 'Na iPhone-u: prvo dodaj Reminder na početni ekran (Share → Add to Home Screen), otvori ga odatle i uključi obaveštenja.',
       pushEnabled: 'Obaveštenja su uključena na ovom uređaju', pushDisabled: 'Obaveštenja su isključena na ovom uređaju', pushFailed: 'Nije uspelo uključivanje obaveštenja', pushTestSent: 'Probno obaveštenje je poslato', pushNeedsOn: 'Prvo uključi obaveštenja na ovom uređaju',
       remindersPushDesc: 'U vreme stavke, i ranije ako izabereš — biraš u svakoj stavci', partnerNotifyFailed: 'Partner nije obavešten', sharedChanges: 'Podeljene stavke', sharedChangesDesc: 'Kad partner doda ili izmeni stavku koju deli sa tobom', morningSummary: 'Jutarnji pregled', morningSummaryDesc: 'Današnje stavke bez vremena, one koje kasne i Opšte', morningTime: 'Vreme', sendTest: 'Pošalji probno obaveštenje', filterAll: 'Sve', filterTasks: 'Zadaci', filterEvents: 'Događaji', lateDay: 'kasni {n} dan', lateDays: 'kasni {n} dana', allDoneToday: 'Sve za danas je urađeno', nothingToday: 'Za danas nema ništa', deleteEntry: 'Obriši', deleteEntryConfirm: 'Obrisati „{name}“?',
@@ -539,7 +539,7 @@
         <div class="day-head-txt">
           <span class="greet">${esc(t('welcomeBack'))}${first ? ', ' + esc(first) : ''}!</span>
           <h2 id="today-h">${esc(t('today'))}</h2>
-          ${wxLine(d)}
+          ${wxLine(d, true)}
         </div>
         ${totalN ? `<div class="ring ring-min" style="--p:${pct}" role="img" aria-label="${esc(t('ofDone', { a: doneN, b: totalN }))} ${esc(t('doneToday'))}"><div><b class="tnum">${doneN}/${totalN}</b><small>${esc(t('doneToday'))}</small></div></div>` : ''}
       </header>
@@ -623,10 +623,13 @@
     return `<span class="wx" title="${w.max}° / ${w.min}°">${icon(wxName(w.code), 'xs')}</span>`;
   }
   // one line for a single day: icon, description, ↑ high ↓ low (home header and the day dialog)
-  function wxLine(d) {
+  function wxLine(d, tap) {
     const w = weatherOn(d); if (!w) return '';
-    const n = wxName(w.code);
-    return `<div class="wx-line" role="img" aria-label="${esc(t('wx_' + n))}, ${esc(t('wxHighLow', { max: w.max, min: w.min }))}">${icon(n)}<span>${esc(t('wx_' + n))}</span><span class="wx-t tnum" aria-hidden="true">↑${w.max}° <i>↓${w.min}°</i></span></div>`;
+    const n = wxName(w.code); const label = `${t('wx_' + n)}, ${t('wxHighLow', { max: w.max, min: w.min })}`;
+    const inner = `${icon(n)}<span>${esc(t('wx_' + n))}</span><span class="wx-t tnum" aria-hidden="true">↑${w.max}° <i>↓${w.min}°</i></span>`;
+    // on Home a tap refreshes the location (the only place the browser may ask for it again)
+    return tap ? `<button type="button" class="wx-line" data-a="wx-locate" aria-label="${esc(label)} · ${esc(t('weatherRefresh'))}" title="${esc(t('weatherRefresh'))}">${inner}</button>`
+      : `<div class="wx-line" role="img" aria-label="${esc(label)}">${inner}</div>`;
   }
   let wxBusy = false;
   function refreshWeather(force) {
@@ -641,21 +644,27 @@
         render();
       }).catch(() => {}).finally(() => { wxBusy = false; });
   }
-  // follows the device's current location: checked again every 30 min (no prompt once allowed); a new place reloads the forecast.
-  // No location at all → Belgrade; a failed check later keeps the last known place.
+  // follows the device's location without nagging: the browser is asked only when the person acts (turns the forecast on,
+  // or taps the weather line on Home) or when the permission is already granted. iPhone home-screen apps forget the
+  // permission between launches, so there the last known place is used until the next tap.
   let wxLocating = false;
-  function ensureWeather() {
+  const saveWx = () => { try { localStorage.setItem(WX_KEY, JSON.stringify(WX)); } catch (e) { /* ignore */ } };
+  const geoGranted = () => (navigator.permissions && navigator.permissions.query ? navigator.permissions.query({ name: 'geolocation' }).then((r) => r.state === 'granted', () => false) : Promise.resolve(false));
+  async function ensureWeather(ask = false) {
     if (wxLocating) return;
-    if (WX && WX.lat != null && WX.locAt && Date.now() - WX.locAt < 30 * 60e3) return refreshWeather();
+    const have = WX && WX.lat != null;
+    if (!ask && have && WX.locAt && Date.now() - WX.locAt < 3 * 3600e3) return refreshWeather();
+    if (!ask && have && !(await geoGranted())) return refreshWeather(); // keep the last place rather than prompt
+    if (!ask && !have && WX && WX.asked && !(await geoGranted())) return; // asked once already on this device
     wxLocating = true;
     const use = (lat, lon, fromDevice) => {
       wxLocating = false; lat = +lat.toFixed(2); lon = +lon.toFixed(2);
       const moved = !WX || WX.lat == null || Math.abs(WX.lat - lat) > 0.05 || Math.abs(WX.lon - lon) > 0.05;
-      WX = { ...(WX || {}), lat, lon, locAt: Date.now(), fromDevice };
-      refreshWeather(moved);
+      WX = { ...(WX || {}), lat, lon, locAt: Date.now(), fromDevice, asked: true }; saveWx();
+      refreshWeather(moved || ask);
     };
     const failed = () => {
-      if (WX && WX.lat != null) return use(WX.lat, WX.lon, WX.fromDevice);
+      if (have) return use(WX.lat, WX.lon, WX.fromDevice);
       toast(t('weatherFallback'), { icon: 'location_off' }); use(44.82, 20.46, false);
     };
     if (!navigator.geolocation) return failed();
@@ -1573,6 +1582,7 @@
       case 'back': back(); break;
       case 'tab': closeModal(); setTab(el.dataset.tab); break;
       case 'go': go(el.dataset.v); break;
+      case 'wx-locate': ensureWeather(true); break;
       case 'watch-check': watchCheck(el.dataset.id); break;
       case 'watch-del': watchDel(el.dataset.id); break;
       case 'auth': ui.auth = el.dataset.v; ui.showPw = {}; render(); break;
@@ -1641,7 +1651,7 @@
     const s = settings();
     if (a === 'dark-toggle') { s.dark = el.checked; save(); render(); }
     else if (a === 'watch-share') ui.watchShare = el.checked;
-    else if (a === 'weather-toggle') { s.weather = el.checked; save(); if (el.checked) { if (WX) WX.locAt = 0; ensureWeather(); } }
+    else if (a === 'weather-toggle') { s.weather = el.checked; save(); if (el.checked) ensureWeather(true); }
     else if (a === 'notif-set') {
       const map = { 'n-rem': 'reminders', 'n-snooze': 'snooze', 'n-sound': 'sound', 'n-morning': 'morning', 'n-shared': 'shared' }; s.notif[map[el.id]] = el.checked; save();
       if (el.id === 'n-morning') render();
