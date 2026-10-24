@@ -16,7 +16,7 @@ module.exports = async (req, res) => {
     }
     if (!w || !Array.isArray(w.members) || !w.members.includes(uid)) return res.status(404).json({ error: 'not found' });
     const r = await W.runWatch(w);
-    res.status(200).json({ online: r.online, store: r.store, storeQty: r.storeQty, error: r.error, sources: r.sources });
+    res.status(200).json({ kind: r.kind, online: r.online, store: r.store, storeQty: r.storeQty, error: r.error, sources: r.sources });
   } catch (e) {
     res.status(500).json({ error: String(e.message || e) });
   }
