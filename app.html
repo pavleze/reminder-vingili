@@ -313,6 +313,10 @@ button.wx-line { border: 0; background: none; padding: 0; font: inherit; text-al
 .watch-card .chip.out { background: color-mix(in srgb, var(--error) 12%, transparent); color: var(--error); }
 .watch-card .w-meta { font-size: 12px; color: var(--muted); }
 .watch-card .w-actions { display: flex; gap: 2px; margin-left: -8px; }
+.watch-card .grow > .chip { align-self: flex-start; }
+.watch-card .w-share { align-self: flex-start; gap: 6px; padding: 6px 12px; border: 1.5px solid var(--divider); background: none; color: var(--muted); border-radius: 99px; font-weight: 500; }
+.watch-card .w-share.on { border-color: transparent; background: color-mix(in srgb, var(--primary) 14%, transparent); color: var(--primary-ink); }
+.watch-card .chip .ms, .watch-card .w-share .ms { font-size: 16px; }
 .watch-card .w-actions .icon-btn { width: 36px; height: 36px; color: var(--primary-ink); }
 .name-row { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 1fr); gap: 10px; }
 .name-row:has(#ef-type-wrap[hidden]) { grid-template-columns: minmax(0, 1fr); }

@@ -28,7 +28,7 @@
       partnerHelp: 'Your partner needs to sign in with Google once. Then enter their email here.', linkBtn: 'Link', unlinkBtn: 'Remove', partnerSelf: "That's your own email",
       partnerNotFound: "No account with that email yet. Ask them to sign in with Google first.", partnerLinked: 'Linked with {name}', shareWith: 'Share with {name}',
       sharedBy: 'Shared by {name}', sharedWith: 'Shared with {name}', partnerLinkFirst: 'Link a partner in Profile to share items', signInGoogleHint: 'Sign in to sync across devices and share with your partner',
-      repUnits: 'day|days|days;week|weeks|weeks;month|months|months;year|years|years', filterDated: 'With date', remindLabel: 'Reminder', remindAtShort: 'At the time', beforeShort: '{n} before', remindHint: 'tap one or more · none = no reminder', remindAt: 'At the time', remindBefore: '{n} before', remindOff: 'No reminder', min5: '5 min', min15: '15 min', min30: '30 min', hour1: '1 hour', day1: '1 day', watchTab: 'Watch', watchAddPh: 'Paste an IKEA product link', watchAdd: 'Watch', watchOnlyIkea: 'For now this works only for IKEA product links (ikea.com/…/p/…)', watchOnline: 'Delivery', watchStore: 'IKEA store', wIn: 'in stock', wOut: 'out of stock', wUnknown: '?', watchChecked: 'Checked {d}', watchNever: 'Not checked yet', watchCheckNow: 'Check now', watchOpen: 'Open', watchEmpty: 'Add products you are waiting for. You get a notification when they are back in stock (checked every 2–3 hours).', watchCloudOnly: 'Watching products works when you are signed in.', watchRestock: 'Expected {d}', watchCantCheck: 'Could not check', watchShareWith: 'Share with {name}', watchAdded: 'Watching — first check is running', watchDeleteConfirm: 'Stop watching “{name}”?', watchDup: 'You already watch this product', watchChecking: 'Checking…', usersTitle: 'Users', usersSearch: 'Search by name or email', usersWeb: 'New app', usersOldOnly: 'Old app only', usersItems: '{n} items', usersDevices: '{n} devices', usersLast: 'Last seen {d}', usersNever: 'never', usersCount: '{n} accounts · {w} use the new app', weather: 'Weather forecast', weatherDesc: 'Weather icon next to the day in the calendar (next 16 days)', weatherFallback: 'Location not allowed — showing Belgrade', weatherRefresh: 'Tap to update the location', wx_sunny: 'Sunny', wx_partly_cloudy_day: 'Partly cloudy', wx_cloud: 'Cloudy', wx_foggy: 'Fog', wx_rainy: 'Rain', wx_weather_snowy: 'Snow', wx_thunderstorm: 'Thunderstorm', wxHighLow: 'High {max}°, low {min}°',
+      repUnits: 'day|days|days;week|weeks|weeks;month|months|months;year|years|years', filterDated: 'With date', remindLabel: 'Reminder', remindAtShort: 'At the time', beforeShort: '{n} before', remindHint: 'tap one or more · none = no reminder', remindAt: 'At the time', remindBefore: '{n} before', remindOff: 'No reminder', min5: '5 min', min15: '15 min', min30: '30 min', hour1: '1 hour', day1: '1 day', watchTab: 'Watch', watchAddPh: 'Paste an IKEA product link', watchAdd: 'Watch', watchOnlyIkea: 'For now this works only for IKEA product links (ikea.com/…/p/…)', watchOnline: 'Delivery', watchStore: 'IKEA store', wIn: 'in stock', wOut: 'out of stock', wUnknown: '?', watchChecked: 'Checked {d}', watchNever: 'Not checked yet', watchCheckNow: 'Check now', watchOpen: 'Open', watchEmpty: 'Add products you are waiting for. You get a notification when they are back in stock (checked every 2–3 hours).', watchCloudOnly: 'Watching products works when you are signed in.', watchRestock: 'Expected {d}', watchCantCheck: 'Could not check', watchShareWith: 'Share with {name}', watchSharedWith: 'Shared with {name}', watchFrom: 'From {name}', watchAdded: 'Watching — first check is running', watchDeleteConfirm: 'Stop watching “{name}”?', watchDup: 'You already watch this product', watchChecking: 'Checking…', usersTitle: 'Users', usersSearch: 'Search by name or email', usersWeb: 'New app', usersOldOnly: 'Old app only', usersItems: '{n} items', usersDevices: '{n} devices', usersLast: 'Last seen {d}', usersNever: 'never', usersCount: '{n} accounts · {w} use the new app', weather: 'Weather forecast', weatherDesc: 'Weather icon next to the day in the calendar (next 16 days)', weatherFallback: 'Location not allowed — showing Belgrade', weatherRefresh: 'Tap to update the location', wx_sunny: 'Sunny', wx_partly_cloudy_day: 'Partly cloudy', wx_cloud: 'Cloudy', wx_foggy: 'Fog', wx_rainy: 'Rain', wx_weather_snowy: 'Snow', wx_thunderstorm: 'Thunderstorm', wxHighLow: 'High {max}°, low {min}°',
       pushDevice: 'Notifications on this device', pushDeviceDesc: 'Arrive even when the app is closed', pushOn: 'On', pushTurnOn: 'Turn on', pushTurnOff: 'Turn off', pushIosHint: 'On iPhone: first add Reminder to the Home Screen (Share → Add to Home Screen), open it from there and turn notifications on.',
       pushEnabled: 'Notifications are on for this device', pushDisabled: 'Notifications are off for this device', pushFailed: 'Could not turn on notifications', pushTestSent: 'Test notification sent', pushNeedsOn: 'Turn on notifications on this device first',
       remindersPushDesc: 'At the item time, or earlier too — you choose in each item', partnerNotifyFailed: 'Could not notify your partner', sharedChanges: 'Shared items', sharedChangesDesc: 'When your partner adds or edits an item shared with you', morningSummary: 'Morning summary', morningSummaryDesc: 'Today\'s items without a time, overdue and General', morningTime: 'Time', sendTest: 'Send a test notification', filterAll: 'All', filterTasks: 'Tasks', filterEvents: 'Events', lateDay: '{n} day late', lateDays: '{n} days late', allDoneToday: 'All done for today', nothingToday: 'Nothing planned for today', deleteEntry: 'Delete', deleteEntryConfirm: 'Delete “{name}”?',
@@ -68,7 +68,7 @@
       partnerHelp: 'Partner treba jednom da se prijavi preko Google-a. Zatim ovde unesite njegov email.', linkBtn: 'Poveži', unlinkBtn: 'Ukloni', partnerSelf: 'To je vaš email',
       partnerNotFound: 'Nema naloga sa tim emailom. Neka se partner prvo prijavi preko Google-a.', partnerLinked: 'Povezani ste sa: {name}', shareWith: 'Podeli sa: {name}',
       sharedBy: 'Podelio/la: {name}', sharedWith: 'Podeljeno sa: {name}', partnerLinkFirst: 'Povežite partnera u Profilu da biste delili stavke', signInGoogleHint: 'Prijavite se da biste imali iste podatke na svim uređajima i delili sa partnerom',
-      repUnits: 'dan|dana|dana;nedelja|nedelje|nedelja;mesec|meseca|meseci;godina|godine|godina', filterDated: 'Sa datumom', remindLabel: 'Podsetnik', remindAtShort: 'U vreme', beforeShort: '{n} pre', remindHint: 'možeš više · nijedan = bez podsetnika', remindAt: 'U vreme stavke', remindBefore: '{n} ranije', remindOff: 'Bez podsetnika', min5: '5 min', min15: '15 min', min30: '30 min', hour1: '1 sat', day1: '1 dan', watchTab: 'Praćenje', watchAddPh: 'Nalepi IKEA link proizvoda', watchAdd: 'Prati', watchOnlyIkea: 'Za sada radi samo za IKEA linkove proizvoda (ikea.com/…/p/…)', watchOnline: 'Dostava', watchStore: 'IKEA robna kuća', wIn: 'ima', wOut: 'nema', wUnknown: '?', watchChecked: 'Provereno {d}', watchNever: 'Još nije provereno', watchCheckNow: 'Proveri sad', watchOpen: 'Otvori', watchEmpty: 'Dodaj proizvode koje čekaš. Stiže obaveštenje kad ponovo budu na stanju (provera na 2–3 sata).', watchCloudOnly: 'Praćenje radi kad si prijavljena.', watchRestock: 'Očekuje se {d}', watchCantCheck: 'Ne može da se proveri', watchShareWith: 'Podeli sa {name}', watchAdded: 'Pratim — prva provera je u toku', watchDeleteConfirm: 'Prestati da pratiš „{name}“?', watchDup: 'Ovaj proizvod već pratiš', watchChecking: 'Proveravam…', usersTitle: 'Korisnici', usersSearch: 'Traži po imenu ili emailu', usersWeb: 'Nova app', usersOldOnly: 'Samo stara app', usersItems: 'stavki: {n}', usersDevices: 'uređaja: {n}', usersLast: 'Poslednji put {d}', usersNever: 'nikad', usersCount: 'naloga: {n} · novu app koristi: {w}', weather: 'Vremenska prognoza', weatherDesc: 'Ikonica vremena pored dana u kalendaru (narednih 16 dana)', weatherFallback: 'Lokacija nije dozvoljena — prikazujem Beograd', weatherRefresh: 'Dodirni da osvežiš lokaciju', wx_sunny: 'Sunčano', wx_partly_cloudy_day: 'Delimično oblačno', wx_cloud: 'Oblačno', wx_foggy: 'Magla', wx_rainy: 'Kiša', wx_weather_snowy: 'Sneg', wx_thunderstorm: 'Grmljavina', wxHighLow: 'Najviša {max}°, najniža {min}°',
+      repUnits: 'dan|dana|dana;nedelja|nedelje|nedelja;mesec|meseca|meseci;godina|godine|godina', filterDated: 'Sa datumom', remindLabel: 'Podsetnik', remindAtShort: 'U vreme', beforeShort: '{n} pre', remindHint: 'možeš više · nijedan = bez podsetnika', remindAt: 'U vreme stavke', remindBefore: '{n} ranije', remindOff: 'Bez podsetnika', min5: '5 min', min15: '15 min', min30: '30 min', hour1: '1 sat', day1: '1 dan', watchTab: 'Praćenje', watchAddPh: 'Nalepi IKEA link proizvoda', watchAdd: 'Prati', watchOnlyIkea: 'Za sada radi samo za IKEA linkove proizvoda (ikea.com/…/p/…)', watchOnline: 'Dostava', watchStore: 'IKEA robna kuća', wIn: 'ima', wOut: 'nema', wUnknown: '?', watchChecked: 'Provereno {d}', watchNever: 'Još nije provereno', watchCheckNow: 'Proveri sad', watchOpen: 'Otvori', watchEmpty: 'Dodaj proizvode koje čekaš. Stiže obaveštenje kad ponovo budu na stanju (provera na 2–3 sata).', watchCloudOnly: 'Praćenje radi kad si prijavljena.', watchRestock: 'Očekuje se {d}', watchCantCheck: 'Ne može da se proveri', watchShareWith: 'Podeli sa: {name}', watchSharedWith: 'Podeljeno sa: {name}', watchFrom: 'Prati: {name}', watchAdded: 'Pratim — prva provera je u toku', watchDeleteConfirm: 'Prestati da pratiš „{name}“?', watchDup: 'Ovaj proizvod već pratiš', watchChecking: 'Proveravam…', usersTitle: 'Korisnici', usersSearch: 'Traži po imenu ili emailu', usersWeb: 'Nova app', usersOldOnly: 'Samo stara app', usersItems: 'stavki: {n}', usersDevices: 'uređaja: {n}', usersLast: 'Poslednji put {d}', usersNever: 'nikad', usersCount: 'naloga: {n} · novu app koristi: {w}', weather: 'Vremenska prognoza', weatherDesc: 'Ikonica vremena pored dana u kalendaru (narednih 16 dana)', weatherFallback: 'Lokacija nije dozvoljena — prikazujem Beograd', weatherRefresh: 'Dodirni da osvežiš lokaciju', wx_sunny: 'Sunčano', wx_partly_cloudy_day: 'Delimično oblačno', wx_cloud: 'Oblačno', wx_foggy: 'Magla', wx_rainy: 'Kiša', wx_weather_snowy: 'Sneg', wx_thunderstorm: 'Grmljavina', wxHighLow: 'Najviša {max}°, najniža {min}°',
       pushDevice: 'Obaveštenja na ovom uređaju', pushDeviceDesc: 'Stižu i kad je aplikacija zatvorena', pushOn: 'Uključeno', pushTurnOn: 'Uključi', pushTurnOff: 'Isključi', pushIosHint: 'Na iPhone-u: prvo dodaj Reminder na početni ekran (Share → Add to Home Screen), otvori ga odatle i uključi obaveštenja.',
       pushEnabled: 'Obaveštenja su uključena na ovom uređaju', pushDisabled: 'Obaveštenja su isključena na ovom uređaju', pushFailed: 'Nije uspelo uključivanje obaveštenja', pushTestSent: 'Probno obaveštenje je poslato', pushNeedsOn: 'Prvo uključi obaveštenja na ovom uređaju',
       remindersPushDesc: 'U vreme stavke, i ranije ako izabereš — biraš u svakoj stavci', partnerNotifyFailed: 'Partner nije obavešten', sharedChanges: 'Podeljene stavke', sharedChangesDesc: 'Kad partner doda ili izmeni stavku koju deli sa tobom', morningSummary: 'Jutarnji pregled', morningSummaryDesc: 'Današnje stavke bez vremena, one koje kasne i Opšte', morningTime: 'Vreme', sendTest: 'Pošalji probno obaveštenje', filterAll: 'Sve', filterTasks: 'Zadaci', filterEvents: 'Događaji', lateDay: 'kasni {n} dan', lateDays: 'kasni {n} dana', allDoneToday: 'Sve za danas je urađeno', nothingToday: 'Za danas nema ništa', deleteEntry: 'Obriši', deleteEntryConfirm: 'Obrisati „{name}“?',
@@ -701,6 +701,7 @@
   }
 
   /* ---------- Watch ("Praćenje"): IKEA products waited for; the server checks them and sends a push when back in stock ---------- */
+  const firstName = (p) => String((p && (p.name || p.email)) || '').trim().split(/[\s@]+/)[0];
   const IKEA_RE = /^https?:\/\/(www\.)?ikea\.com\/[a-z]{2}\/[a-z]{2}\/p\/.*?-(s?\d{8})\/?(\?.*)?$/i;
   const watchChecking = new Set();
   function screenWatch() {
@@ -712,10 +713,14 @@
       const busy = watchChecking.has(w.id);
       const meta = busy ? t('watchChecking') : w.error && w.online === 'unknown' && w.store === 'unknown' ? t('watchCantCheck') : w.checkedAt ? t('watchChecked', { d: when(w.checkedAt) }) : t('watchNever');
       const shared = Array.isArray(w.members) && w.members.length > 1;
+      const mine = w.owner === me().uid; const pName = Cloud.partner ? firstName(Cloud.partner) : '';
+      // owner: one tap shares with the partner or takes it back; partner sees whose it is
+      const share = mine ? (Cloud.partner ? `<button class="btn btn-sm w-share ${shared ? 'on' : ''}" data-a="watch-share" data-id="${esc(w.id)}" aria-pressed="${shared}">${icon(shared ? 'group' : 'person', 'xs')}${esc(shared ? t('watchSharedWith', { name: pName }) : t('watchShareWith', { name: pName }))}</button>` : '')
+        : `<span class="chip neutral">${icon('group', 'xs')}${esc(t('watchFrom', { name: pName || t('partnerTitle') }))}</span>`;
       return `<div class="watch-card">
         ${w.image ? `<img src="${esc(w.image)}" alt="" loading="lazy" referrerpolicy="no-referrer">` : `<span class="ph">${icon('shopping_bag')}</span>`}
         <div class="grow">
-          <span class="w-title">${shared ? icon('group', 'xs') + ' ' : ''}${esc(w.title || w.url)}</span>
+          <span class="w-title">${esc(w.title || w.url)}</span>
           ${w.price ? `<span class="w-meta">${esc(w.price)}</span>` : ''}
           <span class="w-chips">${chip(t('watchOnline'), 'local_shipping', w.online)}${chip(t('watchStore'), 'storefront', w.store, w.store === 'in' && w.storeQty ? `(${w.storeQty})` : '')}</span>
           ${w.store === 'out' && w.restock ? `<span class="w-meta">${esc(t('watchRestock', { d: fmtDate(new Date(w.restock), { day: 'numeric', month: 'short' }) }))}</span>` : ''}
@@ -725,38 +730,49 @@
             <button class="icon-btn" data-a="watch-check" data-id="${esc(w.id)}" aria-label="${esc(t('watchCheckNow'))}" title="${esc(t('watchCheckNow'))}" ${busy ? 'disabled' : ''}>${icon('refresh', 'sm')}</button>
             <button class="icon-btn" data-a="watch-del" data-id="${esc(w.id)}" aria-label="${esc(t('deleteEntry'))}" title="${esc(t('deleteEntry'))}">${icon('delete', 'sm')}</button>
           </span>
+          ${share}
         </div></div>`;
     };
     const html = `<div class="stack">
       <form class="watch-add" id="watch-form" novalidate>
-        <div class="field">${icon('link')}<input id="watch-url" type="url" inputmode="url" placeholder="${esc(t('watchAddPh'))}" autocomplete="off"></div>
+        <div class="field">${icon('link')}<input id="watch-url" type="url" inputmode="url" placeholder="${esc(t('watchAddPh'))}" value="${esc(ui.watchDraft || '')}" autocomplete="off"></div>
         <button class="btn btn-primary" type="submit">${esc(t('watchAdd'))}</button>
       </form>
-      ${Cloud.partner ? switchTile('watch-share', t('watchShareWith', { name: Cloud.partner.name || Cloud.partner.email }), '', !!ui.watchShare, 'watch-share') : ''}
       ${list.length ? list.map(card).join('') : `<p class="quiet">${esc(t('watchEmpty'))}</p>`}
     </div>`;
     return { title: t('watchTab'), html, narrow: true };
   }
   async function watchCheck(id) {
-    watchChecking.add(id); render();
+    watchChecking.add(id); watchRender();
     try {
       const token = await window.firebase.auth().currentUser.getIdToken();
       const r = await fetch('/api/watch', { method: 'POST', headers: { 'content-type': 'application/json', authorization: `Bearer ${token}` }, body: JSON.stringify({ id }) });
       const j = await r.json().catch(() => ({}));
       if (!r.ok || j.error) toast(`${t('watchCantCheck')}: ${j.error || r.status}`, { error: true, ms: 9000 });
     } catch (e) { toast(`${t('watchCantCheck')}: ${(e && e.message) || e}`, { error: true, ms: 9000 }); }
-    watchChecking.delete(id); render();
+    watchChecking.delete(id); watchRender();
   }
   function watchAdd() {
     const inp = $('#watch-url'); const url = (inp.value || '').trim();
     const m = url.match(IKEA_RE); if (!m) { toast(t('watchOnlyIkea'), { error: true, ms: 6000 }); inp.focus(); return; }
     const itemNo = m[2].toLowerCase();
     if ((Cloud.watches || []).some((w) => w.itemNo === itemNo)) { toast(t('watchDup'), { error: true }); return; }
-    const u = me(); const members = [u.uid]; if (ui.watchShare && Cloud.partner) members.push(Cloud.partner.uid);
+    const u = me(); const members = [u.uid];
     const ref = Cloud.db.collection('watches').doc();
     ref.set({ owner: u.uid, members, url: url.split('?')[0], itemNo, title: '', createdAt: new Date().toISOString() })
       .then(() => watchCheck(ref.id)).catch(cloudError);
-    inp.value = ''; toast(t('watchAdded'), { icon: 'shopping_bag' });
+    inp.value = ''; ui.watchDraft = ''; toast(t('watchAdded'), { icon: 'shopping_bag' });
+  }
+  // re-render the tab without losing what is being typed in the link field
+  function watchRender() {
+    const typing = document.activeElement && document.activeElement.id === 'watch-url';
+    render();
+    if (typing) { const i = $('#watch-url'); if (i) { i.focus(); i.setSelectionRange(i.value.length, i.value.length); } }
+  }
+  function watchShare(id) {
+    const w = (Cloud.watches || []).find((x) => x.id === id); if (!w || !Cloud.partner || w.owner !== me().uid) return;
+    const shared = (w.members || []).includes(Cloud.partner.uid);
+    Cloud.db.collection('watches').doc(id).update({ members: shared ? [me().uid] : [me().uid, Cloud.partner.uid] }).catch(cloudError);
   }
   function watchDel(id) {
     const w = (Cloud.watches || []).find((x) => x.id === id); if (!w) return;
@@ -1497,7 +1513,7 @@
     if (Cloud.unsubW) Cloud.unsubW();
     Cloud.unsubW = Cloud.db.collection('watches').where('members', 'array-contains', fu.uid).onSnapshot((qs) => {
       Cloud.watches = []; qs.forEach((doc) => Cloud.watches.push({ ...doc.data(), id: doc.id }));
-      if (ui.tab === 'watch' && !ui.stack.length) render();
+      if (ui.tab === 'watch' && !ui.stack.length) watchRender();
     }, (e) => cloudError(e));
     render();
   }
@@ -1585,6 +1601,7 @@
       case 'wx-locate': ensureWeather(true); break;
       case 'watch-check': watchCheck(el.dataset.id); break;
       case 'watch-del': watchDel(el.dataset.id); break;
+      case 'watch-share': watchShare(el.dataset.id); break;
       case 'auth': ui.auth = el.dataset.v; ui.showPw = {}; render(); break;
       case 'pw-toggle': {
         const id = el.dataset.id; ui.showPw[id] = !ui.showPw[id]; const inp = document.getElementById(id);
@@ -1650,7 +1667,6 @@
     if (!a) return;
     const s = settings();
     if (a === 'dark-toggle') { s.dark = el.checked; save(); render(); }
-    else if (a === 'watch-share') ui.watchShare = el.checked;
     else if (a === 'weather-toggle') { s.weather = el.checked; save(); if (el.checked) ensureWeather(true); }
     else if (a === 'notif-set') {
       const map = { 'n-rem': 'reminders', 'n-snooze': 'snooze', 'n-sound': 'sound', 'n-morning': 'morning', 'n-shared': 'shared' }; s.notif[map[el.id]] = el.checked; save();
@@ -1672,6 +1688,7 @@
     const g = $('.cal-grid'); if (g) g.classList.add(step > 0 ? 'slide-l' : 'slide-r');
   }, { passive: true });
   document.addEventListener('input', (e) => {
+    if (e.target.id === 'watch-url') { ui.watchDraft = e.target.value; return; }
     if (e.target.id === 'users-q') { const q = e.target.value.trim().toLowerCase(); document.querySelectorAll('#users-list .user-row').forEach((r) => { r.hidden = !!q && !r.dataset.q.includes(q); }); return; }
     if (e.target.id === 'np' || e.target.id === 'reg-pass') {
       const m = $('#pw-meter'); if (!m) return; const s = pwStrength(e.target.value);
