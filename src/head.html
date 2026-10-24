@@ -317,8 +317,10 @@ button.wx-line { border: 0; background: none; padding: 0; font: inherit; text-al
 .watch-card img, .watch-card .ph { width: 72px; height: 72px; border-radius: 10px; object-fit: cover; flex: none; background: var(--surface-2); display: grid; place-items: center; color: var(--muted); }
 .watch-card .grow { min-width: 0; display: flex; flex-direction: column; gap: 6px; }
 .watch-card .w-pic { flex: none; display: block; }
-.watch-card .w-actions .icon-btn.w-refresh { width: 42px; height: 42px; }
-.watch-card .w-actions .w-refresh .ms { font-size: 26px; }
+.watch-card .w-head { display: flex; align-items: flex-start; gap: 4px; }
+.watch-card .w-head .w-title { flex: 1; min-width: 0; }
+.watch-card .w-refresh { width: 40px; height: 40px; margin: -8px -8px 0 0; color: var(--primary-ink); }
+.watch-card .w-refresh .ms { font-size: 24px; }
 .watch-card .w-bottom { display: flex; align-items: center; gap: 8px; min-height: 36px; }
 .watch-card .w-bottom .w-del { margin-left: auto; margin-right: -8px; width: 36px; height: 36px; color: var(--muted); }
 .watch-card a.w-title { color: inherit; text-decoration: none; }

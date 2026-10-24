@@ -721,15 +721,13 @@
       return `<div class="watch-card">
         <a class="w-pic" href="${esc(w.url)}" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">${w.image ? `<img src="${esc(w.image)}" alt="" loading="lazy" referrerpolicy="no-referrer">` : `<span class="ph">${icon('shopping_bag')}</span>`}</a>
         <div class="grow">
-          <a class="w-title" href="${esc(w.url)}" target="_blank" rel="noopener">${esc(w.title || w.url)}</a>
+          <span class="w-head"><a class="w-title" href="${esc(w.url)}" target="_blank" rel="noopener">${esc(w.title || w.url)}</a>
+            <button class="icon-btn w-refresh" data-a="watch-check" data-id="${esc(w.id)}" aria-label="${esc(t('watchCheckNow'))}" title="${esc(t('watchCheckNow'))}" ${busy ? 'disabled' : ''}>${icon('refresh')}</button></span>
           ${w.price ? `<span class="w-meta w-price">${esc(w.price)}${w.priceWas ? ` <s>${esc(t('watchPriceWas', { p: w.priceWas }))}</s>` : ''}</span>` : ''}
           <span class="w-chips">${chip(t('watchOnline'), 'local_shipping', w.online)}${chip(t('watchStore'), 'storefront', w.store, w.store === 'in' && w.storeQty ? `(${w.storeQty})` : '')}</span>
           ${w.store === 'out' && w.restock ? `<span class="w-meta">${esc(t('watchRestock', { d: fmtDate(new Date(w.restock), { day: 'numeric', month: 'short' }) }))}</span>` : ''}
           <span class="w-meta">${esc(meta)}</span>
           <span class="watch-opts sm">${watchOpt('stock', 'inventory_2', t('watchOptStockShort'), w.notifyStock !== false, w.id)}${watchOpt('price', 'trending_down', t('watchOptPriceShort'), !!w.notifyPrice, w.id)}</span>
-          <span class="w-actions">
-            <button class="icon-btn w-refresh" data-a="watch-check" data-id="${esc(w.id)}" aria-label="${esc(t('watchCheckNow'))}" title="${esc(t('watchCheckNow'))}" ${busy ? 'disabled' : ''}>${icon('refresh')}</button>
-          </span>
           <span class="w-bottom">${share}<button class="icon-btn w-del" data-a="watch-del" data-id="${esc(w.id)}" aria-label="${esc(t('deleteEntry'))}" title="${esc(t('deleteEntry'))}">${icon('delete', 'sm')}</button></span>
         </div></div>`;
     };
