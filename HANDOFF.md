@@ -85,3 +85,10 @@ Firestore (deli bazu sa starom aplikacijom):
 - Firestore rules: `pushSubs` added (see `firestore.rules`).
 - iPhone: push only works when the app is opened from the Home Screen (iOS 16.4+).
 - Health check: open `/api/cron?key=…` and expect `{"users":N,"sent":…,"errors":[]}`. A 401 response lists which env vars are present.
+
+## Praćenje (product watch, since 2026-10-24)
+- Tab „Praćenje“ (shopping bag). Paste an IKEA product link (`ikea.com/<cc>/<lang>/p/…-<8 digits>/`); optional „Podeli sa partnerom“.
+- Firestore `watches/{id}`: `{ owner, members, url, itemNo, title, image, price, online, store, storeQty, restock, knownOnline, knownStore, checkedAt, error, createdAt }`. Rules: same as `reminders` (see `firestore.rules`) — **publish the rules again** after this change.
+- Server `api/_watch.js`: reads the product page (og/JSON-LD: name, image, price, schema.org availability) and IKEA's availability service (`api.ingka.ikea.com/cia/availabilities/ru/<cc>`, home delivery + store stock). `api/cron.js` checks the 2 stalest watches per run (each ≈ every 2.5 h). A push goes to all members when delivery or store goes from `out` to `in`; failed checks don't count.
+- `api/watch.js`: „Proveri sad“ (token + membership), returns `sources` (what the page / stock service answered) for debugging.
+- Not verified against the live IKEA site from the dev sandbox (ikea.com blocked there); if a check says „Ne može da se proveri“, the toast shows what each source returned.

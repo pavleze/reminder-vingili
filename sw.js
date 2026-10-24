@@ -1,5 +1,5 @@
 /* Reminder service worker: the app opens offline, updates arrive on the next open. */
-const CACHE = 'reminder-v3';
+const CACHE = 'reminder-v4';
 const CORE = ['/', '/index.html', '/app.js', '/i18n.js', '/manifest.webmanifest', '/assets/icon-192.png', '/assets/icon-512.png', '/assets/apple-touch-icon.png'];
 
 self.addEventListener('install', (e) => {
@@ -54,6 +54,8 @@ self.addEventListener('push', (e) => {
 self.addEventListener('notificationclick', (e) => {
   e.notification.close();
   const url = (e.notification.data && e.notification.data.url) || '/';
+  // a link to another site (a watched product) opens that page; our own links focus the app
+  if (new URL(url, self.location.origin).origin !== self.location.origin) { e.waitUntil(self.clients.openWindow(url)); return; }
   e.waitUntil(self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then((list) => {
     for (const c of list) if ('focus' in c) return c.focus();
     return self.clients.openWindow(url);

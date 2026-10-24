@@ -1,6 +1,7 @@
 // Called every minute by an external scheduler (cron-job.org): /api/cron?key=CRON_SECRET
 // Sends due reminders and the morning summary as Web Push to every device a person has turned notifications on for.
 const L = require('./_lib');
+const W = require('./_watch');
 
 const TEXT = {
   sr: {
@@ -91,6 +92,8 @@ module.exports = async (req, res) => {
         await L.patchDoc('pushLog', logId, { result: results.join(' | ') }).catch(() => {});
       }
     }
+    // product watches ("Praćenje"): a couple per run, each re-checked about every 2.5 h
+    report.watches = await W.runDueWatches(2).catch((e) => ({ error: String(e.message || e) }));
     res.status(200).json(report);
   } catch (e) {
     res.status(500).json({ error: String(e.message || e) });
