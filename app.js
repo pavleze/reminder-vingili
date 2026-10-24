@@ -727,9 +727,10 @@
           <span class="w-chips">${chip(t('watchOnline'), 'local_shipping', w.online)}${chip(t('watchStore'), 'storefront', w.store, w.store === 'in' && w.storeQty ? `(${w.storeQty})` : '')}</span>
           ${w.store === 'out' && w.restock ? `<span class="w-meta">${esc(t('watchRestock', { d: fmtDate(new Date(w.restock), { day: 'numeric', month: 'short' }) }))}</span>` : ''}
           <span class="w-meta">${esc(meta)}</span>
-          <span class="watch-opts sm">${watchOpt('stock', 'inventory_2', t('watchOptStockShort'), w.notifyStock !== false, w.id)}${watchOpt('price', 'trending_down', t('watchOptPriceShort'), !!w.notifyPrice, w.id)}</span>
-          <span class="w-bottom">${share}<button class="icon-btn w-del" data-a="watch-del" data-id="${esc(w.id)}" aria-label="${esc(t('deleteEntry'))}" title="${esc(t('deleteEntry'))}">${icon('delete', 'sm')}</button></span>
-        </div></div>`;
+        </div>
+        <div class="w-settings"><span class="watch-opts sm"><span class="w-lbl">${esc(t('watchWhat'))}:</span>${watchOpt('stock', 'inventory_2', t('watchOptStockShort'), w.notifyStock !== false, w.id)}${watchOpt('price', 'trending_down', t('watchOptPriceShort'), !!w.notifyPrice, w.id)}</span>
+          <span class="w-bottom">${share}<button class="icon-btn w-del" data-a="watch-del" data-id="${esc(w.id)}" aria-label="${esc(t('deleteEntry'))}" title="${esc(t('deleteEntry'))}">${icon('delete', 'sm')}</button></span></div>
+        </div>`;
     };
     const html = `<div class="stack">
       <form class="watch-add" id="watch-form" novalidate>
