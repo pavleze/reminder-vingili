@@ -728,10 +728,9 @@
           <span class="w-meta">${esc(meta)}</span>
           <span class="watch-opts sm">${watchOpt('stock', 'inventory_2', t('watchOptStockShort'), w.notifyStock !== false, w.id)}${watchOpt('price', 'trending_down', t('watchOptPriceShort'), !!w.notifyPrice, w.id)}</span>
           <span class="w-actions">
-            <button class="icon-btn" data-a="watch-check" data-id="${esc(w.id)}" aria-label="${esc(t('watchCheckNow'))}" title="${esc(t('watchCheckNow'))}" ${busy ? 'disabled' : ''}>${icon('refresh', 'sm')}</button>
-            <button class="icon-btn" data-a="watch-del" data-id="${esc(w.id)}" aria-label="${esc(t('deleteEntry'))}" title="${esc(t('deleteEntry'))}">${icon('delete', 'sm')}</button>
+            <button class="icon-btn w-refresh" data-a="watch-check" data-id="${esc(w.id)}" aria-label="${esc(t('watchCheckNow'))}" title="${esc(t('watchCheckNow'))}" ${busy ? 'disabled' : ''}>${icon('refresh')}</button>
           </span>
-          ${share}
+          <span class="w-bottom">${share}<button class="icon-btn w-del" data-a="watch-del" data-id="${esc(w.id)}" aria-label="${esc(t('deleteEntry'))}" title="${esc(t('deleteEntry'))}">${icon('delete', 'sm')}</button></span>
         </div></div>`;
     };
     const html = `<div class="stack">
