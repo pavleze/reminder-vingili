@@ -719,7 +719,7 @@
       const share = mine ? (Cloud.partner ? `<button type="button" class="w-opt ${shared ? 'on' : ''}" data-a="watch-share" data-id="${esc(w.id)}" aria-pressed="${shared}" title="${esc(shared ? t('watchSharedWith', { name: pName }) : t('watchShareWith', { name: pName }))}">${icon('group', 'xs')}${esc(shared ? pName : t('watchShareShort'))}</button>` : '')
         : `<span class="w-opt from">${icon('group', 'xs')}${esc(t('watchFrom', { name: pName || t('partnerTitle') }))}</span>`;
       return `<div class="watch-card">
-        <a class="w-pic" href="${esc(w.url)}" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">${w.image ? `<img src="${esc(w.image)}" alt="" loading="lazy" referrerpolicy="no-referrer">` : `<span class="ph">${icon('shopping_bag')}</span>`}</a>
+        <a class="w-pic" href="${esc(w.url)}" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">${/^https:\/\//.test(w.image || '') ? `<img src="${esc(w.image)}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.replaceWith(Object.assign(document.createElement('span'), { className: 'ph', innerHTML: '<span class=&quot;ms&quot; aria-hidden=&quot;true&quot;>shopping_bag</span>' }))">` : `<span class="ph">${icon('shopping_bag')}</span>`}</a>
         <div class="grow">
           <span class="w-head"><a class="w-title" href="${esc(w.url)}" target="_blank" rel="noopener">${esc(w.title || w.url)}</a>
             <button class="icon-btn w-refresh" data-a="watch-check" data-id="${esc(w.id)}" aria-label="${esc(t('watchCheckNow'))}" title="${esc(t('watchCheckNow'))}" ${busy ? 'disabled' : ''}>${icon('refresh')}</button></span>

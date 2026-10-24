@@ -20,6 +20,16 @@ async function get(url, headers) {
 }
 const unesc = (s) => String(s || '').replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&lt;/g, '<').replace(/&gt;/g, '>');
 const meta = (html, prop) => { const m = html.match(new RegExp(`<meta[^>]+(?:property|name)=["']${prop}["'][^>]*content=["']([^"']*)["']`, 'i')) || html.match(new RegExp(`<meta[^>]+content=["']([^"']*)["'][^>]*(?:property|name)=["']${prop}["']`, 'i')); return m ? unesc(m[1]) : ''; };
+// JSON-LD image: a string, an ImageObject ({ url | contentUrl }), or a list of either; must end up an absolute https URL
+function imageUrl(v) {
+  for (const x of [].concat(v || [])) {
+    let u = typeof x === 'string' ? x : x && (x.url || x.contentUrl || x['@id']);
+    if (!u || typeof u !== 'string') continue;
+    if (u.startsWith('//')) u = 'https:' + u; else if (u.startsWith('/')) u = 'https://www.ikea.com' + u;
+    if (/^https?:\/\//.test(u)) return u.replace(/^http:/, 'https:');
+  }
+  return '';
+}
 // '2999', 2999, '2.999,00', '2,999.00' → 2999
 function toNum(v) {
   if (typeof v === 'number') return v;
@@ -37,7 +47,7 @@ function readPage(html) {
     for (const p of [].concat(j['@graph'] || j)) {
       if (!p || !/Product/i.test([].concat(p['@type']).join(' '))) continue;
       out.title = p.name || out.title;
-      out.image = [].concat(p.image || [])[0] || out.image;
+      out.image = imageUrl(p.image) || out.image;
       const offer = [].concat(p.offers || [])[0] || {};
       const o = [].concat(offer.offers || offer)[0] || {};
       const pr = o.price != null ? o.price : o.lowPrice;
@@ -48,6 +58,7 @@ function readPage(html) {
   }
   if (out.priceNum == null) { const a = meta(html, 'product:price:amount'); if (a) { out.priceNum = toNum(a); out.currency = meta(html, 'product:price:currency'); } }
   if (out.priceNum != null) out.price = fmtPrice(out.priceNum, out.currency);
+  out.image = imageUrl(out.image);
   return out;
 }
 
@@ -119,7 +130,7 @@ async function runWatch(w) {
   const price = r.priceNum != null ? r.priceNum : w.knownPrice != null ? w.knownPrice : null;
   const cheaper = wantPrice && w.knownPrice != null && r.priceNum != null && r.priceNum < w.knownPrice - 0.5;
   await L.patchDoc('watches', w.id, {
-    title: r.title || w.title || '', image: r.image || w.image || '', price: r.price || w.price || '',
+    title: r.title || w.title || '', image: r.image || imageUrl(w.image) || '', price: r.price || w.price || '',
     online: r.online, store: r.store, storeQty: r.storeQty, restock: r.restock, error: r.error || '',
     knownOnline: known.online, knownStore: known.store, knownPrice: price, checkedAt: new Date().toISOString(),
     // "was …" stays on the card only while the price is still below it
