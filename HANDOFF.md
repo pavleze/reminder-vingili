@@ -94,3 +94,17 @@ Firestore (deli bazu sa starom aplikacijom):
 - Not verified against the live IKEA site from the dev sandbox (ikea.com blocked there); if a check says „Ne može da se proveri“, the toast shows what each source returned.
 - Since 2026-10-24 also **any web shop** (`checkGeneric` in `api/_watch.js`): reads the page's schema.org JSON-LD (all offers; in stock if any is, lowest price), microdata (`itemprop=price/availability`) and Open Graph product tags. Card shows one „Na stanju“ chip + shop name. Duplicate check: IKEA by item number, others by host + path + query.
 - Per product: `notifyStock` (default on), `notifyPrice`; `knownPrice` / `priceWas` for the price-drop push.
+
+## TODO (dogovoreno za kasnije, 2026-10-24)
+1. **Cron čita previše (Firestore Spark: 50.000 čitanja/dan).** `api/cron.js` svakog minuta čita ceo `users` (i sve naloge stare Android aplikacije), ceo `reminders`, `pushSubs` i `watches` → ~1.440 × broj dokumenata dnevno. Preko granice Firestore do kraja dana blokira čitanje (app i obaveštenja ne rade). Plan:
+   - čitati samo profile onih koji imaju uređaj u `pushSubs` (`getDoc` po uid-u);
+   - podsetnike čitati jednom na 10 min i pripremiti red obaveštenja (`pushQueue`) za narednih 10 min; svakog minuta samo upit nad redom (`at <= now`);
+   - `watches`: upit samo za one kojima je `checkedAt` stariji od 2,5 h (`orderBy checkedAt`, `limit 2`);
+   - `?debug=1` ne sme da čita ceo `pushLog`; brisati `pushLog` starije od 7 dana (ili Firestore TTL).
+   - Proveriti potrošnju: Firebase → Firestore → Usage.
+2. **Profili su čitljivi svakom prijavljenom korisniku** (`firestore.rules`, `users`): ime, email, slika i stari niz `reminders`. Traženje partnera po emailu prebaciti na server (npr. `/api/find-partner`), a pravilo suziti na sebe + povezanog partnera.
+3. Manje stvari u pravilima: `pushSubs` update ne proverava starog vlasnika; partner može da menja `members` na deljenoj stavci; `api/push-test.js` nema proveru tokena.
+4. **Praćenje – pojedinačni sajtovi:** Zara Home / Inditex (stranica bez cene/stanja u HTML-u, jaka zaštita od botova → posebna provera preko njihovog servisa, po boji i veličini); Ricardo (aukcije: obaveštenje pred kraj aukcije / nova ponuda umesto „na stanju“ i „pad cene“). Prvo uzeti poruku sa ↻ (polje `sources`) sa pravog sajta.
+5. **Widget na početnom ekranu** (iPhone): preko aplikacije Scriptable + `/api/widget` sa ličnim ključem (današnje stavke + prognoza); korisnica bira veličinu.
+6. Ostatak engleskog na srpskom UI-ju: naslov forme „Novi task / Izmeni task“, statistika „Taskovi“.
+7. `logo.svg` (ekran za prijavu i bočna traka) je još stari „R + zvono“; nova ikonica je zec.
