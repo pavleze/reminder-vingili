@@ -505,7 +505,7 @@
       </button>
       ${open ? `<div class="entry-items">
         ${it.description ? `<p class="entry-desc">${esc(it.description)}</p>` : ''}
-        ${ev ? it.items.map((x) => `<div class="item-row bullet"><span>${esc(x.text)}</span></div>`).join('') : it.items.map((x) => `<label class="item-row ${checked.has(x.id) ? 'on' : ''}"><input type="checkbox" data-a="toggle-check" data-id="${it.uid}" data-item="${x.id}" data-d="${k}" ${checked.has(x.id) ? 'checked' : ''}><span>${esc(x.text)}</span></label>`).join('')}
+        ${ev ? it.items.map((x) => `<div class="item-row bullet"><span>${esc(x.text)}</span></div>`).join('') : [...it.items.filter((x) => !checked.has(x.id)), ...checkedOn(it, d).map((id) => it.items.find((x) => x.id === id)).filter(Boolean)].map((x) => `<label class="item-row ${checked.has(x.id) ? 'on' : ''}"><input type="checkbox" data-a="toggle-check" data-id="${it.uid}" data-item="${x.id}" data-d="${k}" ${checked.has(x.id) ? 'checked' : ''}><span>${esc(x.text)}</span></label>`).join('')}
         <button class="link-btn" data-a="edit" data-id="${it.uid}">${esc(t('edit'))}</button>
       </div>` : ''}
     </div>`;
