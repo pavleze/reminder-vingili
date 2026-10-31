@@ -115,3 +115,4 @@ Firestore (deli bazu sa starom aplikacijom):
 - `api/cron.js` step 3: once a day at that time sends push „Proveri eDPK 🚗 · <tablice>“; tapping it opens the eDPK page (`sw.js` opens external URLs). Dedup: `pushLog/{uid}_{day}_edpk`.
 - If Parking servis ever offers an API: replace step 3 with a real check and create a shared item „Platiti eDPK · tablica · iznos · rok“.
 - Note: from the dev sandbox the domain was refused by the egress proxy (403), so the page was inspected via web fetch/search only.
+- Since 2026-10-31 **classified ads** (`AD_HOSTS` in `api/_watch.js` / `AD_RE` in `src/app.js`: polovniautomobili, kupujemprodajem, halooglasi, mojauto, ricardo, mobile.de, autoscout24): kind `ad`, status = ad still up (`in`) or removed (`out`: HTTP 404/410 or "oglas je istekao/uklonjen…" on the page). The stock toggle means „Uklonjen“ (push „Oglas više nije aktivan“); price drop is on by default for ads. JSON-LD types Car/Vehicle are read like Product.

@@ -51,7 +51,7 @@ function readPage(html, base) {
   for (const m of html.matchAll(/<script[^>]+application\/ld\+json[^>]*>([\s\S]*?)<\/script>/gi)) {
     let j; try { j = JSON.parse(m[1]); } catch (e) { continue; }
     for (const p of [].concat(j['@graph'] || j)) {
-      if (!p || !/Product/i.test([].concat(p['@type']).join(' '))) continue;
+      if (!p || !/Product|Car|Vehicle|Motorcycle/i.test([].concat(p['@type']).join(' '))) continue; // a car ad is schema.org Car / Vehicle
       out.title = p.name || out.title;
       out.image = imageUrl(p.image, base) || out.image;
       // several offers (sizes, colours): in stock if any is, the lowest price
@@ -129,15 +129,23 @@ async function checkIkea(url) {
   return res;
 }
 
+// classified ads (cars etc.): "in" = the ad is still up, "out" = removed or sold
+const AD_HOSTS = /(^|\.)(polovniautomobili\.com|kupujemprodajem\.com|halooglasi\.com|mojauto\.rs|ricardo\.ch|mobile\.de|autoscout24\.[a-z.]+)$/i;
+const isAd = (url) => { try { return AD_HOSTS.test(new URL(url).hostname); } catch (e) { return false; } };
+const AD_GONE = /oglas (je )?(istekao|uklonjen|obrisan|neaktivan|nije (vi[sš]e )?aktivan)|(vozilo|artikal|predmet) je prodat[oa]?|ad (has been )?(removed|expired)|no longer available|inserat (ist )?(nicht mehr verfügbar|beendet)/i;
+
 // any shop: just the product page
 async function checkGeneric(url) {
   let u; try { u = new URL(String(url).trim()); } catch (e) { return { online: 'unknown', store: 'unknown', error: 'bad link' }; }
-  const res = { kind: 'generic', title: '', image: '', price: '', priceNum: null, online: 'unknown', store: 'unknown', storeQty: null, restock: null, error: '', sources: {} };
+  const ad = isAd(u.href);
+  const res = { kind: ad ? 'ad' : 'generic', title: '', image: '', price: '', priceNum: null, online: 'unknown', store: 'unknown', storeQty: null, restock: null, error: '', sources: {} };
   try {
     const page = await get(u.href, ACCEPT);
-    if (page.status >= 400) res.sources.page = `HTTP ${page.status}`;
+    if (page.status === 404 || page.status === 410) { res.online = 'out'; res.sources.page = `HTTP ${page.status} (removed)`; } // the page is gone
+    else if (page.status >= 400) res.sources.page = `HTTP ${page.status}`;
     else {
       Object.assign(res, readPage(page.text, u.href));
+      if (ad && res.online === 'unknown') res.online = AD_GONE.test(page.text.replace(/<[^>]+>/g, ' ')) ? 'out' : 'in';
       res.sources.page = `ok (stock ${res.online}, price ${res.priceNum != null ? 'yes' : 'no'})`;
     }
   } catch (e) { res.sources.page = String(e.message || e); }
@@ -147,8 +155,8 @@ async function checkGeneric(url) {
 const checkProduct = (url) => (parseIkeaUrl(url) ? checkIkea(url).then((r) => ({ kind: 'ikea', ...r })) : checkGeneric(url));
 
 const TEXT = {
-  sr: { back: 'Ponovo na stanju 🎉', online: 'dostava na kuću', store: 'IKEA robna kuća', pcs: (n) => `${n} kom`, cheaper: 'Cena je pala 💸' },
-  en: { back: 'Back in stock 🎉', online: 'home delivery', store: 'IKEA store', pcs: (n) => `${n} pcs`, cheaper: 'Price dropped 💸' },
+  sr: { back: 'Ponovo na stanju 🎉', online: 'dostava na kuću', store: 'IKEA robna kuća', pcs: (n) => `${n} kom`, cheaper: 'Cena je pala 💸', gone: 'Oglas više nije aktivan' },
+  en: { back: 'Back in stock 🎉', online: 'home delivery', store: 'IKEA store', pcs: (n) => `${n} pcs`, cheaper: 'Price dropped 💸', gone: 'The ad is no longer up' },
 };
 const host = (url) => { try { return new URL(url).hostname.replace(/^www\./, ''); } catch (e) { return ''; } };
 
@@ -159,7 +167,9 @@ async function runWatch(w) {
   const known = { online: r.online !== 'unknown' ? r.online : w.knownOnline || null, store: r.store !== 'unknown' ? r.store : w.knownStore || null };
   // what to watch is chosen per product: stock (default on) and/or a price drop
   const wantStock = w.notifyStock !== false, wantPrice = !!w.notifyPrice;
-  const backOnline = wantStock && w.knownOnline === 'out' && known.online === 'in';
+  const adKind = r.kind === 'ad';
+  const backOnline = wantStock && !adKind && w.knownOnline === 'out' && known.online === 'in';
+  const adGone = wantStock && adKind && w.knownOnline === 'in' && known.online === 'out';
   const backStore = wantStock && w.knownStore === 'out' && known.store === 'in';
   const price = r.priceNum != null ? r.priceNum : w.knownPrice != null ? w.knownPrice : null;
   const cheaper = wantPrice && w.knownPrice != null && r.priceNum != null && r.priceNum < w.knownPrice - 0.5;
@@ -172,15 +182,15 @@ async function runWatch(w) {
       : r.priceNum != null && w.priceWasNum != null && r.priceNum >= w.priceWasNum ? { priceWas: '', priceWasNum: null } : {}),
   });
   let sent = 0;
-  if ((backOnline || backStore || cheaper) && Array.isArray(w.members)) {
+  if ((backOnline || backStore || cheaper || adGone) && Array.isArray(w.members)) {
     sent = await L.pushToUids(w.members, (u) => {
       const tx = TEXT[((u.settings || {}).lang) === 'en' ? 'en' : 'sr'];
       const where = [backOnline ? (r.kind === 'ikea' ? tx.online : host(w.url)) : '', backStore ? tx.store + (r.storeQty ? ` (${tx.pcs(r.storeQty)})` : '') : ''].filter(Boolean).join(' · ');
       const drop = cheaper ? `${fmtPrice(w.knownPrice, r.currency)} → ${fmtPrice(r.priceNum, r.currency)}` : '';
-      return { title: backOnline || backStore ? tx.back : tx.cheaper, body: [r.title || w.title, where, drop].filter(Boolean).join(' · '), tag: `watch_${w.id}`, url: w.url };
+      return { title: adGone ? tx.gone : backOnline || backStore ? tx.back : tx.cheaper, body: [r.title || w.title, where, drop].filter(Boolean).join(' · '), tag: `watch_${w.id}`, url: w.url };
     }, `praćenje: ${r.title || w.title}`);
   }
-  return { ...r, backOnline, backStore, cheaper, sent };
+  return { ...r, backOnline, backStore, cheaper, adGone, sent };
 }
 
 // from the minute cron: a couple of the stalest watches per run, so each one is checked about every 2.5 h
@@ -192,4 +202,4 @@ async function runDueWatches(max = 2) {
   return { checked: due.length, errors: done.filter((x) => x.status === 'rejected').map((x) => String(x.reason && x.reason.message || x.reason)) };
 }
 
-module.exports = { parseIkeaUrl, checkIkea, checkGeneric, checkProduct, runWatch, runDueWatches, readPage, readAvailability };
+module.exports = { isAd, parseIkeaUrl, checkIkea, checkGeneric, checkProduct, runWatch, runDueWatches, readPage, readAvailability };
