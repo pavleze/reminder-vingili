@@ -1160,7 +1160,7 @@
       document.querySelectorAll('#entry-form .seg-btn').forEach((b) => b.setAttribute('aria-checked', b.dataset.kind === st.kind));
     }
     st.kind = base.kind === 'list' ? 'list' : 'task';
-    drawItems(); drawRep(); drawWhen(); drawKind();
+    drawItems(); drawRep(); drawWhen(); drawKind(); const nd = $("#ef-desc"); if (nd && nd.value) growNote(nd);
     const form = $('#entry-form');
     form.addEventListener('click', (e) => {
       const rm = e.target.closest('[data-rm]'); if (rm) { st.items.splice(Number(rm.dataset.rm), 1); drawItems(); return; }
@@ -1281,6 +1281,8 @@
     if (it.done[k]) { delete it.done[k]; delete it.lateDoneOn; } else { it.done[k] = k === 'any' ? dkey(todayD()) : true; delete it.snoozedUntil; if (d < todayD()) it.lateDoneOn = dkey(todayD()); }
     save(); refresh();
   }
+  // the note field grows with its text (up to its max-height, then it scrolls)
+  function growNote(el) { el.style.height = 'auto'; el.style.height = el.scrollHeight + 2 + 'px'; }
   // removes the checked items from the list for good (the list itself stays); undo puts them back
   function clearDone(it, d) {
     const gone = new Set(checkedOn(it, d)); if (!gone.size) return;
@@ -1717,6 +1719,7 @@
     const g = $('.cal-grid'); if (g) g.classList.add(step > 0 ? 'slide-l' : 'slide-r');
   }, { passive: true });
   document.addEventListener('input', (e) => {
+    if (e.target.id === 'ef-desc') { growNote(e.target); return; }
     if (e.target.id === 'watch-url') { ui.watchDraft = e.target.value; return; }
     if (e.target.id === 'users-q') { const q = e.target.value.trim().toLowerCase(); document.querySelectorAll('#users-list .user-row').forEach((r) => { r.hidden = !!q && !r.dataset.q.includes(q); }); return; }
     if (e.target.id === 'np' || e.target.id === 'reg-pass') {

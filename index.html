@@ -129,7 +129,7 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
 .field:focus-within > label { color: var(--primary-ink); }
 .field > .ms { margin-left: 14px; color: var(--primary-ink); }
 .field input, .field select, .field textarea { flex: 1; min-width: 0; border: 0; outline: 0; background: transparent; padding: 14px 14px; font-size: 15px; }
-.field textarea { resize: vertical; min-height: 84px; }
+.field textarea { resize: none; min-height: 84px; max-height: 260px; overflow-y: auto; line-height: 1.4; }
 .field select { appearance: none; padding-right: 36px; cursor: pointer; }
 .field.select::after { content: ""; position: absolute; right: 14px; top: 50%; width: 8px; height: 8px; margin-top: -6px; border-right: 2px solid var(--muted); border-bottom: 2px solid var(--muted); transform: rotate(45deg); pointer-events: none; }
 .field select option { background: var(--card); color: var(--fg); }
@@ -558,6 +558,7 @@ hr.div { border: 0; border-top: 1.2px solid var(--divider); margin: 0; width: 10
 .dialog-head p { margin: 4px 0 0; opacity: .9; font-size: 14px; }
 .dialog-head.plain { background: none; color: var(--fg); box-shadow: none; padding-bottom: 6px; }
 .dialog-body { padding: 22px 20px; overflow-y: auto; overflow-x: hidden; display: flex; flex-direction: column; gap: 18px; }
+.dialog-body > *, .dialog-body form > * { flex-shrink: 0; } /* a short screen (keyboard open) scrolls instead of squeezing fields */
 .dialog-foot { padding: 12px 20px 16px; display: flex; justify-content: flex-end; gap: 10px; border-top: 1px solid var(--divider); flex-wrap: wrap; }
 .dialog-foot.noline { border-top: 0; }
 .day-list { display: flex; flex-direction: column; }
