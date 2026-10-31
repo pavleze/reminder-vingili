@@ -7,12 +7,12 @@ const TEXT = {
   sr: {
     now: (time) => `Sada · ${time}`, before: (lbl, time) => `Za ${lbl} · ${time}`,
     min: (n) => (n >= 1440 ? `${n / 1440} dan` : n >= 60 ? `${n / 60} sat` : `${n} min`),
-    morningTitle: 'Dobro jutro! ☀️', today: 'Danas', general: 'Opšte', late: 'Kasni', more: (n) => `i još ${n}`,
+    edpkTitle: 'Proveri eDPK 🚗', edpkBody: (pl) => `${pl} · dodirni za proveru neplaćenih parking karata`, morningTitle: 'Dobro jutro! ☀️', today: 'Danas', general: 'Opšte', late: 'Kasni', more: (n) => `i još ${n}`,
   },
   en: {
     now: (time) => `Now · ${time}`, before: (lbl, time) => `In ${lbl} · ${time}`,
     min: (n) => (n >= 1440 ? `${n / 1440} day` : n >= 60 ? `${n / 60} hour` : `${n} min`),
-    morningTitle: 'Good morning! ☀️', today: 'Today', general: 'General', late: 'Overdue', more: (n) => `and ${n} more`,
+    edpkTitle: 'Check eDPK 🚗', edpkBody: (pl) => `${pl} · tap to check unpaid parking tickets`, morningTitle: 'Good morning! ☀️', today: 'Today', general: 'General', late: 'Overdue', more: (n) => `and ${n} more`,
   },
 };
 const WINDOW = 20; // minutes: a late scheduler run still sends, each notification goes out once
@@ -75,6 +75,17 @@ module.exports = async (req, res) => {
           if (overdue.length) parts.push(`${tx.late}: ${overdue.length}`);
           if (general.length) parts.push(`${tx.general}: ${general.length}`);
           out.push({ logId: mLog, title: tx.morningTitle, body: parts.join(' · '), tag: `morning_${L.dkey(today)}`, url: '/' });
+        }
+      }
+
+      // 3) eDPK (Belgrade parking fines): the official check is behind Cloudflare Turnstile, so it can't be
+      //    queried by the server — a daily push opens the check page instead (Profile → Parking kazne)
+      const ed = st.edpk || {}; const plates = (Array.isArray(ed.plates) ? ed.plates : []).filter(Boolean);
+      const eLate = nowMin - L.timeToMin(ed.time || '09:00');
+      if (ed.on && plates.length && eLate >= 0 && eLate <= WINDOW) {
+        const eLog = `${uid}_${L.dkey(today)}_edpk`;
+        if (await L.createOnce('pushLog', eLog, { uid, at: new Date().toISOString(), what: 'edpk' })) {
+          out.push({ logId: eLog, title: tx.edpkTitle, body: tx.edpkBody(plates.join(', ')), tag: `edpk_${L.dkey(today)}`, url: 'https://www.parking-servis.co.rs/edpk' });
         }
       }
 

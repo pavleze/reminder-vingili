@@ -108,3 +108,10 @@ Firestore (deli bazu sa starom aplikacijom):
 5. **Widget na početnom ekranu** (iPhone): preko aplikacije Scriptable + `/api/widget` sa ličnim ključem (današnje stavke + prognoza); korisnica bira veličinu.
 6. Ostatak engleskog na srpskom UI-ju: naslov forme „Novi task / Izmeni task“, statistika „Taskovi“.
 7. `logo.svg` (ekran za prijavu i bočna traka) je još stari „R + zvono“; nova ikonica je zec.
+
+## Parking kazne / eDPK (since 2026-10-31)
+- Checked https://www.parking-servis.co.rs/edpk: the page is rendered client-side and the plate lookup is protected by **Cloudflare Turnstile** (anti-bot check, like reCAPTCHA). No public API; per eparkiranje.com the operator has not opened API access yet. So the server **does not** check fines automatically (and must not try to get around the check).
+- Instead: Profile → „Parking kazne (eDPK)“ — up to 2 plates, „Dnevni podsetnik“ switch + time (default 09:00), „Proveri sada“ button. Stored in `users/{uid}.settings.edpk = { plates: [..], on, time }` (per person; the partner turns it on in their own profile if they want it too).
+- `api/cron.js` step 3: once a day at that time sends push „Proveri eDPK 🚗 · <tablice>“; tapping it opens the eDPK page (`sw.js` opens external URLs). Dedup: `pushLog/{uid}_{day}_edpk`.
+- If Parking servis ever offers an API: replace step 3 with a real check and create a shared item „Platiti eDPK · tablica · iznos · rok“.
+- Note: from the dev sandbox the domain was refused by the egress proxy (403), so the page was inspected via web fetch/search only.

@@ -32,6 +32,7 @@
       pushDevice: 'Notifications on this device', pushDeviceDesc: 'Arrive even when the app is closed', pushOn: 'On', pushTurnOn: 'Turn on', pushTurnOff: 'Turn off', pushIosHint: 'On iPhone: first add Reminder to the Home Screen (Share → Add to Home Screen), open it from there and turn notifications on.',
       pushEnabled: 'Notifications are on for this device', pushDisabled: 'Notifications are off for this device', pushFailed: 'Could not turn on notifications', pushTestSent: 'Test notification sent', pushNeedsOn: 'Turn on notifications on this device first',
       remindersPushDesc: 'At the item time, or earlier too — you choose in each item', partnerNotifyFailed: 'Could not notify your partner', sharedChanges: 'Shared items', sharedChangesDesc: 'When your partner adds or edits an item shared with you', morningSummary: 'Morning summary', morningSummaryDesc: 'Today\'s items without a time, overdue and General', morningTime: 'Time', sendTest: 'Send a test notification', filterAll: 'All', filterTasks: 'Tasks', filterEvents: 'Events', lateDay: '{n} day late', lateDays: '{n} days late', allDoneToday: 'All done for today', nothingToday: 'Nothing planned for today', deleteEntry: 'Delete', deleteEntryConfirm: 'Delete “{name}”?',
+      edpkTitle: 'Parking fines (eDPK)', edpkIntro: 'Parking Servis Belgrade protects the eDPK check against automated queries (Cloudflare), so the app cannot check it by itself. Instead you get a daily notification — tap it and the check page opens.', edpkPlates: 'Licence plates', edpkPlate1: 'Plate 1', edpkPlate2: 'Plate 2', edpkDaily: 'Daily reminder', edpkDailyDesc: 'Notification with a link to the eDPK check', edpkCheckNow: 'Check now', edpkHint: 'eDPK must be paid within 8 days (50% off). Only tickets from the last 60 days are shown.', edpkSaved: 'Saved', edpkNeedPlate: 'Enter at least one plate',
       welcomeSubtitleAuth: 'Sign in to your account', fullName: 'Full Name', confirmPassword: 'Confirm Password',
       noAccount: "Don't have an account?", registerNow: 'Register', agreeTerms: 'I agree to the Terms of Service and Privacy Policy',
       fillAllFields: 'Please fill all fields', acceptTerms: 'Please accept terms and conditions', wrongCredentials: 'Wrong email or password',
@@ -72,6 +73,7 @@
       pushDevice: 'Obaveštenja na ovom uređaju', pushDeviceDesc: 'Stižu i kad je aplikacija zatvorena', pushOn: 'Uključeno', pushTurnOn: 'Uključi', pushTurnOff: 'Isključi', pushIosHint: 'Na iPhone-u: prvo dodaj Reminder na početni ekran (Share → Add to Home Screen), otvori ga odatle i uključi obaveštenja.',
       pushEnabled: 'Obaveštenja su uključena na ovom uređaju', pushDisabled: 'Obaveštenja su isključena na ovom uređaju', pushFailed: 'Nije uspelo uključivanje obaveštenja', pushTestSent: 'Probno obaveštenje je poslato', pushNeedsOn: 'Prvo uključi obaveštenja na ovom uređaju',
       remindersPushDesc: 'U vreme stavke, i ranije ako izabereš — biraš u svakoj stavci', partnerNotifyFailed: 'Partner nije obavešten', sharedChanges: 'Podeljene stavke', sharedChangesDesc: 'Kad partner doda ili izmeni stavku koju deli sa tobom', morningSummary: 'Jutarnji pregled', morningSummaryDesc: 'Današnje stavke bez vremena, one koje kasne i Opšte', morningTime: 'Vreme', sendTest: 'Pošalji probno obaveštenje', filterAll: 'Sve', filterTasks: 'Zadaci', filterEvents: 'Događaji', lateDay: 'kasni {n} dan', lateDays: 'kasni {n} dana', allDoneToday: 'Sve za danas je urađeno', nothingToday: 'Za danas nema ništa', deleteEntry: 'Obriši', deleteEntryConfirm: 'Obrisati „{name}“?',
+      edpkTitle: 'Parking kazne (eDPK)', edpkIntro: 'Parking servis Beograd štiti proveru eDPK od automatskih upita (Cloudflare), pa aplikacija ne može sama da proveri. Umesto toga stiže dnevno obaveštenje — dodirneš ga i otvara se stranica za proveru.', edpkPlates: 'Registarske oznake', edpkPlate1: 'Tablica 1', edpkPlate2: 'Tablica 2', edpkDaily: 'Dnevni podsetnik', edpkDailyDesc: 'Obaveštenje sa linkom za proveru eDPK', edpkCheckNow: 'Proveri sada', edpkHint: 'eDPK se plaća u roku od 8 dana (50% popusta). Prikazuju se karte iz poslednjih 60 dana.', edpkSaved: 'Sačuvano', edpkNeedPlate: 'Unesi bar jednu tablicu',
       welcomeSubtitleAuth: 'Prijavite se na svoj nalog', fullName: 'Ime i prezime', confirmPassword: 'Potvrdite lozinku',
       noAccount: 'Nemate nalog?', registerNow: 'Registrujte se', agreeTerms: 'Prihvatam Uslove korišćenja i Politiku privatnosti',
       fillAllFields: 'Popunite sva polja', acceptTerms: 'Prihvatite uslove korišćenja', wrongCredentials: 'Pogrešan email ili lozinka',
@@ -809,6 +811,7 @@
         ${isCloud() ? opt('partner', 'group', t('partnerTitle') + (Cloud.partner ? ' · ' + (Cloud.partner.name || Cloud.partner.email) : '')) : ''}
         ${opt('accountCenter', 'account_balance', t('accountCenter'))}
         ${opt('notifications', 'notifications', t('notifications'))}
+        ${isCloud() ? opt('edpk', 'local_parking', t('edpkTitle')) : ''}
         ${opt('language', 'language', t('language'))}
         ${opt('appearance', 'palette', t('appearance'))}
         ${opt('credits', 'info', t('credits'))}
@@ -987,6 +990,23 @@
     <button class="btn btn-text btn-block" data-a="push-off">${esc(t('pushTurnOff'))}</button>` : ''}`;
     return { title: t('notifications'), html, narrow: true };
   }
+  const EDPK_URL = 'https://www.parking-servis.co.rs/edpk';
+  const plateNorm = (v) => String(v || '').toUpperCase().replace(/[^0-9A-ZČĆŠĐŽ]/g, '').slice(0, 10);
+  const edpkSet = () => { const s = settings(); s.edpk = s.edpk || { plates: [], on: false, time: '09:00' }; return s.edpk; };
+  function screenEdpk() {
+    const e = edpkSet(); const p = e.plates || [];
+    const html = `<p class="muted" style="margin:0 0 12px;font-size:13.5px">${esc(t('edpkIntro'))}</p>
+    <div class="stack">
+      <h2 class="h-sub">${esc(t('edpkPlates'))}</h2>
+      ${field({ id: 'edpk-p1', label: t('edpkPlate1'), ic: 'directions_car', value: p[0] || '', auto: 'off', extra: 'placeholder="BG123AB" autocapitalize="characters" maxlength="12"' })}
+      ${field({ id: 'edpk-p2', label: t('edpkPlate2'), ic: 'directions_car', value: p[1] || '', auto: 'off', extra: 'placeholder="BG456CD" autocapitalize="characters" maxlength="12"' })}
+      ${switchTile('edpk-on', t('edpkDaily'), t('edpkDailyDesc') + (pushOnHere() ? '' : ' · ' + t('pushNeedsOn')), !!e.on, 'edpk-set')}
+      ${e.on ? `<div class="field picker-field"><span class="pick-ic" aria-hidden="true">${icon('schedule')}</span><label for="edpk-time">${esc(t('morningTime'))}</label><input id="edpk-time" type="time" value="${esc(e.time || '09:00')}"></div>` : ''}
+      <p class="muted" style="margin:0;font-size:13px">${esc(t('edpkHint'))}</p>
+    </div>
+    <a class="btn btn-primary btn-block" href="${EDPK_URL}" target="_blank" rel="noopener">${icon('open_in_new')}${esc(t('edpkCheckNow'))}</a>`;
+    return { title: t('edpkTitle'), html, narrow: true };
+  }
   function screenLanguage() {
     const sel = ui.pendingLang || settings().lang;
     const html = `<h2 class="h-sub">${esc(t('selectLanguage'))}</h2><hr class="div">
@@ -1029,7 +1049,7 @@
   const SCREENS = {
     partner: screenPartner, accountCenter: screenAccountCenter, profileData: screenProfileData, security: screenSecurity,
     changePassword: screenChangePassword, connected: screenConnected, notifications: screenNotifications, language: screenLanguage,
-    appearance: screenAppearance, credits: screenCredits, deletion: screenDeletion, users: screenUsers,
+    appearance: screenAppearance, credits: screenCredits, edpk: screenEdpk, deletion: screenDeletion, users: screenUsers,
   };
 
   /* ================= Modals ================= */
@@ -1694,6 +1714,16 @@
   document.addEventListener('change', (e) => {
     const el = e.target; const a = el.dataset && el.dataset.a;
     if (el.id === 'n-morning-time' && el.value) { settings().notif.morningTime = el.value; save(); return; }
+    if (el.id === 'edpk-p1' || el.id === 'edpk-p2') {
+      const e = edpkSet(); el.value = plateNorm(el.value);
+      e.plates = [plateNorm($('#edpk-p1').value), plateNorm($('#edpk-p2').value)].filter(Boolean); save(); toast(t('edpkSaved')); return;
+    }
+    if (el.id === 'edpk-time' && el.value) { edpkSet().time = el.value; save(); return; }
+    if (el.dataset && el.dataset.a === 'edpk-set') {
+      const e = edpkSet();
+      if (el.checked && !(e.plates || []).length) { el.checked = false; toast(t('edpkNeedPlate'), { error: true }); return; }
+      e.on = el.checked; e.time = e.time || '09:00'; save(); render(); return;
+    }
     if (a === 'toggle-check') { const r = findR(el.dataset.id); if (r) toggleCheck(r, el.dataset.item, fromKey(el.dataset.d)); return; }
     if (!a) return;
     const s = settings();
