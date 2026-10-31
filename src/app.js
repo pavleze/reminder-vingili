@@ -734,6 +734,7 @@
           <span class="w-chips">${isIkea ? chip(t('watchOnline'), 'local_shipping', w.online) + chip(t('watchStore'), 'storefront', w.store, w.store === 'in' && w.storeQty ? `(${w.storeQty})` : '') : ad ? adChip(w.online) : chip(t('watchInStock'), 'inventory_2', w.online)}</span>
           ${w.store === 'out' && w.restock ? `<span class="w-meta">${esc(t('watchRestock', { d: fmtDate(new Date(w.restock), { day: 'numeric', month: 'short' }) }))}</span>` : ''}
           <span class="w-meta">${isIkea ? '' : esc(siteOf(w.url)) + ' · '}${esc(meta)}</span>
+          ${!busy && w.error ? `<span class="w-meta w-err">${esc(w.error)}</span>` : ''}
         </div>
         <div class="w-settings watch-opts sm">${watchOpt('stock', 'inventory_2', t(ad ? 'watchOptGone' : 'watchOptStockShort'), w.notifyStock !== false, w.id)}${watchOpt('price', 'trending_down', t('watchOptPriceShort'), !!w.notifyPrice, w.id)}${share}<button class="icon-btn w-del" data-a="watch-del" data-id="${esc(w.id)}" aria-label="${esc(t('deleteEntry'))}" title="${esc(t('deleteEntry'))}">${icon('delete', 'sm')}</button></div>
         </div>`;
