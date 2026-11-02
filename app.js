@@ -518,9 +518,17 @@
     const today = entriesOn(d);
     const floating = entries().filter((it) => isFloating(it) && floatingVisible(it))
       .sort((a, b) => isDoneOn(a, d) - isDoneOn(b, d) || (b.important ? 1 : 0) - (a.important ? 1 : 0) || a.name.localeCompare(b.name));
-    const pastOneOff = (it) => it.date && (!it.repeat || it.repeat.type === 'none') && !isEvent(it) && fromKey(it.date) < d;
-    const overdue = entries().filter((it) => pastOneOff(it) && !isDoneOn(it, fromKey(it.date))).sort((a, b) => a.date.localeCompare(b.date) || byTime(a, b));
-    const lateDone = entries().filter((it) => pastOneOff(it) && isDoneOn(it, fromKey(it.date)) && it.lateDoneOn === dkey(d));
+    // late: a one-off whose day has passed, or the last time a repeating task came up (until its next time comes)
+    const lateAt = (it) => {
+      if (isEvent(it) || isFloating(it)) return null;
+      if (!it.repeat || it.repeat.type === 'none') return it.date && fromKey(it.date) < d ? it.date : null;
+      if (occursOn(it, d)) return null; // today's own turn is shown instead
+      for (let i = 1; i <= 366; i++) { const x = addDays(d, -i); if (occursOn(it, x)) return dkey(x); }
+      return null;
+    };
+    const lateList = entries().map((it) => ({ it, at: lateAt(it) })).filter((x) => x.at);
+    const overdue = lateList.filter((x) => !isDoneOn(x.it, fromKey(x.at))).sort((a, b) => a.at.localeCompare(b.at) || byTime(a.it, b.it));
+    const lateDone = lateList.filter((x) => isDoneOn(x.it, fromKey(x.at)) && x.it.lateDoneOn === dkey(d));
     const doable = today.filter((it) => !isEvent(it));
     const doneN = doable.filter((it) => isDoneOn(it, d)).length + lateDone.length;
     const totalN = doable.length + overdue.length + lateDone.length;
@@ -534,7 +542,7 @@
     const todayOpen = today.filter((it) => !isDone(it) && pass(it));
     const floatOpen = floating.filter((it) => !isDone(it) && pass(it));
     const doneList = today.filter(isDone).concat(floating.filter(isDone)).filter(pass);
-    const overdueF = overdue.filter(pass); const lateDoneF = lateDone.filter(pass);
+    const overdueF = overdue.filter((x) => pass(x.it)); const lateDoneF = lateDone.filter((x) => pass(x.it));
     const filterBar = `<div class="filter-pills home-filter" role="radiogroup" aria-label="Filter">${[['all', 'filterAll'], ['task', 'filterTasks'], ['event', 'filterEvents']].map(([v, k]) => `<button type="button" role="radio" class="fpill" data-a="home-filter" data-v="${v}" aria-checked="${f === v}">${esc(t(k))}</button>`).join('')}</div>`;
     const html = `
       <header class="day-hero green-band">
@@ -548,7 +556,7 @@
       ${filterBar}
       <section class="rows home-rows" aria-labelledby="today-h">
         <h3 class="rows-label">${esc(fmtDate(d, { day: 'numeric', month: 'long' }))} <span class="muted-date">${esc(cap(fmtDate(d, { weekday: 'long' })))}</span></h3>
-        ${overdueF.map((it) => entryCard(it, fromKey(it.date), { overdue: true })).join('')}
+        ${overdueF.map((x) => entryCard(x.it, fromKey(x.at), { overdue: true })).join('')}
         ${todayOpen.length ? todayOpen.map((it) => entryCard(it, d)).join('') : overdueF.length ? '' : `<p class="quiet">${esc(today.length ? t('allDoneToday') : t('nothingToday'))}</p>`}
       </section>
       ${floatOpen.length ? `<section class="rows home-rows" aria-labelledby="nodate-h">
@@ -557,7 +565,7 @@
       </section>` : ''}
       ${doneList.length + lateDoneF.length ? `<section class="rows home-rows done-sec" aria-labelledby="done-h">
         <h3 class="rows-label" id="done-h">${esc(t('doneSection'))} <span class="muted-date tnum">${doneList.length + lateDoneF.length}</span></h3>
-        ${lateDoneF.map((it) => entryCard(it, fromKey(it.date))).join('')}${doneList.map((it) => entryCard(it, d)).join('')}
+        ${lateDoneF.map((x) => entryCard(x.it, fromKey(x.at))).join('')}${doneList.map((it) => entryCard(it, d)).join('')}
       </section>` : ''}
       ${hasSamples ? `<p class="quiet small">${esc(t('sampleData'))} <button class="link-btn" data-a="clear-samples">${esc(t('clearSamples'))}</button></p>` : ''}`;
     const fabs = `<button class="fab" data-a="add" aria-label="${esc(t('addReminder'))}">${icon('add')}<span class="fab-label">${esc(t('addReminder'))}</span></button>`;

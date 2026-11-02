@@ -65,7 +65,15 @@ module.exports = async (req, res) => {
       const mt = L.timeToMin(notif.morningTime || '08:00'); const late = nowMin - mt;
       if (notif.morning !== false && late >= 0 && late <= WINDOW) {
         const todays = mine.filter((it) => !it.time && L.occursOn(it, today) && !(L.isEvent(it) ? false : L.isDoneOn(it, today)));
-        const overdue = mine.filter((it) => it.date && (!it.repeat || it.repeat.type === 'none') && !L.isEvent(it) && L.fromKey(it.date) < today && !L.isDoneOn(it, L.fromKey(it.date)));
+        // late: a past one-off, or a repeating task whose last turn was missed (same rule as the app's Home)
+        const lateAt = (it) => {
+          if (L.isEvent(it) || L.isFloating(it)) return null;
+          if (!it.repeat || it.repeat.type === 'none') return it.date && L.fromKey(it.date) < today ? L.fromKey(it.date) : null;
+          if (L.occursOn(it, today)) return null;
+          for (let i = 1; i <= 366; i++) { const x = L.addDays(today, -i); if (L.occursOn(it, x)) return x; }
+          return null;
+        };
+        const overdue = mine.filter((it) => { const at = lateAt(it); return at && !L.isDoneOn(it, at); });
         const general = mine.filter((it) => L.isFloating(it) && !L.isDoneOn(it, today));
         const mLog = `${uid}_${L.dkey(today)}_morning`;
         if (todays.length + overdue.length + general.length && (await L.createOnce('pushLog', mLog, { uid, at: new Date().toISOString(), what: 'morning' }))) {
