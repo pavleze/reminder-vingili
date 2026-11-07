@@ -70,6 +70,22 @@ async function listAll(collection) {
   } while (pageToken);
   return out;
 }
+// filtered read: filters = [[field, 'EQUAL' | 'GREATER_THAN' | …, firestoreValue]], e.g. [['uid', 'EQUAL', { stringValue: uid }]].
+// Billed per document returned (at least 1), so it is far cheaper than listAll on a whole collection.
+async function query(collection, filters, limit) {
+  const ff = filters.map(([field, op, value]) => ({ fieldFilter: { field: { fieldPath: field }, op, value } }));
+  const structuredQuery = { from: [{ collectionId: collection }], where: ff.length === 1 ? ff[0] : { compositeFilter: { op: 'AND', filters: ff } } };
+  if (limit) structuredQuery.limit = limit;
+  const res = await fsFetch(`${docsBase()}:runQuery`, { method: 'POST', body: JSON.stringify({ structuredQuery }) });
+  const j = await res.json();
+  if (!res.ok) throw new Error(`Firestore query ${collection}: ${JSON.stringify(j)}`);
+  return (Array.isArray(j) ? j : []).filter((r) => r.document).map((r) => ({ id: r.document.name.split('/').pop(), ...decodeFields(r.document.fields) }));
+}
+const subsOf = (uid) => query('pushSubs', [['uid', 'EQUAL', { stringValue: uid }]]).then((l) => l.filter((s) => s.sub && s.sub.endpoint));
+async function setDoc(collection, id, data) {
+  const res = await fsFetch(`${docsBase()}/${collection}/${encodeURIComponent(id)}`, { method: 'PATCH', body: JSON.stringify({ fields: encodeValue(data).mapValue.fields }) });
+  if (!res.ok) throw new Error(`Firestore set: ${await res.text()}`);
+}
 async function getDoc(collection, id) {
   const res = await fsFetch(`${docsBase()}/${collection}/${encodeURIComponent(id)}`);
   if (res.status === 404) return null;
@@ -202,11 +218,11 @@ async function verifyIdTokenClaims(token) {
 const verifyIdToken = async (token) => (await verifyIdTokenClaims(token)).sub;
 // send one message to every device of each uid; drops dead subscriptions
 async function pushToUids(uids, makeMsg, logWhat) {
-  const subs = await listAll('pushSubs'); let sent = 0;
+  let sent = 0;
   for (const uid of uids) {
     const user = await getDoc('users', uid).catch(() => null);
     const msg = makeMsg(user || {});
-    const mine = subs.filter((x) => x.uid === uid && x.sub && x.sub.endpoint);
+    const mine = msg ? await subsOf(uid) : [];
     const results = [];
     if (!msg) results.push('turned off in settings');
     else if (!mine.length) results.push('no devices with notifications on');
@@ -222,4 +238,4 @@ async function pushToUids(uids, makeMsg, logWhat) {
   return sent;
 }
 
-module.exports = { remindList, patchDoc, verifyIdToken, verifyIdTokenClaims, pushToUids, listAll, getDoc, createOnce, deleteDoc, sendPush, encryptPayload, vapidAuth, occursOn, isDoneOn, checkedOn, isEvent, isFloating, localNow, addDays, dkey, fromKey, timeToMin };
+module.exports = { remindList, patchDoc, setDoc, query, subsOf, verifyIdToken, verifyIdTokenClaims, pushToUids, listAll, getDoc, createOnce, deleteDoc, sendPush, encryptPayload, vapidAuth, occursOn, isDoneOn, checkedOn, isEvent, isFloating, localNow, addDays, dkey, fromKey, timeToMin };

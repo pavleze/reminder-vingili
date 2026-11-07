@@ -1480,14 +1480,14 @@
       if (perm !== 'granted') { toast(t('blocked'), { error: true }); return; }
       const reg = await navigator.serviceWorker.ready;
       const sub = (await reg.pushManager.getSubscription()) || (await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: b64uToBytes(VAPID_PUBLIC) }));
-      await pushSave(sub);
+      await pushSave(sub); markChanged();
       toast(t('pushEnabled'), { icon: 'notifications_active' });
     } catch (e) { console.warn(e); toast(`${t('pushFailed')}: ${(e && e.message) || e}`, { error: true, ms: 7000 }); }
   }
   async function pushDisable() {
     const id = pushId();
     try { const reg = await navigator.serviceWorker.ready; const sub = await reg.pushManager.getSubscription(); if (sub) await sub.unsubscribe(); } catch (e) { /* ignore */ }
-    try { if (id) await Cloud.db.collection('pushSubs').doc(id).delete(); } catch (e) { /* ignore */ }
+    try { if (id) await Cloud.db.collection('pushSubs').doc(id).delete(); markChanged(); } catch (e) { /* ignore */ }
     try { localStorage.removeItem(PUSH_KEY); } catch (e) { /* ignore */ }
     toast(t('pushDisabled'));
   }
@@ -1615,25 +1615,34 @@
   // push local changes (add / edit / check / delete) to Firestore
   function syncCloud() {
     const u = me(); if (!u || !u.cloud || !Cloud.db) return;
-    const col = Cloud.db.collection(ITEMS); const seen = new Set();
+    const col = Cloud.db.collection(ITEMS); const seen = new Set(); let changed = false;
     for (const it of u.tasks || []) {
       seen.add(it.uid);
       if (!it.owner) it.owner = u.uid;
       if (!Array.isArray(it.members) || !it.members.length) it.members = [it.owner];
       const j = taskJson(it);
       if (Cloud.last[it.uid] === j) continue;
-      Cloud.last[it.uid] = j;
+      Cloud.last[it.uid] = j; changed = true;
       const data = clean(it); delete data.uid; delete data.sample;
       col.doc(it.uid).set(data).catch(cloudError);
     }
     for (const id of Object.keys(Cloud.last)) {
       if (seen.has(id)) continue;
-      const was = JSON.parse(Cloud.last[id]); delete Cloud.last[id];
+      const was = JSON.parse(Cloud.last[id]); delete Cloud.last[id]; changed = true;
       if (was.owner === u.uid) col.doc(id).delete().catch(cloudError);
       else col.doc(id).update({ members: window.firebase.firestore.FieldValue.arrayRemove(u.uid) }).catch(cloudError);
     }
     const sj = JSON.stringify(u.settings);
-    if (Cloud.lastSettings !== sj) { Cloud.lastSettings = sj; Cloud.db.collection(PEOPLE).doc(u.uid).set({ settings: clean(u.settings), language: u.settings.lang, isDarkMode: isDark() }, { merge: true }).catch(() => {}); }
+    if (Cloud.lastSettings !== sj) { if (Cloud.lastSettings !== undefined) changed = true; Cloud.lastSettings = sj; Cloud.db.collection(PEOPLE).doc(u.uid).set({ settings: clean(u.settings), language: u.settings.lang, isDarkMode: isDark() }, { merge: true }).catch(() => {}); }
+    if (changed) markChanged();
+  }
+  // tells the server (api/cron.js) to rebuild its notification plan on its next run instead of waiting up to 15 min
+  function markChanged() {
+    clearTimeout(Cloud.changedT);
+    Cloud.changedT = setTimeout(() => {
+      const u = me(); if (!u || !u.cloud || !Cloud.db) return;
+      Cloud.db.collection(PEOPLE).doc(u.uid).set({ changedAt: window.firebase.firestore.FieldValue.serverTimestamp() }, { merge: true }).catch(() => {});
+    }, 1500);
   }
   function cloudSignedOut() {
     if (Cloud.unsub) { Cloud.unsub(); Cloud.unsub = null; }

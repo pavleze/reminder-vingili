@@ -78,25 +78,26 @@ Firestore (deli bazu sa starom aplikacijom):
 - PWA: `manifest.webmanifest`, `sw.js` (offline cache + `push` / `notificationclick`), icons in `assets/` (green R + bell).
 - Devices: Profile → Obaveštenja → Uključi saves a Web Push subscription to Firestore `pushSubs/{sha1(endpoint)}` ({uid, sub, tz}).
 - Server (no npm deps, Firestore REST + VAPID/aes128gcm with Node crypto, verified against RFC 8291):
-  - `api/cron.js?key=CRON_SECRET`, called every minute by cron-job.org. It sends item reminders (`it.remind` = minutes before; -1 = off) and the morning summary (`settings.notif.morning`, `morningTime`). Each notification is sent once, deduplicated by `pushLog/{key}`.
+  - `api/cron.js?key=CRON_SECRET`, called every 2 minutes by cron-job.org (job „Reminder cron“, re-created 2026-11-07 with a new CRON_SECRET; mail on 5 failures, responses saved in History). It sends item reminders (`it.remind` = minutes before; -1 = off) and the morning summary (`settings.notif.morning`, `morningTime`). Each notification is sent once, deduplicated by `pushLog/{key}`.
   - `api/notify-share.js`: when a shared item is added or edited, the partner gets "<Ime>: nova/izmenjena stavka". It checks the Firebase ID token and membership. The partner can turn this off with `settings.notif.shared`.
   - `api/push-test.js`: the "Pošalji probno obaveštenje" button.
 - Vercel env (Production): `FIREBASE_SERVICE_ACCOUNT` (service-account JSON), `VAPID_PRIVATE_KEY`, `CRON_SECRET`. VAPID public key is hard-coded in `src/app.js` and `api/_lib.js`.
 - Firestore rules: `pushSubs` added (see `firestore.rules`).
 - iPhone: push only works when the app is opened from the Home Screen (iOS 16.4+).
-- Health check: open `/api/cron?key=…` and expect `{"users":N,"sent":…,"errors":[]}`. A 401 response lists which env vars are present.
+- Health check: open `/api/cron?key=…` and expect `{"users":N,"sent":…,"errors":[],"plan":"kept"}`. A 401 response lists which env vars are present. `&debug=1` adds the plan, `&rebuild=1` forces a rebuild.
+- **Reads (since 2026-11-07):** the cron no longer reads the whole database each run. It keeps a *plan* (`cronState/plan`: every notification due in the next 30 min, built from `users` + `reminders` + `pushSubs`) and rebuilds it every 15 min or when a profile's `changedAt` is newer than the plan (the app sets `users/{uid}.changedAt` after any item/settings change or turning push on/off). A normal run = 2 reads; each sent item reminder re-reads its item once (`stillDue`). Watches: a batch of 3 every 10 min. Simulated day at 2-min runs: ~3.400 reads instead of ~14.800 (old code hit the 50.000/day Spark limit from ~28.10 until cron-job.org dropped the job on 1.11).
 
 ## Praćenje (product watch, since 2026-10-24)
 - Tab „Praćenje“ (shopping bag). Paste an IKEA product link (`ikea.com/<cc>/<lang>/p/…-<8 digits>/`); optional „Podeli sa partnerom“.
 - Firestore `watches/{id}`: `{ owner, members, url, itemNo, title, image, price, online, store, storeQty, restock, knownOnline, knownStore, checkedAt, error, createdAt }`. Rules: same as `reminders` (see `firestore.rules`) — **publish the rules again** after this change.
-- Server `api/_watch.js`: reads the product page (og/JSON-LD: name, image, price, schema.org availability) and IKEA's availability service (`api.ingka.ikea.com/cia/availabilities/ru/<cc>`, home delivery + store stock). `api/cron.js` checks the 2 stalest watches per run (each ≈ every 2.5 h). A push goes to all members when delivery or store goes from `out` to `in`; failed checks don't count.
+- Server `api/_watch.js`: reads the product page (og/JSON-LD: name, image, price, schema.org availability) and IKEA's availability service (`api.ingka.ikea.com/cia/availabilities/ru/<cc>`, home delivery + store stock). `api/cron.js` checks the 3 stalest watches every 10 min (each ≈ every 2.5 h). A push goes to all members when delivery or store goes from `out` to `in`; failed checks don't count.
 - `api/watch.js`: „Proveri sad“ (token + membership), returns `sources` (what the page / stock service answered) for debugging.
 - Not verified against the live IKEA site from the dev sandbox (ikea.com blocked there); if a check says „Ne može da se proveri“, the toast shows what each source returned.
 - Since 2026-10-24 also **any web shop** (`checkGeneric` in `api/_watch.js`): reads the page's schema.org JSON-LD (all offers; in stock if any is, lowest price), microdata (`itemprop=price/availability`) and Open Graph product tags. Card shows one „Na stanju“ chip + shop name. Duplicate check: IKEA by item number, others by host + path + query.
 - Per product: `notifyStock` (default on), `notifyPrice`; `knownPrice` / `priceWas` for the price-drop push.
 
 ## TODO (dogovoreno za kasnije, 2026-10-24)
-1. **Cron čita previše (Firestore Spark: 50.000 čitanja/dan).** `api/cron.js` svakog minuta čita ceo `users` (i sve naloge stare Android aplikacije), ceo `reminders`, `pushSubs` i `watches` → ~1.440 × broj dokumenata dnevno. Preko granice Firestore do kraja dana blokira čitanje (app i obaveštenja ne rade). Plan:
+1. ✅ **Urađeno 2026-11-07 (vidi „Reads“ gore)** — ostaje samo brisanje starog `pushLog`. **Cron čita previše (Firestore Spark: 50.000 čitanja/dan).** `api/cron.js` svakog minuta čita ceo `users` (i sve naloge stare Android aplikacije), ceo `reminders`, `pushSubs` i `watches` → ~1.440 × broj dokumenata dnevno. Preko granice Firestore do kraja dana blokira čitanje (app i obaveštenja ne rade). Plan:
    - čitati samo profile onih koji imaju uređaj u `pushSubs` (`getDoc` po uid-u);
    - podsetnike čitati jednom na 10 min i pripremiti red obaveštenja (`pushQueue`) za narednih 10 min; svakog minuta samo upit nad redom (`at <= now`);
    - `watches`: upit samo za one kojima je `checkedAt` stariji od 2,5 h (`orderBy checkedAt`, `limit 2`);
