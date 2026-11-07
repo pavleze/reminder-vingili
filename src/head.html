@@ -498,6 +498,13 @@ button.wx-line { border: 0; background: none; padding: 0; font: inherit; text-al
 .panel { border-radius: var(--r-lg); background: var(--card); border: 1px solid var(--divider); box-shadow: var(--shadow); padding: 18px; display: flex; flex-direction: column; gap: 14px; }
 .panel h3 { font-size: 17px; font-weight: 600; display: flex; align-items: center; gap: 8px; }
 .panel h3 .ms { color: var(--primary-ink); font-size: 20px; }
+.usage-chart { position: relative; display: flex; align-items: flex-end; gap: 2px; height: 140px; margin-top: 14px; border-bottom: 1px solid var(--divider); }
+.usage-col { flex: 1 1 0; height: 100%; display: flex; align-items: flex-end; padding: 0; border: 0; background: none; cursor: pointer; min-width: 0; }
+.usage-col > i { display: block; width: 100%; background: var(--primary); border-radius: 4px 4px 0 0; }
+.usage-col:hover > i, .usage-col:focus-visible > i, .usage-col.on > i { background: color-mix(in srgb, var(--primary) 70%, var(--fg)); }
+.usage-limit { position: absolute; left: 0; right: 0; border-top: 1px dashed color-mix(in srgb, var(--fg) 45%, transparent); pointer-events: none; }
+.usage-limit > span { position: absolute; right: 0; top: -18px; font-size: 11px; color: var(--muted); }
+.usage-axis { display: flex; justify-content: space-between; font-size: 11px; color: var(--muted); margin-top: 4px; }
 .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
 .stat { border-radius: var(--r-md); padding: 14px; background: color-mix(in srgb, var(--c) 9%, var(--card)); border: 1px solid color-mix(in srgb, var(--c) 22%, transparent); display: flex; flex-direction: column; gap: 6px; min-width: 0; }
 .stat .top { display: flex; align-items: center; gap: 8px; color: color-mix(in srgb, var(--fg) 70%, transparent); font-size: 12.5px; font-weight: 500; }

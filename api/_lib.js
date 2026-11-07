@@ -6,7 +6,7 @@ const b64u = (buf) => Buffer.from(buf).toString('base64url');
 const fromB64u = (s) => Buffer.from(String(s).replace(/=+$/, ''), 'base64url');
 
 /* ---------------- Google auth (service account → OAuth token) ---------------- */
-let tokenCache = null;
+const tokenCache = {}; // per OAuth scope
 function serviceAccount() {
   const raw = String(process.env.FIREBASE_SERVICE_ACCOUNT || '').trim();
   if (!raw) throw new Error('FIREBASE_SERVICE_ACCOUNT is not set');
@@ -14,12 +14,12 @@ function serviceAccount() {
   sa.private_key = String(sa.private_key).replace(/\\n/g, '\n');
   return sa;
 }
-async function accessToken() {
-  if (tokenCache && tokenCache.exp > Date.now() + 60e3) return tokenCache.token;
+async function accessToken(scope = 'https://www.googleapis.com/auth/datastore') {
+  const c = tokenCache[scope]; if (c && c.exp > Date.now() + 60e3) return c.token;
   const sa = serviceAccount();
   const now = Math.floor(Date.now() / 1000);
   const head = b64u(JSON.stringify({ alg: 'RS256', typ: 'JWT' }));
-  const body = b64u(JSON.stringify({ iss: sa.client_email, scope: 'https://www.googleapis.com/auth/datastore', aud: 'https://oauth2.googleapis.com/token', iat: now, exp: now + 3600 }));
+  const body = b64u(JSON.stringify({ iss: sa.client_email, scope, aud: 'https://oauth2.googleapis.com/token', iat: now, exp: now + 3600 }));
   const sig = crypto.sign('RSA-SHA256', Buffer.from(`${head}.${body}`), sa.private_key);
   const res = await fetch('https://oauth2.googleapis.com/token', {
     method: 'POST', headers: { 'content-type': 'application/x-www-form-urlencoded' },
@@ -27,8 +27,8 @@ async function accessToken() {
   });
   const j = await res.json();
   if (!j.access_token) throw new Error('Google token error: ' + JSON.stringify(j));
-  tokenCache = { token: j.access_token, exp: Date.now() + (j.expires_in || 3600) * 1000 };
-  return tokenCache.token;
+  tokenCache[scope] = { token: j.access_token, exp: Date.now() + (j.expires_in || 3600) * 1000 };
+  return j.access_token;
 }
 
 /* ---------------- Firestore REST ---------------- */
@@ -238,4 +238,4 @@ async function pushToUids(uids, makeMsg, logWhat) {
   return sent;
 }
 
-module.exports = { remindList, patchDoc, setDoc, query, subsOf, verifyIdToken, verifyIdTokenClaims, pushToUids, listAll, getDoc, createOnce, deleteDoc, sendPush, encryptPayload, vapidAuth, occursOn, isDoneOn, checkedOn, isEvent, isFloating, localNow, addDays, dkey, fromKey, timeToMin };
+module.exports = { accessToken, projectId, remindList, patchDoc, setDoc, query, subsOf, verifyIdToken, verifyIdTokenClaims, pushToUids, listAll, getDoc, createOnce, deleteDoc, sendPush, encryptPayload, vapidAuth, occursOn, isDoneOn, checkedOn, isEvent, isFloating, localNow, addDays, dkey, fromKey, timeToMin };
