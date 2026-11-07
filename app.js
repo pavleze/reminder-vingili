@@ -23,7 +23,7 @@
       everyLabel: 'Every', unitDay: 'days', unitWeek: 'weeks', unitMonth: 'months', unitYear: 'years', everyYear: 'Every year', everyNyear: 'Every {n} years',
       everyDay: 'Every day', everyWeek: 'Every week', everyMonth: 'Every month', everyNday: 'Every {n} days', everyNweek: 'Every {n} weeks', everyNmonth: 'Every {n} months',
       monthDayEvery: 'Monthly on day {n}', pickDays: 'Pick at least one day', statTasks: 'Tasks', statLists: 'Lists', saved: 'Saved', listDone: 'List completed',
-      homeSub: "Here is what's on for today.", addDate: 'Add date', tomorrow: 'Tomorrow', showMore: 'Show more', changeDate: 'Change date', removeDate: 'Remove date', noDateSection: 'General', doneSection: 'Done', unauthorizedDomain: 'This website is not yet allowed in Firebase (Authentication → Settings → Authorized domains).', networkError: 'No internet connection', permissionDenied: 'Firebase rules do not allow this yet (see README).',
+      homeSub: "Here is what's on for today.", addDate: 'Add date', tomorrow: 'Tomorrow', yesterday: 'Yesterday', prevDay: 'Previous day', nextDay: 'Next day', nothingThatDay: 'Nothing planned for this day', showMore: 'Show more', changeDate: 'Change date', removeDate: 'Remove date', noDateSection: 'General', doneSection: 'Done', unauthorizedDomain: 'This website is not yet allowed in Firebase (Authentication → Settings → Authorized domains).', networkError: 'No internet connection', permissionDenied: 'Firebase rules do not allow this yet (see README).',
       importedLocal: 'Moved {n} items from this device to your account', migratedOld: 'Brought over {n} reminders from the old app', partnerTitle: 'Partner', partnerDesc: 'Share items with one person', partnerEmail: "Partner's email",
       partnerHelp: 'Your partner needs to sign in with Google once. Then enter their email here.', linkBtn: 'Link', unlinkBtn: 'Remove', partnerSelf: "That's your own email",
       partnerNotFound: "No account with that email yet. Ask them to sign in with Google first.", partnerLinked: 'Linked with {name}', shareWith: 'Share with {name}',
@@ -64,7 +64,7 @@
       everyLabel: 'Na svakih', unitDay: 'dana', unitWeek: 'nedelja', unitMonth: 'meseci', unitYear: 'godina', everyYear: 'Svake godine', everyNyear: 'Na svakih {n} godina',
       everyDay: 'Svaki dan', everyWeek: 'Svake nedelje', everyMonth: 'Svakog meseca', everyNday: 'Na svakih {n} dana', everyNweek: 'Na svakih {n} nedelja', everyNmonth: 'Na svakih {n} meseci',
       monthDayEvery: 'Svakog {n}. u mesecu', pickDays: 'Izaberite bar jedan dan', statTasks: 'Taskovi', statLists: 'Liste', saved: 'Sačuvano', listDone: 'Lista završena',
-      homeSub: 'Evo šta vas čeka danas.', addDate: 'Dodaj datum', tomorrow: 'Sutra', showMore: 'Prikaži još', changeDate: 'Promeni datum', removeDate: 'Ukloni datum', noDateSection: 'Opšte', doneSection: 'Urađeno', unauthorizedDomain: 'Ovaj sajt još nije dozvoljen u Firebase-u (Authentication → Settings → Authorized domains).', networkError: 'Nema internet konekcije', permissionDenied: 'Firebase pravila ovo još ne dozvoljavaju (pogledajte README).',
+      homeSub: 'Evo šta vas čeka danas.', addDate: 'Dodaj datum', tomorrow: 'Sutra', yesterday: 'Juče', prevDay: 'Prethodni dan', nextDay: 'Sledeći dan', nothingThatDay: 'Za taj dan nema ništa', showMore: 'Prikaži još', changeDate: 'Promeni datum', removeDate: 'Ukloni datum', noDateSection: 'Opšte', doneSection: 'Urađeno', unauthorizedDomain: 'Ovaj sajt još nije dozvoljen u Firebase-u (Authentication → Settings → Authorized domains).', networkError: 'Nema internet konekcije', permissionDenied: 'Firebase pravila ovo još ne dozvoljavaju (pogledajte README).',
       importedLocal: 'Prebačeno {n} stavki sa ovog uređaja na vaš nalog', migratedOld: 'Preneto {n} podsetnika iz stare aplikacije', partnerTitle: 'Partner', partnerDesc: 'Delite stavke sa jednom osobom', partnerEmail: 'Email partnera',
       partnerHelp: 'Partner treba jednom da se prijavi preko Google-a. Zatim ovde unesite njegov email.', linkBtn: 'Poveži', unlinkBtn: 'Ukloni', partnerSelf: 'To je vaš email',
       partnerNotFound: 'Nema naloga sa tim emailom. Neka se partner prvo prijavi preko Google-a.', partnerLinked: 'Povezani ste sa: {name}', shareWith: 'Podeli sa: {name}',
@@ -543,6 +543,9 @@
     const floatOpen = floating.filter((it) => !isDone(it) && pass(it));
     const doneList = today.filter(isDone).concat(floating.filter(isDone)).filter(pass);
     const overdueF = overdue.filter((x) => pass(x.it)); const lateDoneF = lateDone.filter((x) => pass(x.it));
+    // the dated list can be moved to other days (arrows); the hero, overdue and Done stay about today
+    const off = ui.homeOff || 0; const dd = addDays(d, off);
+    const dayList = off ? entriesOn(dd).filter(pass).sort((a, b) => isDoneOn(a, dd) - isDoneOn(b, dd)) : [];
     const filterBar = `<div class="filter-pills home-filter" role="radiogroup" aria-label="Filter">${[['all', 'filterAll'], ['task', 'filterTasks'], ['event', 'filterEvents']].map(([v, k]) => `<button type="button" role="radio" class="fpill" data-a="home-filter" data-v="${v}" aria-checked="${f === v}">${esc(t(k))}</button>`).join('')}</div>`;
     const html = `
       <header class="day-hero green-band">
@@ -555,20 +558,26 @@
       </header>
       ${filterBar}
       <section class="rows home-rows" aria-labelledby="today-h">
-        <h3 class="rows-label">${esc(fmtDate(d, { day: 'numeric', month: 'long' }))} <span class="muted-date">${esc(cap(fmtDate(d, { weekday: 'long' })))}</span></h3>
-        ${overdueF.map((x) => entryCard(x.it, fromKey(x.at), { overdue: true })).join('')}
-        ${todayOpen.length ? todayOpen.map((it) => entryCard(it, d)).join('') : overdueF.length ? '' : `<p class="quiet">${esc(today.length ? t('allDoneToday') : t('nothingToday'))}</p>`}
+        <div class="label-row day-nav">
+          <h3 class="rows-label" aria-live="polite">${esc(fmtDate(dd, { day: 'numeric', month: 'long' }))} <span class="muted-date">${esc(off === 1 ? t('tomorrow') + ' · ' : off === -1 ? t('yesterday') + ' · ' : '')}${esc(cap(fmtDate(dd, { weekday: 'long' })))}</span></h3>
+          <span class="day-nav-btns">${off ? `<button type="button" class="fpill" data-a="home-today" aria-checked="true">${esc(t('today'))}</button>` : ''}
+            <button type="button" class="icon-btn" data-a="home-day" data-v="-1" aria-label="${esc(t('prevDay'))}" title="${esc(t('prevDay'))}">${icon('chevron_left')}</button>
+            <button type="button" class="icon-btn" data-a="home-day" data-v="1" aria-label="${esc(t('nextDay'))}" title="${esc(t('nextDay'))}">${icon('chevron_right')}</button></span>
+        </div>
+        ${off ? (dayList.length ? dayList.map((it) => entryCard(it, dd)).join('') : `<p class="quiet">${esc(t('nothingThatDay'))}</p>`)
+    : `${overdueF.map((x) => entryCard(x.it, fromKey(x.at), { overdue: true })).join('')}
+        ${todayOpen.length ? todayOpen.map((it) => entryCard(it, d)).join('') : overdueF.length ? '' : `<p class="quiet">${esc(today.length ? t('allDoneToday') : t('nothingToday'))}</p>`}`}
       </section>
       ${floatOpen.length ? `<section class="rows home-rows" aria-labelledby="nodate-h">
         <h3 class="rows-label" id="nodate-h">${esc(t('noDateSection'))}</h3>
         ${floatOpen.map((it) => entryCard(it, d)).join('')}
       </section>` : ''}
-      ${doneList.length + lateDoneF.length ? `<section class="rows home-rows done-sec" aria-labelledby="done-h">
+      ${!off && doneList.length + lateDoneF.length ? `<section class="rows home-rows done-sec" aria-labelledby="done-h">
         <h3 class="rows-label" id="done-h">${esc(t('doneSection'))} <span class="muted-date tnum">${doneList.length + lateDoneF.length}</span></h3>
         ${lateDoneF.map((x) => entryCard(x.it, fromKey(x.at))).join('')}${doneList.map((it) => entryCard(it, d)).join('')}
       </section>` : ''}
       ${hasSamples ? `<p class="quiet small">${esc(t('sampleData'))} <button class="link-btn" data-a="clear-samples">${esc(t('clearSamples'))}</button></p>` : ''}`;
-    const fabs = `<button class="fab" data-a="add" aria-label="${esc(t('addReminder'))}">${icon('add')}<span class="fab-label">${esc(t('addReminder'))}</span></button>`;
+    const fabs = `<button class="fab" ${off ? `data-a="add-on" data-d="${dkey(dd)}"` : 'data-a="add"'} aria-label="${esc(t('addReminder'))}">${icon('add')}<span class="fab-label">${esc(t('addReminder'))}</span></button>`;
     return { title: t('homeTitle'), html, fabs, actions: avatarAction(), narrow: true };
   }
   const avatarAction = () => `<button class="icon-btn theme-btn" data-a="theme-toggle" aria-label="${esc(t('darkMode'))}" aria-pressed="${isDark()}" title="${esc(t('darkMode'))}">${icon(isDark() ? 'light_mode' : 'dark_mode')}</button>
@@ -1745,6 +1754,8 @@
       case 'cal-today': ui.calMonth = todayD(); render(); break;
       case 'rem-tab': ui.remTab = el.dataset.v; render(); scrollTop(); break;
       case 'home-filter': ui.homeFilter = el.dataset.v; render(); break;
+      case 'home-day': ui.homeOff = (ui.homeOff || 0) + Number(el.dataset.v); render(); break;
+      case 'home-today': ui.homeOff = 0; render(); break;
       case 'agenda-filter': ui.agendaFilter = el.dataset.v; render(); break;
       case 'partner-unlink': unlinkPartner(); break;
       case 'agenda-more': ui.agendaDays = (ui.agendaDays || 30) + 30; render(); break;
