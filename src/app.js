@@ -636,16 +636,22 @@
   const weatherWanted = () => !!settings().weather;
   const weatherOn = (d) => (weatherWanted() && WX && WX.days && WX.days[dkey(d)]) || null;
   // WMO weather code → Material Symbols icon
+  // the day's weather_code is the worst hour of the 24 (a drizzle at 3 a.m. makes the whole day "rain"), so wet codes
+  // count only when rain is likely (≥ 50%) and real (≥ 1 mm); otherwise the day shows as cloudy
+  const wxDay = (w) => {
+    const c = w.code; const wet = (c >= 51 && c <= 67) || (c >= 80 && c <= 82) || c >= 95;
+    return wet && w.pop != null && (w.pop < 50 || (w.mm != null && w.mm < 1)) ? 3 : c;
+  };
   const wxName = (c) => (c <= 0 ? 'sunny' : c <= 2 ? 'partly_cloudy_day' : c === 3 ? 'cloud' : c <= 48 ? 'foggy' : c >= 95 ? 'thunderstorm' : (c >= 71 && c <= 77) || c === 85 || c === 86 ? 'weather_snowy' : 'rainy');
   function wxIcon(d) {
     const w = weatherOn(d); if (!w) return '';
-    return `<span class="wx" title="${w.max}° / ${w.min}°">${icon(wxName(w.code), 'xs')}</span>`;
+    return `<span class="wx" title="${w.max}° / ${w.min}°">${icon(wxName(wxDay(w)), 'xs')}</span>`;
   }
   // one line for a single day: icon, description, ↑ high ↓ low (home header and the day dialog)
   function wxLine(d, tap) {
     const w = weatherOn(d); if (!w) return '';
-    const n = wxName(w.code); const label = `${t('wx_' + n)}, ${t('wxHighLow', { max: w.max, min: w.min })}`;
-    const inner = `${icon(n)}<span>${esc(t('wx_' + n))}</span><span class="wx-t tnum" aria-hidden="true">↑${w.max}° <i>↓${w.min}°</i></span>`;
+    const n = wxName(wxDay(w)); const rain = w.pop >= 20 ? ` · ☔ ${w.pop}%` : ''; const label = `${t('wx_' + n)}, ${t('wxHighLow', { max: w.max, min: w.min })}${rain}`;
+    const inner = `${icon(n)}<span>${esc(t('wx_' + n))}</span><span class="wx-t tnum" aria-hidden="true">↑${w.max}° <i>↓${w.min}°</i>${rain ? `<i class="wx-pop">${esc(rain.slice(3))}</i>` : ''}</span>`;
     // on Home a tap refreshes the location (the only place the browser may ask for it again)
     return tap ? `<button type="button" class="wx-line" data-a="wx-locate" aria-label="${esc(label)} · ${esc(t('weatherRefresh'))}" title="${esc(t('weatherRefresh'))}">${inner}</button>`
       : `<div class="wx-line" role="img" aria-label="${esc(label)}">${inner}</div>`;
@@ -653,12 +659,13 @@
   let wxBusy = false;
   function refreshWeather(force) {
     if (!weatherWanted() || wxBusy || !WX || WX.lat == null) return;
-    if (!force && WX.at && Date.now() - WX.at < 3 * 3600e3) return;
+    const oldFormat = WX.days && Object.values(WX.days).some((x) => x && !('pop' in x));
+    if (!force && !oldFormat && WX.at && Date.now() - WX.at < 3 * 3600e3) return;
     wxBusy = true;
-    fetch(`https://api.open-meteo.com/v1/forecast?latitude=${WX.lat}&longitude=${WX.lon}&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=auto&forecast_days=16`)
+    fetch(`https://api.open-meteo.com/v1/forecast?latitude=${WX.lat}&longitude=${WX.lon}&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_sum,precipitation_probability_max&timezone=auto&forecast_days=16`)
       .then((r) => r.json()).then((j) => {
         const dl = j.daily || {}; const days = {};
-        (dl.time || []).forEach((k, i) => { days[k] = { code: dl.weather_code[i], max: Math.round(dl.temperature_2m_max[i]), min: Math.round(dl.temperature_2m_min[i]) }; });
+        (dl.time || []).forEach((k, i) => { days[k] = { code: dl.weather_code[i], max: Math.round(dl.temperature_2m_max[i]), min: Math.round(dl.temperature_2m_min[i]), mm: (dl.precipitation_sum || [])[i] ?? null, pop: (dl.precipitation_probability_max || [])[i] ?? null }; });
         WX = { ...WX, at: Date.now(), days }; try { localStorage.setItem(WX_KEY, JSON.stringify(WX)); } catch (e) { /* ignore */ }
         render();
       }).catch(() => {}).finally(() => { wxBusy = false; });
